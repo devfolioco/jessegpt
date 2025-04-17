@@ -11,8 +11,6 @@ import {
   VoiceAssistantControlBar,
   useVoiceAssistant,
 } from "@livekit/components-react";
-import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
-import { AnimatePresence, motion } from "framer-motion";
 import { Room, RoomEvent } from "livekit-client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -147,54 +145,67 @@ export default function TalkPage() {
 function SimpleVoiceAssistant() {
   const { state: agentState } = useVoiceAssistant();
   return (
-    <>
-      <div className="w-3/4 lg:w-1/2 mx-auto h-full">
-        <TranscriptionView />
+    <div className="fixed inset-0 flex flex-col items-center justify-start min-h-screen w-full bg-[#638596]">
+      {/* Dot grid background */}
+      <div className="fixed inset-0 pointer-events-none -z-10">
+        <svg width="100%" height="100%" style={{ position: "absolute", top: 0, left: 0 }}>
+          {Array.from({ length: 60 }).map((_, y) =>
+            Array.from({ length: 60 }).map((_, x) => (
+              <circle
+                key={`${x}-${y}`}
+                cx={x * 32 + 16}
+                cy={y * 32 + 16}
+                r="2"
+                fill="#8CA3AD"
+                opacity="0.8"
+              />
+            ))
+          )}
+        </svg>
+      </div>
+      {/* Avatar and BarVisualizer */}
+      <div
+        className="flex flex-col items-center mt-8 mb-8 relative"
+        style={{ width: 200, height: 200 }}
+      >
+        <Image
+          src={
+            typeof window !== "undefined" && window.location.search.includes("critical")
+              ? "/critical-jesse.png"
+              : "/mellow-jesse.png"
+          }
+          alt="JesseXBT Avatar"
+          width={180}
+          height={180}
+          className="rounded-none"
+          priority
+        />
+        <div className="absolute top-6 right-0">
+          <BarVisualizer
+            state={agentState}
+            barCount={5}
+            className="agent-visualizer w-16 gap-1"
+            options={{ minHeight: 8 }}
+          />
+        </div>
+      </div>
+      {/* Chat bubbles */}
+      <div className="w-full flex-1 flex flex-col items-center">
+        <div className="w-full max-w-2xl">
+          <TranscriptionView />
+        </div>
       </div>
       <RoomAudioRenderer />
       <NoAgentNotification state={agentState} />
-      <div className="fixed bottom-0 w-full px-4 py-2">
-        <ControlBar />
+      {/* Centered controls at the bottom */}
+      <div className="w-full flex justify-center fixed bottom-0 left-0 px-4 py-6 z-10">
+        <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg px-6 py-3">
+          <VoiceAssistantControlBar controls={{ leave: false }} />
+          <DisconnectButton>
+            <CloseIcon />
+          </DisconnectButton>
+        </div>
       </div>
-    </>
-  );
-}
-
-function ControlBar() {
-  const krisp = useKrispNoiseFilter();
-  useEffect(() => {
-    krisp.setNoiseFilterEnabled(true);
-  }, []);
-
-  const { state: agentState, audioTrack } = useVoiceAssistant();
-
-  return (
-    <div className="relative h-[100px]">
-      <AnimatePresence>
-        {agentState !== "disconnected" && agentState !== "connecting" && (
-          <motion.div
-            initial={{ opacity: 0, top: "10px" }}
-            animate={{ opacity: 1, top: 0 }}
-            exit={{ opacity: 0, top: "-10px" }}
-            transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-            className="flex absolute w-full h-full justify-between px-8 sm:px-4"
-          >
-            <BarVisualizer
-              state={agentState}
-              barCount={5}
-              trackRef={audioTrack}
-              className="agent-visualizer w-24 gap-2"
-              options={{ minHeight: 12 }}
-            />
-            <div className="flex items-center">
-              <VoiceAssistantControlBar controls={{ leave: false }} />
-              <DisconnectButton>
-                <CloseIcon />
-              </DisconnectButton>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

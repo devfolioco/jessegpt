@@ -7,7 +7,7 @@ export default function HomePage() {
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {/* Subtle dot grid background */}
         <svg width="100%" height="100%" style={{ position: "absolute", top: 0, left: 0 }}>
-          {Array.from({ length: 30 }).map((_, y) =>
+          {Array.from({ length: 60 }).map((_, y) =>
             Array.from({ length: 60 }).map((_, x) => (
               <circle
                 key={`${x}-${y}`}

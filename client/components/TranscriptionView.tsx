@@ -16,16 +16,17 @@ export default function TranscriptionView() {
   }, [combinedTranscriptions]);
 
   return (
-    <div className="h-full flex flex-col gap-2 overflow-y-auto">
+    <div className="h-full flex flex-col gap-4 overflow-y-auto py-8">
       {combinedTranscriptions.map((segment) => (
         <div
           id={segment.id}
           key={segment.id}
           className={
             segment.role === "assistant"
-              ? "p-2 self-start fit-content"
-              : "bg-gray-800 rounded-md p-2 self-end fit-content"
+              ? "bg-white text-gray-900 rounded-2xl px-6 py-4 self-start max-w-[70%] shadow-md text-lg"
+              : "bg-[#22302B] text-white rounded-2xl px-6 py-4 self-end max-w-[70%] shadow-md text-lg"
           }
+          style={{ wordBreak: "break-word", whiteSpace: "pre-line" }}
         >
           {segment.text}
         </div>
