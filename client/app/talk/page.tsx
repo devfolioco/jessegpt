@@ -135,14 +135,14 @@ export default function TalkPage() {
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
       <RoomContext.Provider value={room}>
         <div className="lk-room-container max-h-[90vh]">
-          <SimpleVoiceAssistant />
+          <SimpleVoiceAssistant mood={mood} />
         </div>
       </RoomContext.Provider>
     </main>
   );
 }
 
-function SimpleVoiceAssistant() {
+function SimpleVoiceAssistant({ mood }: { mood: "critical" | "excited" }) {
   const { state: agentState } = useVoiceAssistant();
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-start min-h-screen w-full bg-[#638596]">
@@ -169,11 +169,7 @@ function SimpleVoiceAssistant() {
         style={{ width: 200, height: 200 }}
       >
         <Image
-          src={
-            typeof window !== "undefined" && window.location.search.includes("critical")
-              ? "/critical-jesse.png"
-              : "/mellow-jesse.png"
-          }
+          src={mood === "critical" ? "/critical-jesse.png" : "/mellow-jesse.png"}
           alt="JesseXBT Avatar"
           width={180}
           height={180}
