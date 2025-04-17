@@ -151,30 +151,30 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
         aria-hidden="true"
       ></div>
 
-      <div className="flex flex-col items-center mb-8 relative" style={{ width: 200, height: 200 }}>
-        <div className="relative w-[180px] h-[180px]">
+      <div className="flex flex-col items-center mb-6 relative">
+        <div className="flex flex-row">
           <Image
             src={mood === "critical" ? "/critical-jesse.png" : "/mellow-jesse.png"}
             alt="JesseXBT Avatar"
-            width={180}
-            height={180}
+            width={254}
+            height={254}
             className="rounded-none"
             priority
           />
-          <div className="absolute top-2 right-2 z-10">
+          <div className="bg-[#FFF68D] mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden">
             <BarVisualizer
               state={agentState}
               trackRef={agentAudioTrack}
               barCount={5}
-              className="agent-visualizer w-12 gap-1"
-              options={{ minHeight: 8 }}
+              className="agent-visualizer"
+              options={{ maxHeight: 40 }}
             />
           </div>
         </div>
       </div>
 
-      <div className="w-full flex-1 flex flex-col items-center overflow-hidden z-10">
-        <div className="max-w-2xl h-[560px] overflow-y-auto px-4">
+      <div className="w-full flex-1 flex flex-col items-center overflow-hidden z-10 mt-16">
+        <div className="max-w-2xl h-[560px] overflow-y-auto">
           <TranscriptionView />
         </div>
       </div>
@@ -182,6 +182,7 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
       <RoomAudioRenderer />
       <NoAgentNotification state={agentState} />
 
+      {/* Centered controls at the bottom - Fixed */}
       <div className="w-full flex justify-center fixed bottom-0 left-0 px-4 py-6 z-10">
         <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg px-6 py-3">
           <VoiceAssistantControlBar controls={{ leave: false }} />

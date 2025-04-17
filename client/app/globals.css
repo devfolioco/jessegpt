@@ -7,9 +7,27 @@
   --lk-control-bar-height: unset;
 }
 
-/* .agent-visualizer > .lk-audio-bar {
-  width: 72px;
-} */
+.agent-visualizer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1px;
+  background: none;
+}
+
+.agent-visualizer > .lk-audio-bar {
+  width: 6%;
+  max-width: 4px;
+  min-width: 2px;
+  background-color: #20282C;
+  margin: 2px;
+  max-height: 60%;
+}
+
+.agent-visualizer > .lk-audio-bar.lk-highlighted {
+  background-color: #3b4144;
+}
 
 .lk-agent-control-bar {
   @apply border-t-0 p-0 h-min mr-4;
