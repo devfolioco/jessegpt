@@ -7,9 +7,9 @@
   --lk-control-bar-height: unset;
 }
 
-.agent-visualizer > .lk-audio-bar {
+/* .agent-visualizer > .lk-audio-bar {
   width: 72px;
-}
+} */
 
 .lk-agent-control-bar {
   @apply border-t-0 p-0 h-min mr-4;

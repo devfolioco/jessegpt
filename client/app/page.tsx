@@ -3,24 +3,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#638596] relative">
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* Subtle dot grid background */}
-        <svg width="100%" height="100%" style={{ position: "absolute", top: 0, left: 0 }}>
-          {Array.from({ length: 60 }).map((_, y) =>
-            Array.from({ length: 60 }).map((_, x) => (
-              <circle
-                key={`${x}-${y}`}
-                cx={x * 32 + 16}
-                cy={y * 32 + 16}
-                r="2"
-                fill="#8CA3AD"
-                opacity="0.8"
-              />
-            ))
-          )}
-        </svg>
-      </div>
+    <main className="min-h-screen flex items-center justify-center bg-[#638596] relative absolute inset-0 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]">
       <div className="z-10 flex flex-col items-center text-center gap-8">
         <Image
           src="/mellow-jesse.png"

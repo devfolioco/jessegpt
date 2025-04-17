@@ -142,58 +142,46 @@ export default function TalkPage() {
   );
 }
 
-function SimpleVoiceAssistant({ mood }: { mood: "critical" | "excited" }) {
-  const { state: agentState } = useVoiceAssistant();
+function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
+  const { state: agentState, audioTrack: agentAudioTrack } = useVoiceAssistant();
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-start min-h-screen w-full bg-[#638596]">
-      {/* Dot grid background */}
-      <div className="fixed inset-0 pointer-events-none -z-10">
-        <svg width="100%" height="100%" style={{ position: "absolute", top: 0, left: 0 }}>
-          {Array.from({ length: 60 }).map((_, y) =>
-            Array.from({ length: 60 }).map((_, x) => (
-              <circle
-                key={`${x}-${y}`}
-                cx={x * 32 + 16}
-                cy={y * 32 + 16}
-                r="2"
-                fill="#8CA3AD"
-                opacity="0.8"
-              />
-            ))
-          )}
-        </svg>
-      </div>
-      {/* Avatar and BarVisualizer */}
+    <div className="fixed inset-0 flex flex-col items-center bg-[#638596] pt-8">
       <div
-        className="flex flex-col items-center mt-8 mb-8 relative"
-        style={{ width: 200, height: 200 }}
-      >
-        <Image
-          src={mood === "critical" ? "/critical-jesse.png" : "/mellow-jesse.png"}
-          alt="JesseXBT Avatar"
-          width={180}
-          height={180}
-          className="rounded-none"
-          priority
-        />
-        <div className="absolute top-6 right-0">
-          <BarVisualizer
-            state={agentState}
-            barCount={5}
-            className="agent-visualizer w-16 gap-1"
-            options={{ minHeight: 8 }}
+        className="absolute inset-0 pointer-events-none -z-10 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]"
+        aria-hidden="true"
+      ></div>
+
+      <div className="flex flex-col items-center mb-8 relative" style={{ width: 200, height: 200 }}>
+        <div className="relative w-[180px] h-[180px]">
+          <Image
+            src={mood === "critical" ? "/critical-jesse.png" : "/mellow-jesse.png"}
+            alt="JesseXBT Avatar"
+            width={180}
+            height={180}
+            className="rounded-none"
+            priority
           />
+          <div className="absolute top-2 right-2 z-10">
+            <BarVisualizer
+              state={agentState}
+              trackRef={agentAudioTrack}
+              barCount={5}
+              className="agent-visualizer w-12 gap-1"
+              options={{ minHeight: 8 }}
+            />
+          </div>
         </div>
       </div>
-      {/* Chat bubbles */}
-      <div className="w-full flex-1 flex flex-col items-center">
-        <div className="w-full max-w-2xl">
+
+      <div className="w-full flex-1 flex flex-col items-center overflow-hidden z-10">
+        <div className="max-w-2xl h-[560px] overflow-y-auto px-4">
           <TranscriptionView />
         </div>
       </div>
+
       <RoomAudioRenderer />
       <NoAgentNotification state={agentState} />
-      {/* Centered controls at the bottom */}
+
       <div className="w-full flex justify-center fixed bottom-0 left-0 px-4 py-6 z-10">
         <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg px-6 py-3">
           <VoiceAssistantControlBar controls={{ leave: false }} />
