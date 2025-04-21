@@ -6,7 +6,7 @@ import logging
 import time
 import asyncio
 
-from livekit.agents import (cli, JobProcess, JobContext, WorkerOptions, AutoSubscribe, metrics)
+from livekit.agents import (cli, JobProcess, JobContext, RunContext, WorkerOptions, AutoSubscribe, function_tool, get_job_context)
 from livekit.agents import AgentSession, Agent
 from livekit.plugins import (
     openai,
@@ -41,16 +41,33 @@ logger = logging.getLogger("jessexbt")
 
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()
+    proc.userdata["turn_detection"] = EnglishModel()
 
 
 class Assistant(Agent):
     def __init__(self, system_prompt: str) -> None:
         super().__init__(instructions=system_prompt)
 
+    @function_tool()
+    async def end_conversation(
+        self,
+        context: RunContext,
+        one_liner: str,
+    ) -> None:
+        """End the conversation.
+        
+        Args:
+            one_liner: A one-line summary of the conversation. Be witty and concise.
+        """
+        logger.info(f"Ending conversation with one-liner: {one_liner}")
+        
+        room = get_job_context().room
+        
+        await room.local_participant.send_text(one_liner, topic="end_conversation")
+        await room.disconnect()
+
 
 async def entrypoint(ctx: JobContext):
-    usage_collector = metrics.UsageCollector()
-
     # State variables
     last_interaction_time = None
     still_there_prompt_sent = False
@@ -68,13 +85,13 @@ async def entrypoint(ctx: JobContext):
 
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="en-US"),
-        llm=openai.LLM(model="gpt-4o"),
+        llm=openai.LLM(model="gpt-4.1-mini-2025-04-14"),
         tts=elevenlabs.TTS(
             model="eleven_multilingual_v2",
             voice_id="TX3LPaxmHKxFdv7VOQHJ",
         ),
         vad=ctx.proc.userdata["vad"],
-        turn_detection=EnglishModel(),
+        turn_detection=ctx.proc.userdata["turn_detection"],
     )
 
     agent = Assistant(system_prompt)
@@ -126,7 +143,7 @@ async def entrypoint(ctx: JobContext):
                 reset_timeout()
             if await should_end_call():
                 logger.info("Ending call due to inactivity.")
-                await session.generate_reply(instructions="The user has been inactive for too long. EXPLICITLY Say goodbye and end the call.", allow_interruptions=False)
+                await session.generate_reply(instructions="The user has been inactive for too long. EXPLICITLY Say goodbye and call the `end_conversation` function to the end the call... And DO NTO forget to say goodbye to the user", allow_interruptions=False)
                 await asyncio.sleep(GOODBYE_DELAY)
                 await hangup()
                 break
