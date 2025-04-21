@@ -14,7 +14,10 @@ from livekit.plugins import (
 )
 from livekit.plugins.turn_detector.english import EnglishModel
 
-from prompts import excited_system_prompt, excited_initial_prompt, critical_system_prompt, critical_initial_prompt
+from prompts import (
+    excited_system_prompt, excited_initial_prompt,
+    critical_system_prompt, critical_initial_prompt,
+)
 
 load_dotenv()
 
@@ -47,10 +50,32 @@ async def entrypoint(ctx: JobContext):
     usage_collector = metrics.UsageCollector()
 
     # State variables
-    last_interaction_time = time.time()
+    last_interaction_time = None
     still_there_prompt_sent = False
     is_agent_speaking = False
     is_user_speaking = False
+
+    logger.info(f"Connecting to room {ctx.room.name}")
+    await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
+
+    mood = ctx.room.name.split('_')[0]
+    print(f"MOOD: {mood}")
+
+    system_prompt = mood_system_prompts[mood]
+    initial_prompt = mood_initial_prompts[mood]
+
+    session = AgentSession(
+        stt=deepgram.STT(model="nova-3", language="en-US"),
+        llm=openai.LLM(model="gpt-4o"),
+        tts=elevenlabs.TTS(
+            model="eleven_multilingual_v2",
+            voice_id="TX3LPaxmHKxFdv7VOQHJ",
+        ),
+        vad=ctx.proc.userdata["vad"],
+        turn_detection=EnglishModel(),
+    )
+
+    agent = Assistant(system_prompt)
 
     def reset_timeout():
         nonlocal still_there_prompt_sent, last_interaction_time
@@ -84,7 +109,7 @@ async def entrypoint(ctx: JobContext):
         if time.time() - last_interaction_time >= PROMPT_WARNING_TIME and not still_there_prompt_sent:
             logger.info("Sending idle too long prompt")
             still_there_prompt_sent = True
-            await session.generate_reply("The user has been inactive for a while. Ask them if they are still there.")
+            await session.generate_reply(instructions="The user has been inactive for a while. Ask them if they are still there.", allow_interruptions=True)
 
     async def monitor_interaction():
         while True:
@@ -93,64 +118,38 @@ async def entrypoint(ctx: JobContext):
                 reset_timeout()
             if await should_end_call():
                 logger.info("Ending call due to inactivity.")
-                await session.generate_reply("The user has been inactive for too long. Say goodbye and end the call.")
+                await session.generate_reply(instructions="The user has been inactive for too long. Say goodbye and end the call.", allow_interruptions=False)
                 await asyncio.sleep(GOODBYE_DELAY)
                 await hangup()
                 break
             await send_agent_prompt()
             await asyncio.sleep(1)  # Check every second
 
-    logger.info(f"Connecting to room {ctx.room.name}")
-    await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
-
-    session = AgentSession(
-        stt=deepgram.STT(model="nova-3", language="en-US"),
-        llm=openai.LLM(model="gpt-4o"),
-        tts=elevenlabs.TTS(
-            model="eleven_multilingual_v2",
-            voice_id="TX3LPaxmHKxFdv7VOQHJ",
-        ),
-        vad=ctx.proc.userdata["vad"],
-        turn_detection=EnglishModel(),
-    )
-
-    mood = ctx.room.name.split('_')[0]
-    print(f"MOOD: {mood}")
-
-    system_prompt = mood_system_prompts[mood]
-    initial_prompt = mood_initial_prompts[mood]
-
-    agent = Assistant(system_prompt)
-
     # Event handlers
-    @session.on("agent_started_speaking")
-    def _on_agent_started_speaking():
+    @session.on("agent_state_changed")
+    def _on_agent_state_changed(ev):
+        logger.info(f"Agent state changed from {ev.old_state} to {ev.new_state}")
         nonlocal is_agent_speaking
-        is_agent_speaking = True
-        logger.info("Agent started speaking")
+        if ev.new_state == "speaking":
+            is_agent_speaking = True
+            logger.info("Agent started speaking")
+        else:
+            is_agent_speaking = False
+            logger.info("Agent stopped speaking")
         if not still_there_prompt_sent:
             reset_timeout()
 
-    @session.on("agent_stopped_speaking")
-    def _on_agent_stopped_speaking():
-        nonlocal is_agent_speaking
-        is_agent_speaking = False
-        logger.info("Agent stopped speaking")
-        if not still_there_prompt_sent:
-            reset_timeout()
-
-    @session.on("user_started_speaking")
-    def _on_user_started_speaking():
+    @session.on("user_state_changed")
+    def _on_user_state_changed(ev):
+        logger.info(f"User state changed from {ev.old_state} to {ev.new_state}")
         nonlocal is_user_speaking
-        is_user_speaking = True
-        logger.info("User started speaking")
-        reset_timeout()
+        if ev.new_state == "speaking":
+            is_user_speaking = True
+            logger.info("User started speaking")
+        else:
+            is_user_speaking = False
+            logger.info("User stopped speaking")
 
-    @session.on("user_stopped_speaking")
-    def _on_user_stopped_speaking():
-        nonlocal is_user_speaking
-        is_user_speaking = False
-        logger.info("User stopped speaking")
         reset_timeout()
 
     await session.start(
@@ -159,12 +158,14 @@ async def entrypoint(ctx: JobContext):
     )
 
     ctx.add_shutdown_callback(log_usage)
-    asyncio.create_task(monitor_interaction())
-
 
     await session.generate_reply(
-        instructions=initial_prompt
+        instructions=initial_prompt, allow_interruptions=False
     )
+
+    await asyncio.sleep(3)
+
+    asyncio.create_task(monitor_interaction())
 
 
 if __name__ == "__main__":
