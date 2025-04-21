@@ -6,13 +6,14 @@ import logging
 import time
 import asyncio
 
-from livekit.agents import (cli, JobProcess, JobContext, RunContext, WorkerOptions, AutoSubscribe, function_tool, get_job_context)
-from livekit.agents import AgentSession, Agent
+from livekit.agents import (Agent, AgentSession, cli, JobProcess, JobContext, RunContext, WorkerOptions, AutoSubscribe, tokenize, function_tool, get_job_context)
+from livekit.agents.tts import StreamAdapter
+
 from livekit.plugins import (
     openai,
-    elevenlabs,
+    smallest,
     deepgram,
-    silero,
+    silero
 )
 from livekit.plugins.turn_detector.english import EnglishModel
 
@@ -41,7 +42,6 @@ logger = logging.getLogger("jessexbt")
 
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()
-    proc.userdata["turn_detection"] = EnglishModel()
 
 
 class Assistant(Agent):
@@ -83,15 +83,17 @@ async def entrypoint(ctx: JobContext):
     system_prompt = mood_system_prompts[mood]
     initial_prompt = mood_initial_prompts[mood]
 
+    smallest_tts = StreamAdapter(
+        tts=smallest.TTS(model="lightning-large", voice="zorin"),
+        sentence_tokenizer=tokenize.basic.SentenceTokenizer(),
+    )
+
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="en-US"),
         llm=openai.LLM(model="gpt-4.1-mini-2025-04-14"),
-        tts=elevenlabs.TTS(
-            model="eleven_multilingual_v2",
-            voice_id="TX3LPaxmHKxFdv7VOQHJ",
-        ),
+        tts=smallest_tts,
         vad=ctx.proc.userdata["vad"],
-        turn_detection=ctx.proc.userdata["turn_detection"],
+        turn_detection=EnglishModel(),
     )
 
     agent = Assistant(system_prompt)

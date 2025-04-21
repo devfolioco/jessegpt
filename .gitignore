@@ -189,3 +189,6 @@ docs
 __pycache__/
 
 transcripts/
+
+build/
+*.egg-info/
