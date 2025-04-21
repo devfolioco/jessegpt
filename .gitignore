@@ -187,3 +187,5 @@ docs
 .direnv
 
 __pycache__/
+
+transcripts/

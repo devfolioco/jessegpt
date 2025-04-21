@@ -1,3 +1,5 @@
+from datetime import datetime
+import json
 from dotenv import load_dotenv
 
 import logging
@@ -82,9 +84,15 @@ async def entrypoint(ctx: JobContext):
         still_there_prompt_sent = False
         last_interaction_time = time.time()
 
-    async def log_usage():
-        summary = usage_collector.get_summary()
-        logger.info(f"Usage: ${summary}")
+    async def shutdown_handler():
+        current_date = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        filename = f"./transcripts/transcript_{ctx.room.name}_{current_date}.json"
+        
+        with open(filename, 'w') as f:
+            json.dump(session.history.to_dict(), f, indent=2)
+            
+        print(f"Transcript for {ctx.room.name} saved to {filename}")
 
     async def hangup():
         logger.info("Idle too long, hanging up")
@@ -109,7 +117,7 @@ async def entrypoint(ctx: JobContext):
         if time.time() - last_interaction_time >= PROMPT_WARNING_TIME and not still_there_prompt_sent:
             logger.info("Sending idle too long prompt")
             still_there_prompt_sent = True
-            await session.generate_reply(instructions="The user has been inactive for a while. Ask them if they are still there.", allow_interruptions=True)
+            await session.generate_reply(instructions="The user has been inactive for a while. EXPLICITLY ask them if they are still there and if they'd like to continue the conversation.", allow_interruptions=True)
 
     async def monitor_interaction():
         while True:
@@ -118,7 +126,7 @@ async def entrypoint(ctx: JobContext):
                 reset_timeout()
             if await should_end_call():
                 logger.info("Ending call due to inactivity.")
-                await session.generate_reply(instructions="The user has been inactive for too long. Say goodbye and end the call.", allow_interruptions=False)
+                await session.generate_reply(instructions="The user has been inactive for too long. EXPLICITLY Say goodbye and end the call.", allow_interruptions=False)
                 await asyncio.sleep(GOODBYE_DELAY)
                 await hangup()
                 break
@@ -157,7 +165,7 @@ async def entrypoint(ctx: JobContext):
         agent=agent
     )
 
-    ctx.add_shutdown_callback(log_usage)
+    ctx.add_shutdown_callback(shutdown_handler)
 
     await session.generate_reply(
         instructions=initial_prompt, allow_interruptions=False
