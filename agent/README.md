@@ -13,7 +13,7 @@ cp .env.example .env
 Make sure you have [uv](https://github.com/astral-sh/uv#installation) installed
 
 ```sh
-uv sync
+make install
 ```
 
 ### Download model files

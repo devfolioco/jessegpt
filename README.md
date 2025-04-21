@@ -26,7 +26,7 @@
     Install dependencies and download model files:
 
     ```sh
-    uv sync
+    make install
     make download-files
     ```
 
