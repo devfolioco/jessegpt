@@ -9,7 +9,8 @@ cp .env.example .env
 ```
 
 ### Install dependencies
-Make sure you have uv installed
+
+Make sure you have [uv](https://github.com/astral-sh/uv#installation) installed
 
 ```sh
 uv sync
@@ -17,24 +18,18 @@ uv sync
 
 ### Download model files
 
-tts
 ```sh
-uv run tts.py download-files
-```
-
-realtime
-```sh
-uv run realtime.py download-files
+make download-files
 ```
 
 ### Run the agent
 
-tts
 ```sh
-uv run tts.py dev
+make dev
 ```
 
-realtime
+or
+
 ```sh
-uv run realtime.py dev
+uv run main.py dev
 ```

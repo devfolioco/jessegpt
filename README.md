@@ -10,7 +10,7 @@
 ### Prerequisites
 
 - Node.js and pnpm (for the client)
-- Python and uv (for the agent)
+- Python and [uv](https://github.com/astral-sh/uv#installation) (for the agent)
 - Access keys/credentials for any required services (e.g., LiveKit, TTS providers - check `.env.example` files)
 
 ### Setup
@@ -27,8 +27,7 @@
 
     ```sh
     uv sync
-    uv run tts.py download-files
-    uv run realtime.py download-files
+    make download-files
     ```
 
 2.  **Set up the Client:**
@@ -47,16 +46,10 @@
 ### Running the Project
 
 1.  **Start the Agent:**
-    - TTS:
-      ```sh
-      cd agent
-      uv run tts.py dev
-      ```
-    - Realtime:
-      ```sh
-      cd agent
-      uv run realtime.py dev
-      ```
+    ```sh
+    cd agent
+    make dev
+    ```
 
 2.  **Start the Client:**
     ```sh
