@@ -38,7 +38,9 @@ mood_initial_prompts = {
 
 TIMEOUT_SECONDS = 30
 PROMPT_WARNING_TIME = 10
-GOODBYE_DELAY = 3
+SPEAK_DELAY = 3
+MAX_CALL_DURATION = 120  # 2 minutes in seconds
+CALL_DURATION_WARNING_TIME = 60  # 1 minute in seconds
 
 logger = logging.getLogger("jessexbt")
 
@@ -75,6 +77,8 @@ async def entrypoint(ctx: JobContext):
     still_there_prompt_sent = False
     is_agent_speaking = False
     is_user_speaking = False
+    call_start_time = time.time()
+    duration_warning_sent = False
 
     logger.info(f"Connecting to room {ctx.room.name}")
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
@@ -93,7 +97,14 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="en-US"),
         llm=openai.LLM(model="gpt-4.1-mini-2025-04-14"),
-        tts=elevenlabs.TTS(model="eleven_multilingual_v2", voice_id="goljFZPfRhM9ZkyHrOmQ", voice_settings=VoiceSettings(speed=1.08, stability=0.3, similarity_boost=0.7, style=0.10, use_speaker_boost=True)),
+        tts=elevenlabs.TTS(model="eleven_multilingual_v2", voice_id="goljFZPfRhM9ZkyHrOmQ",
+                           voice_settings=VoiceSettings(
+                               speed=0.86,
+                               stability=0.3,
+                               similarity_boost=0.7,
+                               style=0.10,
+                               use_speaker_boost=True
+                            )),
         vad=ctx.proc.userdata["vad"],
         turn_detection=EnglishModel(),
     )
@@ -141,14 +152,28 @@ async def entrypoint(ctx: JobContext):
             await session.generate_reply(instructions="The user has been inactive for a while. EXPLICITLY ask them if they are still there and if they'd like to continue the conversation.", allow_interruptions=True)
 
     async def monitor_interaction():
+        nonlocal duration_warning_sent
         while True:
             logger.info(f"is_agent_speaking: {is_agent_speaking}, is_user_speaking: {is_user_speaking}, still_there_prompt_sent: {still_there_prompt_sent}")
             if (is_agent_speaking or is_user_speaking) and not still_there_prompt_sent:
                 reset_timeout()
+            # --- Call Duration Monitoring ---
+            elapsed_call_time = int(time.time() - call_start_time)
+            if elapsed_call_time >= CALL_DURATION_WARNING_TIME and not duration_warning_sent:
+                logger.info("Sending call duration warning prompt")
+                duration_warning_sent = True
+                await session.generate_reply(instructions="You have about one minute left in this conversation. Please wrap up any important points you'd like to discuss!", allow_interruptions=True)
+            if elapsed_call_time >= MAX_CALL_DURATION:
+                logger.info("Ending call due to max duration.")
+                await session.generate_reply(instructions="The maximum call duration has been reached. EXPLICITLY say goodbye and call the `end_conversation` function to end the call... And DO NTO forget to say goodbye to the user", allow_interruptions=False)
+                await asyncio.sleep(SPEAK_DELAY)
+                # await hangup() <-- uncomment this if we want the call to abruptly end when the max duration is reached
+                break
+            # --- End Call if Idle ---
             if await should_end_call():
                 logger.info("Ending call due to inactivity.")
                 await session.generate_reply(instructions="The user has been inactive for too long. EXPLICITLY Say goodbye and call the `end_conversation` function to the end the call... And DO NTO forget to say goodbye to the user", allow_interruptions=False)
-                await asyncio.sleep(GOODBYE_DELAY)
+                await asyncio.sleep(SPEAK_DELAY)
                 await hangup()
                 break
             await send_agent_prompt()
@@ -192,7 +217,7 @@ async def entrypoint(ctx: JobContext):
         instructions=initial_prompt, allow_interruptions=False
     )
 
-    await asyncio.sleep(3)
+    await asyncio.sleep(SPEAK_DELAY)
 
     asyncio.create_task(monitor_interaction())
 
