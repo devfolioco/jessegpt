@@ -12,9 +12,11 @@ from livekit.agents.tts import StreamAdapter
 from livekit.plugins import (
     openai,
     smallest,
+    elevenlabs,
     deepgram,
     silero
 )
+from livekit.plugins.elevenlabs import VoiceSettings
 from livekit.plugins.turn_detector.english import EnglishModel
 
 from prompts import (
@@ -91,7 +93,7 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="en-US"),
         llm=openai.LLM(model="gpt-4.1-mini-2025-04-14"),
-        tts=smallest_tts,
+        tts=elevenlabs.TTS(model="eleven_multilingual_v2", voice_id="goljFZPfRhM9ZkyHrOmQ", voice_settings=VoiceSettings(speed=1.08, stability=0.3, similarity_boost=0.7, style=0.10, use_speaker_boost=True)),
         vad=ctx.proc.userdata["vad"],
         turn_detection=EnglishModel(),
     )

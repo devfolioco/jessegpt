@@ -28,7 +28,7 @@ export default function TranscriptionView() {
           }
           style={{ wordBreak: "break-word", whiteSpace: "pre-line" }}
         >
-          {segment.text}
+          {(segment.text as string).toLocaleLowerCase()}
         </div>
       ))}
     </div>
