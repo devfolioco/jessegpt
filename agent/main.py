@@ -8,22 +8,31 @@ import logging
 import time
 import asyncio
 
-from livekit.agents import (Agent, AgentSession, cli, JobProcess, JobContext, RunContext, WorkerOptions, AutoSubscribe, tokenize, function_tool, get_job_context)
+from livekit.agents import (
+    Agent,
+    AgentSession,
+    cli,
+    JobProcess,
+    JobContext,
+    RunContext,
+    WorkerOptions,
+    AutoSubscribe,
+    ChatContext,
+    tokenize,
+    function_tool,
+    get_job_context,
+)
 from livekit.agents.tts import StreamAdapter
 
-from livekit.plugins import (
-    openai,
-    smallest,
-    elevenlabs,
-    deepgram,
-    silero
-)
+from livekit.plugins import openai, smallest, elevenlabs, deepgram, silero
 from livekit.plugins.elevenlabs import VoiceSettings
 from livekit.plugins.turn_detector.english import EnglishModel
 
 from prompts import (
-    excited_system_prompt, excited_initial_prompt,
-    critical_system_prompt, critical_initial_prompt,
+    excited_system_prompt,
+    excited_initial_prompt,
+    critical_system_prompt,
+    critical_initial_prompt,
 )
 
 load_dotenv()
@@ -46,6 +55,7 @@ CALL_DURATION_WARNING_TIME = 60  # 1 minute in seconds
 
 logger = logging.getLogger("jessexbt")
 
+
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()
 
@@ -61,14 +71,14 @@ class Assistant(Agent):
         one_liner: str,
     ) -> None:
         """End the conversation.
-        
+
         Args:
             one_liner: A one-line summary of the conversation. Be witty and concise.
         """
         logger.info(f"Ending conversation with one-liner: {one_liner}")
-        
+
         room = get_job_context().room
-        
+
         await room.local_participant.send_text(one_liner, topic="end_conversation")
         await room.disconnect()
 
@@ -85,28 +95,31 @@ async def entrypoint(ctx: JobContext):
     logger.info(f"Connecting to room {ctx.room.name}")
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
 
-    mood = ctx.room.name.split('_')[0]
+    mood = ctx.room.name.split("_")[0]
     print(f"MOOD: {mood}")
 
     system_prompt = mood_system_prompts[mood]
     initial_prompt = mood_initial_prompts[mood]
 
-    smallest_tts = StreamAdapter(
+    _smallest_tts = StreamAdapter(
         tts=smallest.TTS(model="lightning-large", voice="zorin"),
         sentence_tokenizer=tokenize.basic.SentenceTokenizer(),
     )
 
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="en-US"),
-        llm=openai.LLM(model="gpt-4.1-mini-2025-04-14"),
-        tts=elevenlabs.TTS(model="eleven_multilingual_v2", voice_id="goljFZPfRhM9ZkyHrOmQ",
-                           voice_settings=VoiceSettings(
-                               speed=0.86,
-                               stability=0.3,
-                               similarity_boost=0.7,
-                               style=0.10,
-                               use_speaker_boost=True
-                            )),
+        llm=openai.LLM(model="gpt-4o-mini"),
+        tts=elevenlabs.TTS(
+            model="eleven_multilingual_v2",
+            voice_id="goljFZPfRhM9ZkyHrOmQ",
+            voice_settings=VoiceSettings(
+                speed=0.86,
+                stability=0.3,
+                similarity_boost=0.7,
+                style=0.10,
+                use_speaker_boost=True,
+            ),
+        ),
         vad=ctx.proc.userdata["vad"],
         turn_detection=EnglishModel(),
     )
@@ -131,7 +144,7 @@ async def entrypoint(ctx: JobContext):
                 Bucket=s3_bucket,
                 Key=s3_key,
                 Body=transcript_json,
-                ContentType="application/json"
+                ContentType="application/json",
             )
             print(f"Transcript uploaded to s3://{s3_bucket}/{s3_key}")
         except Exception as e:
@@ -148,7 +161,9 @@ async def entrypoint(ctx: JobContext):
         nonlocal still_there_prompt_sent
         idle_time = int(time.time() - last_interaction_time)
         if idle_time >= PROMPT_WARNING_TIME:
-            logger.debug(f"Idle time: {idle_time} (Prompt sent: {still_there_prompt_sent}, Agent speaking: {is_agent_speaking}, User speaking: {is_user_speaking})")
+            logger.debug(
+                f"Idle time: {idle_time} (Prompt sent: {still_there_prompt_sent}, Agent speaking: {is_agent_speaking}, User speaking: {is_user_speaking})"
+            )
         if is_agent_speaking or is_user_speaking:
             return False
         return idle_time > TIMEOUT_SECONDS
@@ -157,33 +172,59 @@ async def entrypoint(ctx: JobContext):
         nonlocal still_there_prompt_sent
         if is_agent_speaking or is_user_speaking:
             return
-        if time.time() - last_interaction_time >= PROMPT_WARNING_TIME and not still_there_prompt_sent:
+        if (
+            time.time() - last_interaction_time >= PROMPT_WARNING_TIME
+            and not still_there_prompt_sent
+        ):
             logger.info("Sending idle too long prompt")
             still_there_prompt_sent = True
-            await session.generate_reply(instructions="The user has been inactive for a while. EXPLICITLY ask them if they are still there and if they'd like to continue the conversation.", allow_interruptions=True)
+            await session.generate_reply(
+                instructions="The user has been inactive for a while. EXPLICITLY ask them if they are still there and if they'd like to continue the conversation.",
+                allow_interruptions=True,
+            )
 
     async def monitor_interaction():
         nonlocal duration_warning_sent
         while True:
-            logger.info(f"is_agent_speaking: {is_agent_speaking}, is_user_speaking: {is_user_speaking}, still_there_prompt_sent: {still_there_prompt_sent}")
+            logger.info(
+                f"is_agent_speaking: {is_agent_speaking}, is_user_speaking: {is_user_speaking}, still_there_prompt_sent: {still_there_prompt_sent}"
+            )
             if (is_agent_speaking or is_user_speaking) and not still_there_prompt_sent:
                 reset_timeout()
             # --- Call Duration Monitoring ---
             elapsed_call_time = int(time.time() - call_start_time)
-            if elapsed_call_time >= CALL_DURATION_WARNING_TIME and not duration_warning_sent:
+            if (
+                elapsed_call_time >= CALL_DURATION_WARNING_TIME
+                and not duration_warning_sent
+            ):
                 logger.info("Sending call duration warning prompt")
+                session.interrupt()
+                session.clear_user_turn()
+                await session.say(
+                    "You have about one minute left in this conversation. Please wrap up any important points you'd like to discuss!"
+                )
+                await asyncio.sleep(SPEAK_DELAY)
                 duration_warning_sent = True
-                await session.generate_reply(instructions="You have about one minute left in this conversation. Please wrap up any important points you'd like to discuss!", allow_interruptions=True)
             if elapsed_call_time >= MAX_CALL_DURATION:
                 logger.info("Ending call due to max duration.")
-                await session.generate_reply(instructions="The maximum call duration has been reached. EXPLICITLY say goodbye and call the `end_conversation` function to end the call... And DO NOT forget to say goodbye to the user. Make sure to say goodbye to the user.", allow_interruptions=False)
-                await asyncio.sleep(SPEAK_DELAY)
+                # await session.generate_reply(instructions="The maximum call duration has been reached. EXPLICITLY say goodbye and call the `end_conversation` function to end the call... And DO NOT forget to say goodbye to the user. Make sure to say goodbye to the user.", allow_interruptions=False)
+                # await asyncio.sleep(SPEAK_DELAY)
+                session.interrupt()
+                session.clear_user_turn()
+                await session.say(
+                    "Aha! I'm afraid thats all that we have time for today. This was a great chat. I can't wait to see your idea come to life during Onchain Summer! Take care, and never stop building!!"
+                )
+                await asyncio.sleep(SPEAK_DELAY * 2)
+                await end_convo()
                 # await hangup() <-- uncomment this if we want the call to abruptly end when the max duration is reached
                 break
             # --- End Call if Idle ---
             if await should_end_call():
                 logger.info("Ending call due to inactivity.")
-                await session.generate_reply(instructions="The user has been inactive for too long. EXPLICITLY Say goodbye and call the `end_conversation` function to the end the call... And DO NOT forget to say goodbye to the user. Make sure to say goodbye to the user.", allow_interruptions=False)
+                await session.generate_reply(
+                    instructions="The user has been inactive for too long. EXPLICITLY Say goodbye and call the `end_conversation` function to the end the call... And DO NOT forget to say goodbye to the user. Make sure to say goodbye to the user.",
+                    allow_interruptions=False,
+                )
                 await asyncio.sleep(SPEAK_DELAY)
                 await hangup()
                 break
@@ -217,16 +258,32 @@ async def entrypoint(ctx: JobContext):
 
         reset_timeout()
 
-    await session.start(
-        room=ctx.room,
-        agent=agent
-    )
+    async def end_convo():
+        job_ctx = get_job_context()
+        room = job_ctx.room
+        llm = openai.LLM(model="gpt-4o-mini")
+
+        chat_ctx = ChatContext().from_dict(session.history.to_dict())
+        chat_ctx.add_message(
+            role="system",
+            content="Please summarize core idea discussed in the conversation in one or two words. Just return the words, and absolutely nothing else.",
+        )
+
+        writer = await room.local_participant.stream_text(topic="end_conversation")
+
+        async with llm.chat(chat_ctx) as stream:
+            async for chunk in stream:
+                print("END_CONVO_CHUNK", chunk)
+                await writer.write(chunk)
+
+        await writer.close()
+        await room.disconnect()
+
+    await session.start(room=ctx.room, agent=agent)
 
     ctx.add_shutdown_callback(shutdown_handler)
 
-    await session.generate_reply(
-        instructions=initial_prompt, allow_interruptions=False
-    )
+    await session.generate_reply(instructions=initial_prompt, allow_interruptions=False)
 
     await asyncio.sleep(SPEAK_DELAY)
 
