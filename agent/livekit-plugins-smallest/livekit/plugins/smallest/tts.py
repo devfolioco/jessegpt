@@ -12,7 +12,7 @@ from .log import logger
 from .models import TTSEncoding, TTSLanguages, TTSModels, TTSVoices
 
 NUM_CHANNELS = 1
-SENTENCE_END_REGEX = re.compile(r'.*[-.—!?,;:…।|]$')
+SENTENCE_END_REGEX = re.compile(r".*[-.—!?,;:…।|]$")
 API_BASE_URL = "https://waves-api.smallest.ai/api/v1"
 
 
@@ -178,19 +178,19 @@ def _split_into_chunks(text: str, chunk_size: int = 250) -> List[str]:
 
         # Find last sentence boundary using regex
         for i in range(len(chunk_text) - 1, -1, -1):
-            if SENTENCE_END_REGEX.match(chunk_text[:i + 1]):
+            if SENTENCE_END_REGEX.match(chunk_text[: i + 1]):
                 last_break_index = i
                 break
 
         if last_break_index == -1:
             # Fallback to space if no sentence boundary found
-            last_space = chunk_text.rfind(' ')
+            last_space = chunk_text.rfind(" ")
             if last_space != -1:
-                last_break_index = last_space 
+                last_break_index = last_space
             else:
                 last_break_index = chunk_size - 1
 
-        chunks.append(text[:last_break_index + 1].strip())
-        text = text[last_break_index + 1:].strip()
+        chunks.append(text[: last_break_index + 1].strip())
+        text = text[last_break_index + 1 :].strip()
 
     return chunks

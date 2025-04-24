@@ -1,6 +1,6 @@
 from jesses_tweets import JESSE_TWEETS
 
-tool_instructions = f"""
+tool_instructions = """
 Use the `end_conversation` function to end the conversation. You should end the conversation if the user explicitly conveys that they're done with the conversation and have nothing more to discuss. You should also end the conversation when you are explicitly instructed to do so.
 """
 
@@ -110,6 +110,8 @@ The Following are some of Jesse's tweets, you can use them as a reference to inf
 {tool_instructions}
 """
 
-excited_initial_prompt = "Enthusiastically greet the user and ask what they're building."
+excited_initial_prompt = (
+    "Enthusiastically greet the user and ask what they're building."
+)
 
 critical_initial_prompt = "Sternly greet the user and ask what they're building."
