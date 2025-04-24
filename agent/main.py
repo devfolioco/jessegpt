@@ -1,5 +1,7 @@
 from datetime import datetime
 import json
+import boto3
+import os
 from dotenv import load_dotenv
 
 import logging
@@ -118,13 +120,22 @@ async def entrypoint(ctx: JobContext):
 
     async def shutdown_handler():
         current_date = datetime.now().strftime("%Y%m%d_%H%M%S")
+        s3_bucket = os.environ.get("S3_BUCKET_NAME")
+        s3_key = f"transcripts/{ctx.room.name}_{current_date}.json"
 
-        filename = f"./transcripts/transcript_{ctx.room.name}_{current_date}.json"
-        
-        with open(filename, 'w') as f:
-            json.dump(session.history.to_dict(), f, indent=2)
-            
-        print(f"Transcript for {ctx.room.name} saved to {filename}")
+        transcript_json = json.dumps(session.history.to_dict(), indent=2)
+
+        s3 = boto3.client("s3")
+        try:
+            s3.put_object(
+                Bucket=s3_bucket,
+                Key=s3_key,
+                Body=transcript_json,
+                ContentType="application/json"
+            )
+            print(f"Transcript uploaded to s3://{s3_bucket}/{s3_key}")
+        except Exception as e:
+            print(f"Failed to upload transcript to S3: {e}")
 
     async def hangup():
         logger.info("Idle too long, hanging up")
@@ -165,14 +176,14 @@ async def entrypoint(ctx: JobContext):
                 await session.generate_reply(instructions="You have about one minute left in this conversation. Please wrap up any important points you'd like to discuss!", allow_interruptions=True)
             if elapsed_call_time >= MAX_CALL_DURATION:
                 logger.info("Ending call due to max duration.")
-                await session.generate_reply(instructions="The maximum call duration has been reached. EXPLICITLY say goodbye and call the `end_conversation` function to end the call... And DO NTO forget to say goodbye to the user", allow_interruptions=False)
+                await session.generate_reply(instructions="The maximum call duration has been reached. EXPLICITLY say goodbye and call the `end_conversation` function to end the call... And DO NOT forget to say goodbye to the user. Make sure to say goodbye to the user.", allow_interruptions=False)
                 await asyncio.sleep(SPEAK_DELAY)
                 # await hangup() <-- uncomment this if we want the call to abruptly end when the max duration is reached
                 break
             # --- End Call if Idle ---
             if await should_end_call():
                 logger.info("Ending call due to inactivity.")
-                await session.generate_reply(instructions="The user has been inactive for too long. EXPLICITLY Say goodbye and call the `end_conversation` function to the end the call... And DO NTO forget to say goodbye to the user", allow_interruptions=False)
+                await session.generate_reply(instructions="The user has been inactive for too long. EXPLICITLY Say goodbye and call the `end_conversation` function to the end the call... And DO NOT forget to say goodbye to the user. Make sure to say goodbye to the user.", allow_interruptions=False)
                 await asyncio.sleep(SPEAK_DELAY)
                 await hangup()
                 break
