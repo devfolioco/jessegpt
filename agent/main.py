@@ -17,7 +17,6 @@ from livekit.agents import (
     RunContext,
     WorkerOptions,
     AutoSubscribe,
-    ChatContext,
     tokenize,
     function_tool,
     get_job_context,
@@ -50,8 +49,8 @@ mood_initial_prompts = {
 TIMEOUT_SECONDS = 30
 PROMPT_WARNING_TIME = 10
 SPEAK_DELAY = 3
-MAX_CALL_DURATION = 120  # 2 minutes in seconds
-CALL_DURATION_WARNING_TIME = 60  # 1 minute in seconds
+MAX_CALL_DURATION = 60
+CALL_DURATION_WARNING_TIME = 30
 
 logger = logging.getLogger("jessexbt")
 
@@ -212,10 +211,15 @@ async def entrypoint(ctx: JobContext):
                 session.interrupt()
                 session.clear_user_turn()
                 await session.say(
-                    "Aha! I'm afraid thats all that we have time for today. This was a great chat. I can't wait to see your idea come to life during Onchain Summer! Take care, and never stop building!!"
+                    "Aha! This was fun, but I'm afraid thats all that we have for today. I can't wait to see your idea come to life during Onchain Summer! stay based, and never stop building!!"
                 )
                 await asyncio.sleep(SPEAK_DELAY * 2)
-                await end_convo()
+                await session.generate_reply(
+                    instructions="The conversation has concluded. Please call the `end_conversation` function to end the call...",
+                    allow_interruptions=False,
+                )
+                await asyncio.sleep(SPEAK_DELAY)
+                # await end_convo()
                 # await hangup() <-- uncomment this if we want the call to abruptly end when the max duration is reached
                 break
             # --- End Call if Idle ---
@@ -258,27 +262,6 @@ async def entrypoint(ctx: JobContext):
 
         reset_timeout()
 
-    async def end_convo():
-        job_ctx = get_job_context()
-        room = job_ctx.room
-        llm = openai.LLM(model="gpt-4o-mini")
-
-        chat_ctx = ChatContext().from_dict(session.history.to_dict())
-        chat_ctx.add_message(
-            role="system",
-            content="Please summarize core idea discussed in the conversation in one or two words. Just return the words, and absolutely nothing else.",
-        )
-
-        writer = await room.local_participant.stream_text(topic="end_conversation")
-
-        async with llm.chat(chat_ctx) as stream:
-            async for chunk in stream:
-                print("END_CONVO_CHUNK", chunk)
-                await writer.write(chunk)
-
-        await writer.close()
-        await room.disconnect()
-
     await session.start(room=ctx.room, agent=agent)
 
     ctx.add_shutdown_callback(shutdown_handler)
@@ -288,6 +271,10 @@ async def entrypoint(ctx: JobContext):
     await asyncio.sleep(SPEAK_DELAY)
 
     asyncio.create_task(monitor_interaction())
+
+    await ctx.room.local_participant.send_text(
+        "Hello, this is just a test", topic="hello"
+    )
 
 
 if __name__ == "__main__":

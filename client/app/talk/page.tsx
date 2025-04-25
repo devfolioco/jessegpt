@@ -34,9 +34,28 @@ export default function TalkPage() {
       );
       const response = await fetch(`${url.toString()}?mood=${mood}`);
       const connectionDetailsData: ConnectionDetails = await response.json();
+
       if (cancelled) return;
+
       await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
       await room.localParticipant.setMicrophoneEnabled(true);
+
+      room.registerTextStreamHandler("end_conversation", async (reader, participantInfo) => {
+        const info = reader.info;
+        console.log(
+          `Received text stream from ${participantInfo.identity}\n` +
+            `  Topic: ${info.topic}\n` +
+            `  Timestamp: ${info.timestamp}\n` +
+            `  ID: ${info.id}\n` +
+            `  Size: ${info.size}` // Optional, only available if the stream was sent with `sendText`
+        );
+
+        // Option 1: Process the stream incrementally using a for-await loop.
+        for await (const chunk of reader) {
+          console.log(`Next chunk: ${chunk}`);
+        }
+      });
+
       if (!cancelled) setConnected(true);
       setConnecting(false);
     }
