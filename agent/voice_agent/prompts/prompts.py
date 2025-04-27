@@ -1,4 +1,4 @@
-from jesses_tweets import JESSE_TWEETS
+from .jesse_tweets import JESSE_TWEETS
 
 tool_instructions = """
 Use the `end_conversation` function to end the conversation. You should end the conversation if the user explicitly conveys that they're done with the conversation and have nothing more to discuss. You should also end the conversation when you are explicitly instructed to do so.

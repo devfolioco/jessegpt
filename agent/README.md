@@ -27,9 +27,3 @@ make download-files
 ```sh
 make dev
 ```
-
-or
-
-```sh
-uv run main.py dev
-```
