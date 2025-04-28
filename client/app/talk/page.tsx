@@ -21,6 +21,8 @@ export default function TalkPage() {
   const [room] = useState(new Room());
   const [connecting, setConnecting] = useState(false);
   const [connected, setConnected] = useState(false);
+  // Holds object URL of image received via byte stream
+  const [endImageUrl, setEndImageUrl] = useState<string | null>(null);
 
   // Connect to LiveKit when mood is selected
   useEffect(() => {
@@ -40,20 +42,51 @@ export default function TalkPage() {
       await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
       await room.localParticipant.setMicrophoneEnabled(true);
 
-      room.registerTextStreamHandler("end_conversation", async (reader, participantInfo) => {
+      // Register handler for the one liner text stream
+      room.registerTextStreamHandler(
+        "end_conversation_one_liner",
+        async (reader, participantInfo) => {
+          const info = reader.info;
+          console.log(
+            `Received text stream from ${participantInfo.identity}\n` +
+              `  Topic: ${info.topic}\n` +
+              `  Timestamp: ${info.timestamp}\n` +
+              `  ID: ${info.id}\n` +
+              `  Size: ${info.size}`
+          );
+
+          for await (const chunk of reader) {
+            console.log(`One Liner: ${chunk}`);
+          }
+        }
+      );
+
+      // Register handler for PNG image byte stream (chunk-by-chunk)
+      room.registerByteStreamHandler("end_conversation_image", async (reader, participantInfo) => {
         const info = reader.info;
+
         console.log(
-          `Received text stream from ${participantInfo.identity}\n` +
+          `Received byte stream from ${participantInfo.identity}\n` +
             `  Topic: ${info.topic}\n` +
             `  Timestamp: ${info.timestamp}\n` +
-            `  ID: ${info.id}\n` +
-            `  Size: ${info.size}` // Optional, only available if the stream was sent with `sendText`
+            `  ID: ${info.id}\n`
         );
 
-        // Option 1: Process the stream incrementally using a for-await loop.
+        // Collect chunks as they arrive
+        const chunks: Uint8Array[] = [];
+
         for await (const chunk of reader) {
-          console.log(`Next chunk: ${chunk}`);
+          chunks.push(chunk);
         }
+
+        const blob = new Blob(chunks, {
+          type: info.mimeType || "image/png",
+        });
+
+        setEndImageUrl((prev) => {
+          if (prev) URL.revokeObjectURL(prev);
+          return URL.createObjectURL(blob);
+        });
       });
 
       if (!cancelled) setConnected(true);
@@ -156,6 +189,16 @@ export default function TalkPage() {
         <div className="lk-room-container max-h-[90vh]">
           <SimpleVoiceAssistant mood={mood} />
         </div>
+        {endImageUrl && (
+          <div className="fixed bottom-4 right-4 z-50 bg-white p-2 rounded shadow-lg">
+            {/* Using a regular img tag to avoid Next/Image restrictions on object URLs */}
+            <img
+              src={endImageUrl}
+              alt="Conversation result"
+              className="max-w-[200px] max-h-[200px]"
+            />
+          </div>
+        )}
       </RoomContext.Provider>
     </main>
   );

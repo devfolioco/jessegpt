@@ -284,8 +284,27 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     await session.generate_reply(instructions=initial_prompt, allow_interruptions=False)
     await asyncio.sleep(SPEAK_DELAY)
 
-    # Start monitoring loop (fire-and-forget)
-    asyncio.create_task(monitor_interaction())
+    # =======================================================================
+    # Simulate user conversation
+    # TODO: Remove after testing
+
+    await session.generate_reply(
+        user_input="Our mission is to build a global onchain economy that increases innovation, creativity, and freedom. A new internet, built by the people, for the people.",
+        allow_interruptions=False,
+    )
+
+    await asyncio.sleep(5)
+
+    monitor_task = asyncio.create_task(monitor_interaction())
+    # Expose the task so other components (e.g., tools) can cancel it when needed
+    ctx.proc.userdata["monitor_task"] = monitor_task
+
+    await asyncio.sleep(2)
+    await session.generate_reply(
+        user_input="Please call the `end_conversation` function to end the call...",
+        allow_interruptions=False,
+    )
+    # =======================================================================
 
     # Example starter message via data-channel
     await ctx.room.local_participant.send_text(

@@ -544,6 +544,7 @@ dependencies = [
     { name = "boto3" },
     { name = "livekit-agents", extra = ["cartesia", "deepgram", "elevenlabs", "google", "openai", "silero", "turn-detector"] },
     { name = "livekit-plugins-noise-cancellation" },
+    { name = "openai" },
     { name = "python-dotenv" },
 ]
 
@@ -552,6 +553,7 @@ requires-dist = [
     { name = "boto3", specifier = ">=1.38.1" },
     { name = "livekit-agents", extras = ["cartesia", "deepgram", "elevenlabs", "google", "openai", "silero", "turn-detector"], specifier = "~=1.0" },
     { name = "livekit-plugins-noise-cancellation", specifier = "~=0.2" },
+    { name = "openai", specifier = ">=1.76.0" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
 ]
 
