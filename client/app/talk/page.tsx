@@ -80,7 +80,7 @@ export default function TalkPage() {
           {/* JesseXBT (Optimistic) */}
           <div className="flex-1 flex flex-col items-center text-center bg-transparent">
             <Image
-              src="/mellow-jesse.png"
+              src="/mellow-jesse.gif"
               alt="JesseXBT Avatar"
               width={180}
               height={180}
@@ -106,7 +106,7 @@ export default function TalkPage() {
           {/* SupaBald JesseXBT (Critical) */}
           <div className="flex-1 flex flex-col items-center text-center bg-transparent">
             <Image
-              src="/critical-jesse.png"
+              src="/critical-jesse.gif"
               alt="SupaBald JesseXBT Avatar"
               width={180}
               height={180}
@@ -173,7 +173,7 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
       <div className="flex flex-col items-center mb-6 relative">
         <div className="flex flex-row">
           <Image
-            src={mood === "critical" ? "/critical-jesse.png" : "/mellow-jesse.png"}
+            src={mood === "critical" ? "/critical-jesse.gif" : "/mellow-jesse.gif"}
             alt="JesseXBT Avatar"
             width={254}
             height={254}
