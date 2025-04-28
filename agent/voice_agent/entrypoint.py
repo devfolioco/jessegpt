@@ -201,11 +201,13 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
             if elapsed >= CALL_DURATION_WARNING_TIME and not duration_warning_sent:
                 logger.info("Sending call duration warning")
 
+                session.input.set_audio_enabled(False)
                 session.clear_user_turn()
 
                 speech_handle = session.say(
                     "You have about one minute left in this conversation. "
-                    "Please wrap up any important points you'd like to discuss!"
+                    "Please wrap up any important points you'd like to discuss!",
+                    allow_interruptions=False,
                 )
                 if session.current_speech is not None:
                     await session.current_speech.wait_for_playout()
@@ -214,13 +216,20 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
 
                 duration_warning_sent = True
 
+                session.input.set_audio_enabled(True)
+
             if elapsed >= MAX_CALL_DURATION:
                 logger.info("Max call duration reached – wrapping up")
+
+                # Stop listening to the user while we send the goodbye message
+                session.input.set_audio_enabled(False)
                 session.clear_user_turn()
+
                 speech_handle = session.say(
                     "Aha! This was fun, but I'm afraid that's all that we have for "
                     "today. I can't wait to see your idea come to life during "
-                    "Onchain Summer! Stay based, and never stop building!!"
+                    "Onchain Summer! Stay based, and never stop building!!",
+                    allow_interruptions=False,
                 )
                 if session.current_speech is not None:
                     await session.current_speech.wait_for_playout()
