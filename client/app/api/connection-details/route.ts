@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { AccessToken, AccessTokenOptions, VideoGrant } from "livekit-server-sdk";
 import { NextResponse } from "next/server";
 
@@ -33,8 +34,10 @@ export async function GET(request: Request) {
     }
 
     // Generate participant token
-    const participantIdentity = `voice_assistant_user_${Math.floor(Math.random() * 10_000)}`;
-    const roomName = `${mood}_room`;
+    const participantIdentity = `voice_assistant_user_${crypto.randomUUID().replace(/-/g, "")}`;
+    const roomName = `${mood}_room_${crypto.randomUUID().replace(/-/g, "")}`;
+    console.log("roomName", roomName);
+    console.log("participantIdentity", participantIdentity);
     const participantToken = await createParticipantToken(
       { identity: participantIdentity },
       roomName

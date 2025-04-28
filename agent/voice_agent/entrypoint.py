@@ -113,6 +113,11 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
 
     async def upload_transcript() -> None:
         """Serialize *session* history and upload to S3 bucket (if configured)."""
+
+        if len(session.history.items) == 0:
+            logger.debug("Skipping transcript upload for empty transcript")
+            return
+
         bucket = os.environ.get("S3_BUCKET_NAME")
         if not bucket:
             logger.debug("S3_BUCKET_NAME not configured – skipping transcript upload")
