@@ -6,7 +6,7 @@ export default function HomePage() {
     <main className="min-h-screen flex items-center justify-center bg-[#638596] relative absolute inset-0 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]">
       <div className="z-10 flex flex-col items-center text-center gap-8">
         <Image
-          src="/mellow-jesse.png"
+          src="/mellow-jesse.gif"
           alt="JesseXBT Avatar"
           width={180}
           height={180}
