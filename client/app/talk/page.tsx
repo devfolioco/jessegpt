@@ -8,16 +8,17 @@ import {
   DisconnectButton,
   RoomAudioRenderer,
   RoomContext,
-  VoiceAssistantControlBar,
+
   useVoiceAssistant,
 } from "@livekit/components-react";
 import { Room, RoomEvent } from "livekit-client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { ConnectionDetails } from "../api/connection-details/route";
+import { CustomVoiceAssistantControlBar } from "@/components/CustomVoiceAssistantControlBar";
 
 export default function TalkPage() {
-  const [mood, setMood] = useState<null | "excited" | "critical">(null);
+  const [mood, setMood] = useState<null | "excited" | "critical">("critical");
   const [room] = useState(new Room());
   const [connecting, setConnecting] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -245,10 +246,12 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
       <NoAgentNotification state={agentState} />
 
       {/* Centered controls at the bottom - Fixed */}
-      <div className="w-full flex justify-center fixed bottom-0 left-0 px-4 py-6 z-10">
-        <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg px-6 py-3">
-          <VoiceAssistantControlBar controls={{ leave: false }} />
-          <DisconnectButton>
+      <div className="w-full flex justify-center fixed bottom-0 left-0 px-4 py-6 z-10 gap-4">
+        <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg py-3">
+          <CustomVoiceAssistantControlBar controls={{ leave: false }} />
+        </div>
+        <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg px-3 py-3">
+          <DisconnectButton className="w-[40px] h-[40px] " style={{backgroundColor: '#F06444', borderRadius: '8px', border: 'none', color: 'white'}}>
             <CloseIcon />
           </DisconnectButton>
         </div>
