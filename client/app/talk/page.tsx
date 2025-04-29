@@ -8,13 +8,14 @@ import {
   DisconnectButton,
   RoomAudioRenderer,
   RoomContext,
-  VoiceAssistantControlBar,
+
   useVoiceAssistant,
 } from "@livekit/components-react";
 import { Room, RoomEvent } from "livekit-client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { ConnectionDetails } from "../api/connection-details/route";
+import { CustomVoiceAssistantControlBar } from "@/components/CustomVoiceAssistantControlBar";
 
 export default function TalkPage() {
   const [mood, setMood] = useState<null | "excited" | "critical">(null);
@@ -192,7 +193,7 @@ export default function TalkPage() {
         {endImageUrl && (
           <div className="fixed bottom-4 right-4 z-50 bg-white p-2 rounded shadow-lg">
             {/* Using a regular img tag to avoid Next/Image restrictions on object URLs */}
-            <img
+            <Image
               src={endImageUrl}
               alt="Conversation result"
               className="max-w-[200px] max-h-[200px]"
@@ -245,10 +246,12 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
       <NoAgentNotification state={agentState} />
 
       {/* Centered controls at the bottom - Fixed */}
-      <div className="w-full flex justify-center fixed bottom-0 left-0 px-4 py-6 z-10">
-        <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg px-6 py-3">
-          <VoiceAssistantControlBar controls={{ leave: false }} />
-          <DisconnectButton>
+      <div className="w-full flex justify-center fixed bottom-0 left-0 px-4 py-6 z-10 gap-4">
+        <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg py-3">
+          <CustomVoiceAssistantControlBar controls={{ leave: false }} />
+        </div>
+        <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg px-3 py-3">
+          <DisconnectButton className="w-[40px] h-[40px] " style={{backgroundColor: '#F06444', borderRadius: '8px', border: 'none', color: 'white'}}>
             <CloseIcon />
           </DisconnectButton>
         </div>
