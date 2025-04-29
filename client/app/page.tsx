@@ -2,6 +2,8 @@
 
 import { AgentSelection } from '@/components/AgentSelection';
 import { Button } from '@/components/Button';
+import useButtonPointerAnimation from '@/hooks/useButtonPointerAnimation';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -22,6 +24,12 @@ export default function HomePage() {
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
   }, [showAgentSelection]);
+
+  const { canvasRef, targetRef, initializeAnimation } = useButtonPointerAnimation();
+
+  useEffect(() => {
+    initializeAnimation();
+  }, []);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#638596] relative inset-0 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]">
@@ -46,18 +54,28 @@ export default function HomePage() {
           <Button href="https://www.basebatches.xyz/" target="_blank" appearance="secondary">
             Apply to Base Batches: 001
           </Button>
-          <Button onClick={handleAgentSelection}>Start talking to Jesse</Button>
+          <Button ref={targetRef} onClick={handleAgentSelection}>
+            Start talking to Jesse
+          </Button>
         </div>
       </div>
 
-      {showAgentSelection && (
-        <div
-          className="flex items-center justify-center absolute inset-0 bg-black bg-opacity-80 w-screen h-screen backdrop-blur-lg z-20"
-          onClick={() => setShowAgentSelection(false)}
-        >
-          <AgentSelection />
-        </div>
-      )}
+      <AnimatePresence>
+        {showAgentSelection && (
+          <motion.div
+            className="flex items-center justify-center absolute inset-0 bg-black bg-opacity-80 w-screen h-screen backdrop-blur-lg z-20"
+            onClick={() => setShowAgentSelection(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.1 } }}
+            transition={{ duration: 0.2 }}
+          >
+            <AgentSelection />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none w-screen h-screen"></canvas>
     </main>
   );
 }
