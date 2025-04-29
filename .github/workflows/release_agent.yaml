@@ -1,4 +1,4 @@
-name: Release
+name: Release Agent
 on:
   release:
     types:
@@ -23,6 +23,7 @@ jobs:
         id: docker_build_and_push
         uses: docker/build-push-action@v3
         with:
+          context: agent
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
