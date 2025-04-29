@@ -1,7 +1,11 @@
 import useCombinedTranscriptions from "@/hooks/useCombinedTranscriptions";
 import * as React from "react";
 
-export default function TranscriptionView() {
+export default function TranscriptionView({
+  mood,
+}: {
+  mood: "excited" | "critical";
+}) {
   const combinedTranscriptions = useCombinedTranscriptions();
 
   // scroll to bottom when new transcription is added
@@ -23,7 +27,7 @@ export default function TranscriptionView() {
           key={segment.id}
           className={
             segment.role === "assistant"
-              ? "bg-white text-gray-900 rounded-2xl px-6 py-4 self-start max-w-[70%] shadow-md text-lg"
+              ? ` rounded-2xl px-6 py-4 self-start max-w-[70%] shadow-md text-lg ${mood === "excited" ? "bg-[#FFF68E] text-gray-900" : "bg-[#0157FA] text-white"}`
               : "bg-[#22302B] text-white rounded-2xl px-6 py-4 self-end max-w-[70%] shadow-md text-lg"
           }
           style={{ wordBreak: "break-word", whiteSpace: "pre-line" }}
