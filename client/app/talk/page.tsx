@@ -1,6 +1,7 @@
 "use client";
 
 import { CloseIcon } from "@/components/CloseIcon";
+import { MicIcon } from "@/components/MicIcon";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import TranscriptionView from "@/components/TranscriptionView";
 import {
@@ -132,7 +133,7 @@ export default function TalkPage() {
               onClick={() => setMood("excited")}
             >
               <span role="img" aria-label="microphone">
-                🎤
+                <MicIcon color="black" />
               </span>{" "}
               Start talking
             </button>
@@ -158,7 +159,7 @@ export default function TalkPage() {
               onClick={() => setMood("critical")}
             >
               <span role="img" aria-label="microphone">
-                🎤
+                <MicIcon />
               </span>{" "}
               Start talking
             </button>
