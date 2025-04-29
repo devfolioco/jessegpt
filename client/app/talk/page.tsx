@@ -1,5 +1,4 @@
 "use client";
-
 import { CloseIcon } from "@/components/CloseIcon";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import TranscriptionView from "@/components/TranscriptionView";
@@ -8,7 +7,6 @@ import {
   DisconnectButton,
   RoomAudioRenderer,
   RoomContext,
-
   useVoiceAssistant,
 } from "@livekit/components-react";
 import { Room, RoomEvent } from "livekit-client";
@@ -16,14 +14,32 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { ConnectionDetails } from "../api/connection-details/route";
 import { CustomVoiceAssistantControlBar } from "@/components/CustomVoiceAssistantControlBar";
+import {  useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+const parseMoodQueryParam = (query: string | string[] | null): "excited" | "critical" | null => {
+  if (typeof query === 'string') {
+    return query as "excited" | "critical";
+  }
+  return null;
+}
 
 export default function TalkPage() {
-  const [mood, setMood] = useState<null | "excited" | "critical">(null);
+  const searchParams = useSearchParams();
+  const mood = parseMoodQueryParam(searchParams.get("mood"));
+  const router = useRouter();
+
   const [room] = useState(new Room());
   const [connecting, setConnecting] = useState(false);
   const [connected, setConnected] = useState(false);
   // Holds object URL of image received via byte stream
   const [endImageUrl, setEndImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    // redirect to home page if no mood is selected
+    if (!mood) {
+      router.push('/');
+    }
+  }, [mood, router]);
 
   // Connect to LiveKit when mood is selected
   useEffect(() => {
@@ -109,62 +125,7 @@ export default function TalkPage() {
   // Persona selection UI
   if (!mood) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-[#0C1110]">
-        <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-16 py-16">
-          {/* JesseXBT (Optimistic) */}
-          <div className="flex-1 flex flex-col items-center text-center bg-transparent">
-            <Image
-              src="/mellow-jesse.gif"
-              alt="JesseXBT Avatar"
-              width={180}
-              height={180}
-              className="rounded-none mb-6"
-              priority
-            />
-            <h2 className="text-4xl font-serif font-bold text-white mb-2">JesseXBT</h2>
-            <p className="text-lg text-white/90 mb-2">The relentlessly optimistic Jesse Pollak.</p>
-            <p className="text-base text-white/80 mb-8 max-w-xs">
-              Sees massive potential everywhere, bursting with Onchain Summer energy, &amp; ready to
-              hype your vision to the moon.
-            </p>
-            <button
-              className="flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-lg font-semibold bg-yellow-300 text-black hover:bg-yellow-200 transition-all shadow-md"
-              onClick={() => setMood("excited")}
-            >
-              <span role="img" aria-label="microphone">
-                🎤
-              </span>{" "}
-              Start talking
-            </button>
-          </div>
-          {/* SupaBald JesseXBT (Critical) */}
-          <div className="flex-1 flex flex-col items-center text-center bg-transparent">
-            <Image
-              src="/critical-jesse.gif"
-              alt="SupaBald JesseXBT Avatar"
-              width={180}
-              height={180}
-              className="rounded-none mb-6"
-              priority
-            />
-            <h2 className="text-4xl font-serif font-bold text-white mb-2">SupaBald JesseXBT</h2>
-            <p className="text-lg text-white/90 mb-2">The brutally honest Jesse Pollak.</p>
-            <p className="text-base text-white/80 mb-8 max-w-xs">
-              Cuts through the hype, challenges every premise, &amp; believes great ideas must
-              survive intense scrutiny to succeed.
-            </p>
-            <button
-              className="flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-lg font-semibold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md"
-              onClick={() => setMood("critical")}
-            >
-              <span role="img" aria-label="microphone">
-                🎤
-              </span>{" "}
-              Start talking
-            </button>
-          </div>
-        </div>
-      </main>
+      <></>
     );
   }
 
