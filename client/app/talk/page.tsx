@@ -7,7 +7,6 @@ import {
   DisconnectButton,
   RoomAudioRenderer,
   RoomContext,
-
   useVoiceAssistant,
 } from "@livekit/components-react";
 import { Room, RoomEvent } from "livekit-client";
