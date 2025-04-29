@@ -226,13 +226,17 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
             className="rounded-none"
             priority
           />
-          <div className="bg-[#FFF68D] mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden">
+          <div className={`mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden ${mood === "excited" ? "bg-[#FFF68D]" : "bg-[#0157FA]"}`}>
             <BarVisualizer
               state={agentState}
               trackRef={agentAudioTrack}
               barCount={5}
               className="agent-visualizer"
               options={{ maxHeight: 40 }}
+              style={{
+                // @ts-expect-error variable update
+                "--lk-fg": mood === "excited" ? "#20282D" : "white",
+              }}
             />
           </div>
         </div>
