@@ -18,7 +18,7 @@ import type { ConnectionDetails } from "../api/connection-details/route";
 import { CustomVoiceAssistantControlBar } from "@/components/CustomVoiceAssistantControlBar";
 
 export default function TalkPage() {
-  const [mood, setMood] = useState<null | "excited" | "critical">("critical");
+  const [mood, setMood] = useState<null | "excited" | "critical">(null);
   const [room] = useState(new Room());
   const [connecting, setConnecting] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -193,7 +193,7 @@ export default function TalkPage() {
         {endImageUrl && (
           <div className="fixed bottom-4 right-4 z-50 bg-white p-2 rounded shadow-lg">
             {/* Using a regular img tag to avoid Next/Image restrictions on object URLs */}
-            <img
+            <Image
               src={endImageUrl}
               alt="Conversation result"
               className="max-w-[200px] max-h-[200px]"
