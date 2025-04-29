@@ -18,7 +18,6 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
         e.stopPropagation();
     }
 
-// bg-[#0C1110]
     return ( 
         <main className="min-h-screen w-full flex items-center justify-center" {...props}>
         <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-16 py-16">
