@@ -1,4 +1,4 @@
-# Jesse LiveKit Voice Agent Demo
+# JesseGPT
 
 ## Overview
 
@@ -46,6 +46,7 @@
 ### Running the Project
 
 1.  **Start the Agent:**
+
     ```sh
     cd agent
     make dev

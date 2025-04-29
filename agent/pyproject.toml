@@ -1,7 +1,7 @@
 [project]
-name = "jesse-livekit-voice-agent"
-version = "0.1.0"
-description = "Jesse Livekit Voice Agent"
+name = "jessegpt"
+version = "0.0.1"
+description = "JesseGPT"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
