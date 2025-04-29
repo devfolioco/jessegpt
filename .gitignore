@@ -192,3 +192,7 @@ transcripts/
 
 build/
 *.egg-info/
+
+
+# ignore all ai generated files in the agent directory
+agent/*.png
