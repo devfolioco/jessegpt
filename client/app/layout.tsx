@@ -1,10 +1,10 @@
-import "@livekit/components-styles";
-import { Public_Sans } from "next/font/google";
-import "./globals.css";
+import '@livekit/components-styles';
+import { Public_Sans } from 'next/font/google';
+import './globals.css';
 
 const publicSans400 = Public_Sans({
-  weight: "400",
-  subsets: ["latin"],
+  weight: '400',
+  subsets: ['latin'],
 });
 
 export default function RootLayout({

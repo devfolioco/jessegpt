@@ -1,15 +1,14 @@
-import { Track } from "livekit-client";
-import * as React from "react";
-import { MediaDeviceMenu, TrackToggle } from "@livekit/components-react";
-
+import { MediaDeviceMenu, TrackToggle } from '@livekit/components-react';
 import {
   useLocalParticipant,
   useLocalParticipantPermissions,
   usePersistentUserChoices,
-} from "@livekit/components-react";
-import { StartMediaButton } from "@livekit/components-react";
-import { BarVisualizer, DisconnectButton } from "@livekit/components-react";
-import type { TrackReferenceOrPlaceholder } from "@livekit/components-react";
+} from '@livekit/components-react';
+import { StartMediaButton } from '@livekit/components-react';
+import { BarVisualizer, DisconnectButton } from '@livekit/components-react';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-react';
+import { Track } from 'livekit-client';
+import * as React from 'react';
 
 /** @beta */
 export type VoiceAssistantControlBarControls = {
@@ -18,8 +17,7 @@ export type VoiceAssistantControlBarControls = {
 };
 
 /** @beta */
-export interface VoiceAssistantControlBarProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface VoiceAssistantControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
   onDeviceError?: (error: { source: Track.Source; error: Error }) => void;
   controls?: VoiceAssistantControlBarControls;
   /**
@@ -64,12 +62,11 @@ export function CustomVoiceAssistantControlBar({
     visibleControls.microphone ??= localPermissions.canPublish;
   }
 
-  const htmlProps = { ...props, className: "lk-agent-control-bar" };
+  const htmlProps = { ...props, className: 'lk-agent-control-bar' };
 
-  const { saveAudioInputEnabled, saveAudioInputDeviceId } =
-    usePersistentUserChoices({
-      preventSave: !saveUserChoices,
-    });
+  const { saveAudioInputEnabled, saveAudioInputDeviceId } = usePersistentUserChoices({
+    preventSave: !saveUserChoices,
+  });
 
   const microphoneOnChange = React.useCallback(
     (enabled: boolean, isUserInitiated: boolean) => {
@@ -88,12 +85,12 @@ export function CustomVoiceAssistantControlBar({
             className=" text-[#8E989C] hover:text-[#8E989C]"
             style={{
               // @ts-expect-error Update color
-              "--lk-control-active-bg": "transparent",
-              "--lk-control-active-color": "transparent",
-              "--lk-control-active-hover-bg": "transparent",
-              "--lk-control-bg": "transparent",
-              "--lk-control-hover-bg": "transparent",
-              "--lk-fg": "#273339",
+              '--lk-control-active-bg': 'transparent',
+              '--lk-control-active-color': 'transparent',
+              '--lk-control-active-hover-bg': 'transparent',
+              '--lk-control-bg': 'transparent',
+              '--lk-control-hover-bg': 'transparent',
+              '--lk-fg': '#273339',
 
               paddingLeft: '24px',
               paddingRight: '8px',
@@ -101,23 +98,19 @@ export function CustomVoiceAssistantControlBar({
             source={Track.Source.Microphone}
             showIcon={true}
             onChange={microphoneOnChange}
-            onDeviceError={(error) =>
-              onDeviceError?.({ source: Track.Source.Microphone, error })
-            }
+            onDeviceError={error => onDeviceError?.({ source: Track.Source.Microphone, error })}
           >
             <BarVisualizer
               trackRef={micTrackRef}
               barCount={7}
               options={{ minHeight: 32 }}
-              style={{margin: '0 24px'}}
+              style={{ margin: '0 24px' }}
             />
           </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
               kind="audioinput"
-              onActiveDeviceChange={(_kind, deviceId) =>
-                saveAudioInputDeviceId(deviceId ?? "default")
-              }
+              onActiveDeviceChange={(_kind, deviceId) => saveAudioInputDeviceId(deviceId ?? 'default')}
               style={{
                 borderRadius: '8px',
               }}
@@ -126,9 +119,7 @@ export function CustomVoiceAssistantControlBar({
         </div>
       )}
 
-      {visibleControls.leave && (
-        <DisconnectButton>{"Disconnect"}</DisconnectButton>
-      )}
+      {visibleControls.leave && <DisconnectButton>{'Disconnect'}</DisconnectButton>}
       <StartMediaButton />
     </div>
   );
