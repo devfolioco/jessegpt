@@ -1,11 +1,7 @@
-import useCombinedTranscriptions from "@/hooks/useCombinedTranscriptions";
-import * as React from "react";
+import useCombinedTranscriptions from '@/hooks/useCombinedTranscriptions';
+import * as React from 'react';
 
-export default function TranscriptionView({
-  mood,
-}: {
-  mood: "excited" | "critical";
-}) {
+export default function TranscriptionView({ mood }: { mood: 'excited' | 'critical' }) {
   const combinedTranscriptions = useCombinedTranscriptions();
 
   // scroll to bottom when new transcription is added
@@ -14,23 +10,23 @@ export default function TranscriptionView({
     if (transcription) {
       const transcriptionElement = document.getElementById(transcription.id);
       if (transcriptionElement) {
-        transcriptionElement.scrollIntoView({ behavior: "smooth" });
+        transcriptionElement.scrollIntoView({ behavior: 'smooth' });
       }
     }
   }, [combinedTranscriptions]);
 
   return (
     <div className="h-full flex flex-col gap-4 overflow-y-auto py-8">
-      {combinedTranscriptions.map((segment) => (
+      {combinedTranscriptions.map(segment => (
         <div
           id={segment.id}
           key={segment.id}
           className={
-            segment.role === "assistant"
-              ? ` rounded-2xl px-6 py-4 self-start max-w-[70%] shadow-md text-lg ${mood === "excited" ? "bg-[#FFF68E] text-gray-900" : "bg-[#0157FA] text-white"}`
-              : "bg-[#22302B] text-white rounded-2xl px-6 py-4 self-end max-w-[70%] shadow-md text-lg"
+            segment.role === 'assistant'
+              ? ` rounded-2xl px-6 py-4 self-start max-w-[70%] shadow-md text-lg ${mood === 'excited' ? 'bg-[#FFF68E] text-gray-900' : 'bg-[#0157FA] text-white'}`
+              : 'bg-[#22302B] text-white rounded-2xl px-6 py-4 self-end max-w-[70%] shadow-md text-lg'
           }
-          style={{ wordBreak: "break-word", whiteSpace: "pre-line" }}
+          style={{ wordBreak: 'break-word', whiteSpace: 'pre-line' }}
         >
           {(segment.text as string).toLocaleLowerCase()}
         </div>

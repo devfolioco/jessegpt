@@ -1,31 +1,33 @@
-"use client";
-import { CloseIcon } from "@/components/CloseIcon";
-import { NoAgentNotification } from "@/components/NoAgentNotification";
-import TranscriptionView from "@/components/TranscriptionView";
+'use client';
+
+import { CloseIcon } from '@/components/CloseIcon';
+import { CustomVoiceAssistantControlBar } from '@/components/CustomVoiceAssistantControlBar';
+import { NoAgentNotification } from '@/components/NoAgentNotification';
+import TranscriptionView from '@/components/TranscriptionView';
 import {
   BarVisualizer,
   DisconnectButton,
   RoomAudioRenderer,
   RoomContext,
   useVoiceAssistant,
-} from "@livekit/components-react";
-import { Room, RoomEvent } from "livekit-client";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import type { ConnectionDetails } from "../api/connection-details/route";
-import { CustomVoiceAssistantControlBar } from "@/components/CustomVoiceAssistantControlBar";
-import {  useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-const parseMoodQueryParam = (query: string | string[] | null): "excited" | "critical" | null => {
+} from '@livekit/components-react';
+import { Room, RoomEvent } from 'livekit-client';
+import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import type { ConnectionDetails } from '../api/connection-details/route';
+
+const parseMoodQueryParam = (query: string | string[] | null): 'excited' | 'critical' | null => {
   if (typeof query === 'string') {
-    return query as "excited" | "critical";
+    return query as 'excited' | 'critical';
   }
   return null;
-}
+};
 
 export default function TalkPage() {
   const searchParams = useSearchParams();
-  const mood = parseMoodQueryParam(searchParams.get("mood"));
+  const mood = parseMoodQueryParam(searchParams.get('mood'));
   const router = useRouter();
 
   const [room] = useState(new Room());
@@ -48,7 +50,7 @@ export default function TalkPage() {
     async function connect() {
       setConnecting(true);
       const url = new URL(
-        process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? "/api/connection-details",
+        process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',
         window.location.origin
       );
       const response = await fetch(`${url.toString()}?mood=${mood}`);
@@ -60,26 +62,23 @@ export default function TalkPage() {
       await room.localParticipant.setMicrophoneEnabled(true);
 
       // Register handler for the one liner text stream
-      room.registerTextStreamHandler(
-        "end_conversation_one_liner",
-        async (reader, participantInfo) => {
-          const info = reader.info;
-          console.log(
-            `Received text stream from ${participantInfo.identity}\n` +
-              `  Topic: ${info.topic}\n` +
-              `  Timestamp: ${info.timestamp}\n` +
-              `  ID: ${info.id}\n` +
-              `  Size: ${info.size}`
-          );
+      room.registerTextStreamHandler('end_conversation_one_liner', async (reader, participantInfo) => {
+        const info = reader.info;
+        console.log(
+          `Received text stream from ${participantInfo.identity}\n` +
+            `  Topic: ${info.topic}\n` +
+            `  Timestamp: ${info.timestamp}\n` +
+            `  ID: ${info.id}\n` +
+            `  Size: ${info.size}`
+        );
 
-          for await (const chunk of reader) {
-            console.log(`One Liner: ${chunk}`);
-          }
+        for await (const chunk of reader) {
+          console.log(`One Liner: ${chunk}`);
         }
-      );
+      });
 
       // Register handler for PNG image byte stream (chunk-by-chunk)
-      room.registerByteStreamHandler("end_conversation_image", async (reader, participantInfo) => {
+      room.registerByteStreamHandler('end_conversation_image', async (reader, participantInfo) => {
         const info = reader.info;
 
         console.log(
@@ -97,10 +96,10 @@ export default function TalkPage() {
         }
 
         const blob = new Blob(chunks, {
-          type: info.mimeType || "image/png",
+          type: info.mimeType || 'image/png',
         });
 
-        setEndImageUrl((prev) => {
+        setEndImageUrl(prev => {
           if (prev) URL.revokeObjectURL(prev);
           return URL.createObjectURL(blob);
         });
@@ -124,9 +123,7 @@ export default function TalkPage() {
 
   // Persona selection UI
   if (!mood) {
-    return (
-      <></>
-    );
+    return <></>;
   }
 
   // Show loading state while connecting
@@ -135,8 +132,7 @@ export default function TalkPage() {
       <main className="min-h-screen flex items-center justify-center bg-[#0C1110]">
         <div className="flex flex-col items-center justify-center">
           <div className="text-white text-2xl font-bold mb-4">
-            Connecting to{" "}
-            {mood === "excited" ? "JesseXBT (Optimistic)" : "SupaBald JesseXBT (Critical)"}...
+            Connecting to {mood === 'excited' ? 'JesseXBT (Optimistic)' : 'SupaBald JesseXBT (Critical)'}...
           </div>
           <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
         </div>
@@ -168,7 +164,7 @@ export default function TalkPage() {
   );
 }
 
-function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
+function SimpleVoiceAssistant({ mood }: { mood: 'excited' | 'critical' }) {
   const { state: agentState, audioTrack: agentAudioTrack } = useVoiceAssistant();
   return (
     <div className="fixed inset-0 flex flex-col items-center bg-[#638596] pt-8">
@@ -180,14 +176,16 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
       <div className="flex flex-col items-center mb-6 relative">
         <div className="flex flex-row">
           <Image
-            src={mood === "critical" ? "/critical-jesse.gif" : "/mellow-jesse.gif"}
+            src={mood === 'critical' ? '/critical-jesse.gif' : '/mellow-jesse.gif'}
             alt="JesseXBT Avatar"
             width={254}
             height={254}
             className="rounded-none"
             priority
           />
-          <div className={`mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden ${mood === "excited" ? "bg-[#FFF68D]" : "bg-[#0157FA]"}`}>
+          <div
+            className={`mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden ${mood === 'excited' ? 'bg-[#FFF68D]' : 'bg-[#0157FA]'}`}
+          >
             <BarVisualizer
               state={agentState}
               trackRef={agentAudioTrack}
@@ -196,7 +194,7 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
               options={{ maxHeight: 40 }}
               style={{
                 // @ts-expect-error variable update
-                "--lk-fg": mood === "excited" ? "#20282D" : "white",
+                '--lk-fg': mood === 'excited' ? '#20282D' : 'white',
               }}
             />
           </div>
@@ -218,7 +216,10 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
           <CustomVoiceAssistantControlBar controls={{ leave: false }} />
         </div>
         <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg px-3 py-3">
-          <DisconnectButton className="w-[40px] h-[40px] " style={{backgroundColor: '#F06444', borderRadius: '8px', border: 'none', color: 'white'}}>
+          <DisconnectButton
+            className="w-[40px] h-[40px] "
+            style={{ backgroundColor: '#F06444', borderRadius: '8px', border: 'none', color: 'white' }}
+          >
             <CloseIcon />
           </DisconnectButton>
         </div>
@@ -230,6 +231,6 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
 function onDeviceFailure(error: Error) {
   console.error(error);
   alert(
-    "Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab"
+    'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab'
   );
 }

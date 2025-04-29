@@ -1,5 +1,5 @@
-import type { AgentState } from "@livekit/components-react";
-import { useEffect, useRef, useState } from "react";
+import type { AgentState } from '@livekit/components-react';
+import { useEffect, useRef, useState } from 'react';
 
 interface NoAgentNotificationProps extends React.PropsWithChildren<object> {
   state: AgentState;
@@ -15,17 +15,14 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
   const agentHasConnected = useRef(false);
 
   // If the agent has connected, we don't need to show the notification.
-  if (
-    ["listening", "thinking", "speaking"].includes(props.state) &&
-    agentHasConnected.current == false
-  ) {
+  if (['listening', 'thinking', 'speaking'].includes(props.state) && agentHasConnected.current == false) {
     agentHasConnected.current = true;
   }
 
   useEffect(() => {
-    if (props.state === "connecting") {
+    if (props.state === 'connecting') {
       timeoutRef.current = window.setTimeout(() => {
-        if (props.state === "connecting" && agentHasConnected.current === false) {
+        if (props.state === 'connecting' && agentHasConnected.current === false) {
           setShowNotification(true);
         }
       }, timeToWaitMs);
@@ -49,13 +46,7 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
         <div className="fixed text-sm left-1/2 max-w-[90vw] -translate-x-1/2 flex top-6 items-center gap-4 bg-[#1F1F1F] px-4 py-3 rounded-lg">
           <div>
             {/* Warning Icon */}
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -65,8 +56,8 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
             </svg>
           </div>
           <p className="text-pretty w-max">
-            It&apos;s quiet... too quiet. Is your agent lost? Ensure your agent is properly
-            configured and running on your machine.
+            It&apos;s quiet... too quiet. Is your agent lost? Ensure your agent is properly configured and running on
+            your machine.
           </p>
           <a
             href="https://docs.livekit.io/agents/quickstarts/s2s/"
@@ -77,13 +68,7 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
           </a>
           <button onClick={() => setShowNotification(false)}>
             {/* Close Icon */}
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M3.16602 3.16666L12.8327 12.8333M12.8327 3.16666L3.16602 12.8333"
                 stroke="#999999"
