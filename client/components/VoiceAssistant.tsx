@@ -2,10 +2,11 @@ import { CloseIcon } from '@/components/CloseIcon';
 import { CustomVoiceAssistantControlBar } from '@/components/CustomVoiceAssistantControlBar';
 import { NoAgentNotification } from '@/components/NoAgentNotification';
 import TranscriptionView from '@/components/TranscriptionView';
+import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { BarVisualizer, DisconnectButton, RoomAudioRenderer, useVoiceAssistant } from '@livekit/components-react';
 import Image from 'next/image';
 
-export function VoiceAssistant({ mood }: { mood: 'excited' | 'critical' }) {
+export function VoiceAssistant({ mood }: { mood: AgentMoodI }) {
   const { state: agentState, audioTrack: agentAudioTrack } = useVoiceAssistant();
   return (
     <div className="fixed inset-0 flex flex-col items-center bg-[#638596] pt-8">
@@ -17,7 +18,7 @@ export function VoiceAssistant({ mood }: { mood: 'excited' | 'critical' }) {
       <div className="flex flex-col items-center mb-6 relative">
         <div className="flex flex-row">
           <Image
-            src={mood === 'critical' ? '/critical-jesse.gif' : '/mellow-jesse.gif'}
+            src={mood === AgentMoodEnum.CRITICAL ? '/critical-jesse.gif' : '/mellow-jesse.gif'}
             alt="JesseXBT Avatar"
             width={254}
             height={254}
@@ -25,7 +26,7 @@ export function VoiceAssistant({ mood }: { mood: 'excited' | 'critical' }) {
             priority
           />
           <div
-            className={`mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden ${mood === 'excited' ? 'bg-[#FFF68D]' : 'bg-[#0157FA]'}`}
+            className={`mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden ${mood === AgentMoodEnum.EXCITED ? 'bg-[#FFF68D]' : 'bg-[#0157FA]'}`}
           >
             <BarVisualizer
               state={agentState}
@@ -35,7 +36,7 @@ export function VoiceAssistant({ mood }: { mood: 'excited' | 'critical' }) {
               options={{ maxHeight: 40 }}
               style={{
                 // @ts-expect-error variable update
-                '--lk-fg': mood === 'excited' ? '#20282D' : 'white',
+                '--lk-fg': mood === AgentMoodEnum.EXCITED ? '#20282D' : 'white',
               }}
             />
           </div>

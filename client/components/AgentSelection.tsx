@@ -1,6 +1,7 @@
 'use client';
 
 import { MicIcon } from '@/components/MicIcon';
+import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -11,7 +12,7 @@ interface AgentSelectionProps extends React.HTMLAttributes<HTMLDivElement> {
 export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
   const router = useRouter();
 
-  const updateMood = (mood: 'excited' | 'critical') => {
+  const updateMood = (mood: AgentMoodI) => {
     router.push(`/talk?mood=${mood}`);
   };
 
@@ -40,7 +41,7 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
           </p>
           <button
             className="flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-lg font-semibold bg-yellow-300 text-black hover:bg-yellow-200 transition-all shadow-md"
-            onClick={() => updateMood('excited')}
+            onClick={() => updateMood(AgentMoodEnum.EXCITED)}
           >
             <span role="img" aria-label="microphone">
               <MicIcon color="black" />
@@ -66,7 +67,7 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
           </p>
           <button
             className="flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-lg font-semibold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md"
-            onClick={() => updateMood('critical')}
+            onClick={() => updateMood(AgentMoodEnum.CRITICAL)}
           >
             <span role="img" aria-label="microphone">
               <MicIcon />

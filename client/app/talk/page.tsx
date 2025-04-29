@@ -1,6 +1,7 @@
 'use client';
 
 import { VoiceAssistant } from '@/components/VoiceAssistant';
+import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { RoomContext } from '@livekit/components-react';
 import { Room, RoomEvent } from 'livekit-client';
 import Image from 'next/image';
@@ -9,9 +10,9 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { ConnectionDetails } from '../api/connection-details/route';
 
-const parseMoodQueryParam = (query: string | string[] | null): 'excited' | 'critical' | null => {
+const parseMoodQueryParam = (query: string | string[] | null): AgentMoodI | null => {
   if (typeof query === 'string') {
-    return query as 'excited' | 'critical';
+    return query as AgentMoodI;
   }
   return null;
 };
@@ -123,7 +124,7 @@ export default function TalkPage() {
       <main className="min-h-screen flex items-center justify-center bg-[#0C1110]">
         <div className="flex flex-col items-center justify-center">
           <div className="text-white text-2xl font-bold mb-4">
-            Connecting to {mood === 'excited' ? 'JesseXBT (Optimistic)' : 'SupaBald JesseXBT (Critical)'}...
+            Connecting to {mood === AgentMoodEnum.EXCITED ? 'JesseXBT (Optimistic)' : 'SupaBald JesseXBT (Critical)'}...
           </div>
           <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
         </div>
