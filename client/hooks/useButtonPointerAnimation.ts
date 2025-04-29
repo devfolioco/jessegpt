@@ -65,7 +65,10 @@ const useButtonPointerAnimation = (): UseButtonPointerAnimationReturn => {
     const controlY = midY + offset * t;
 
     const r = Math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2);
-    const opacity = Math.min(0.75, (r - Math.max(rect.width, rect.height) / 2) / 750);
+    // const opacity = Math.min(0.75, (r - Math.max(rect.width, rect.height) / 2) / 750);
+
+    // Use fixed opacity for now
+    const opacity = 1;
 
     ctx.strokeStyle = `rgba( 255, 255, 255, ${opacity})`;
     ctx.lineWidth = 1;
