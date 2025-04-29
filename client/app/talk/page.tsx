@@ -197,6 +197,8 @@ export default function TalkPage() {
               src={endImageUrl}
               alt="Conversation result"
               className="max-w-[200px] max-h-[200px]"
+              width={200}
+              height={200}
             />
           </div>
         )}
@@ -238,7 +240,7 @@ function SimpleVoiceAssistant({ mood }: { mood: "excited" | "critical" }) {
 
       <div className="w-full flex-1 flex flex-col items-center overflow-hidden z-10 mt-16">
         <div className="max-w-2xl h-[560px] overflow-y-auto">
-          <TranscriptionView />
+          <TranscriptionView mood={mood} />
         </div>
       </div>
 
