@@ -1,5 +1,6 @@
 'use client';
 
+import LoadingPage from '@/components/LoadingPage';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { RoomContext } from '@livekit/components-react';
@@ -7,7 +8,7 @@ import { Room, RoomEvent } from 'livekit-client';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import type { ConnectionDetails } from '../api/connection-details/route';
 
 const parseMoodQueryParam = (query: string | string[] | null): AgentMoodI | null => {
@@ -17,7 +18,7 @@ const parseMoodQueryParam = (query: string | string[] | null): AgentMoodI | null
   return null;
 };
 
-export default function TalkPage() {
+const TalkComponent = () => {
   const searchParams = useSearchParams();
   const mood = parseMoodQueryParam(searchParams.get('mood'));
   const router = useRouter();
@@ -153,6 +154,14 @@ export default function TalkPage() {
         )}
       </RoomContext.Provider>
     </main>
+  );
+};
+
+export default function TalkPage() {
+  return (
+    <Suspense fallback={<LoadingPage />}>
+      <TalkComponent />
+    </Suspense>
   );
 }
 

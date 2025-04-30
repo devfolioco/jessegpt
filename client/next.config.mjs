@@ -7,20 +7,20 @@ const nextConfig = {
         destination: '/',
         permanent: false,
         missing: [
-        {
+          {
             type: 'query',
             key: 'mood',
             value: 'excited',
-        },
-        {
+          },
+          {
             type: 'query',
             key: 'mood',
             value: 'critical',
-        }
+          },
         ],
       },
     ];
-  }
+  },
 };
 
 export default nextConfig;
