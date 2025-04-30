@@ -25,17 +25,8 @@ const useButtonPointerAnimation = (): UseButtonPointerAnimationReturn => {
     canvas.height = window.innerHeight;
   };
 
-  // Handle window resize
-  window.addEventListener('resize', updateCanvasSize);
-  updateCanvasSize();
-
   // Mouse position
   const mouseRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
-
-  window.addEventListener('mousemove', e => {
-    mouseRef.current.x = e.clientX;
-    mouseRef.current.y = e.clientY;
-  });
 
   // Draw arrow function
   const drawArrow = () => {
@@ -104,10 +95,25 @@ const useButtonPointerAnimation = (): UseButtonPointerAnimationReturn => {
     requestAnimationFrame(animate);
   };
 
+  const handleMouseMove = (e: MouseEvent) => {
+    mouseRef.current.x = e.clientX;
+    mouseRef.current.y = e.clientY;
+  };
+
   useEffect(() => {
     if (mounted) {
+      // Handle window resize
+      window.addEventListener('resize', updateCanvasSize);
+      window.addEventListener('mousemove', handleMouseMove);
+
+      updateCanvasSize();
       animate();
     }
+
+    return () => {
+      window.removeEventListener('resize', updateCanvasSize);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, [mounted]);
 
   const initializeAnimation = () => {
