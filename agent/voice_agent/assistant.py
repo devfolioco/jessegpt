@@ -41,19 +41,21 @@ class Assistant(Agent):
 
     @function_tool()
     async def end_conversation(
-        self, context: RunContext, one_liner: str, summary: str
+        self, context: RunContext, super_short_summary: str, summary: str
     ) -> None:  # noqa: D401
         """End the conversation gracefully.
 
         Parameters
         ----------
-        one_liner:
-            A punchy summary to send to the user before disconnecting.
+        super_short_summary:
+            One or two (three at most) words that captures the essence of the user's project idea. Be creative, make it a noun if possible. And BE SURE to restrict yourself to ONLY A FEW WORDS AT MOST.
         summary:
             A concise yet detailed summary of the user's project idea.
         """
 
-        logger.info("Ending conversation with one_liner: %s", one_liner)
+        logger.info(
+            "Ending conversation with super_short_summary: %s", super_short_summary
+        )
         logger.info("Ending conversation with summary: %s", summary)
 
         job_context = get_job_context()
@@ -69,7 +71,7 @@ class Assistant(Agent):
             monitor_task.cancel()
 
         await room.local_participant.send_text(
-            one_liner, topic="end_conversation_one_liner"
+            super_short_summary, topic="end_conversation_one_liner"
         )
 
         await room.local_participant.send_text(
