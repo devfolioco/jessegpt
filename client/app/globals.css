@@ -3,6 +3,28 @@
 @tailwind utilities;
 
 :root {
+  --primary: #638596;
+  --text-color: #fff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--text-color);
+  background: var(--primary);
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: never;
+}
+
+:root {
   --lk-va-bar-width: 72px;
   --lk-control-bar-height: unset;
 }

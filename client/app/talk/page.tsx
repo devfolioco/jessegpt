@@ -27,10 +27,10 @@ const TalkComponent = () => {
   const [connecting, setConnecting] = useState(false);
   const [connected, setConnected] = useState(false);
 
-  const [isOneLinerReceived, setIsOneLinerReceived] = useState(false);
+  const [isOneLinerReceived, setIsOneLinerReceived] = useState(true);
 
   const finalMintData = useRef<AgentShareData>({
-    oneLiner: '',
+    oneLiner: 'Talent Protocol',
     summary: '',
   });
 
@@ -103,7 +103,8 @@ const TalkComponent = () => {
       if (!cancelled) setConnected(true);
       setConnecting(false);
     }
-    connect();
+    //todo: remove this
+    // connect();
     console.log('connecting to room...');
     return () => {
       cancelled = true;
@@ -153,16 +154,14 @@ const TalkComponent = () => {
         </div>
       </RoomContext.Provider>
 
-      {
-        <ShareModal
-          isOpen={isOneLinerReceived}
-          data={finalMintData.current}
-          onClose={() => {
-            // on close
-            // retry
-          }}
-        />
-      }
+      <ShareModal
+        isOpen={isOneLinerReceived}
+        data={finalMintData.current}
+        onClose={() => {
+          // on close
+          // retry
+        }}
+      />
     </main>
   );
 };

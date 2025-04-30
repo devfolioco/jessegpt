@@ -1,5 +1,6 @@
 import { AgentShareData } from '@/types/agent';
 import { AnimatePresence, motion } from 'motion/react';
+import JesseFrame from './JesseFrame';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -7,10 +8,10 @@ interface ShareModalProps {
   data: AgentShareData;
 }
 
-const MainContent = ({ data }: ShareModalProps) => {
+const MainContent = ({ data, isOpen }: ShareModalProps) => {
   return (
     <div>
-      <h1>{data.oneLiner}</h1>
+      <JesseFrame idea={data.oneLiner} />
     </div>
   );
 };
