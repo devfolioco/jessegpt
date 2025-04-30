@@ -109,8 +109,16 @@ const TalkComponent = () => {
 
   useEffect(() => {
     room.on(RoomEvent.MediaDevicesError, onDeviceFailure);
+
+    const handleDisconnected = () => {
+      console.log('Disconnected from room');
+    };
+
+    room.on(RoomEvent.Disconnected, handleDisconnected);
+
     return () => {
       room.off(RoomEvent.MediaDevicesError, onDeviceFailure);
+      room.off(RoomEvent.Disconnected, handleDisconnected);
     };
   }, [room]);
 
