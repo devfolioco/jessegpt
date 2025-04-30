@@ -31,7 +31,6 @@ const useButtonPointerAnimation = (): UseButtonPointerAnimationReturn => {
   // Draw arrow function
   const drawArrow = () => {
     if (!canvas || !target || !ctx) return { canvasRef, targetRef };
-    console.log('drawArrow');
 
     const x0 = mouseRef.current.x;
     const y0 = mouseRef.current.y;
