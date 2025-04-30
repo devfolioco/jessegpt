@@ -1,0 +1,12 @@
+services:
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jessegpt
+    env_file: .env
+    volumes:
+      - .:/app
+    ports:
+      - "8081:8081"
+    restart: unless-stopped

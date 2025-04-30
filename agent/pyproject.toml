@@ -5,7 +5,6 @@ description = "JesseGPT"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "boto3>=1.38.1",
     "livekit-agents[cartesia,deepgram,elevenlabs,google,openai,silero,turn-detector]~=1.0",
     "livekit-plugins-noise-cancellation~=0.2",
     "openai>=1.76.0",

@@ -1,13 +1,8 @@
 from __future__ import annotations
 
 import asyncio
-import json
-import os
 import time
-from datetime import datetime
 from typing import Optional
-
-import boto3
 
 from livekit.agents import (
     AgentSession,
@@ -112,34 +107,14 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     # ------------------------------------------------------------------
 
     async def upload_transcript() -> None:
-        """Serialize *session* history and upload to S3 bucket (if configured)."""
+        """Serialize *session* history and save it to the DB"""
 
         if len(session.history.items) == 0:
             logger.debug("Skipping transcript upload for empty transcript")
             return
+        pass
 
-        bucket = os.environ.get("S3_BUCKET_NAME")
-        if not bucket:
-            logger.debug("S3_BUCKET_NAME not configured – skipping transcript upload")
-            return
-
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        key = f"transcripts/{ctx.room.name}_{timestamp}.json"
-        logger.info("Uploading transcript to s3://%s/%s", bucket, key)
-
-        payload = json.dumps(session.history.to_dict(), indent=2)
-        s3 = boto3.client("s3")
-        try:
-            s3.put_object(
-                Bucket=bucket,
-                Key=key,
-                Body=payload,
-                ContentType="application/json",
-            )
-        except Exception as exc:  # pragma: no cover – network errors
-            logger.error("Failed to upload transcript: %s", exc)
-
-    ctx.add_shutdown_callback(upload_transcript)
+    # ctx.add_shutdown_callback(upload_transcript)
 
     # ------------------------------------------------------------------
     # Helper coroutines --------------------------------------------------
