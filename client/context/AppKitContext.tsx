@@ -25,9 +25,6 @@ const metadata = {
 const featuredWalletIds = [
   // coinbase
   'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa',
-
-  // metamask
-  'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
 ];
 
 // Create the modal
