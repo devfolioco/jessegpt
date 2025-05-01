@@ -1,5 +1,6 @@
 import { inter } from '@/app/fonts/fonts';
 import { BASE_BATCH_APPLY_URL } from '@/constants';
+import { useCoinOnZora } from '@/hooks/useCoinOnZora';
 import { AgentShareData } from '@/types/agent';
 import { AnimatePresence, motion } from 'motion/react';
 import { Button } from './Button';
@@ -18,6 +19,8 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
     e.preventDefault();
     e.stopPropagation();
   };
+
+  const { onClick: handleCoinOnZoraClick } = useCoinOnZora();
 
   return (
     <div
@@ -41,7 +44,7 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
           Chat again
         </Button>
 
-        <Button appearance="colored" className="bg-white text-black">
+        <Button appearance="colored" className="bg-white text-black" onClick={handleCoinOnZoraClick}>
           {/* todo: add zora icon and loading state */}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
