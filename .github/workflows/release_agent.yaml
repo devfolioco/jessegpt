@@ -23,7 +23,7 @@ jobs:
         id: docker_build_and_push
         uses: docker/build-push-action@v3
         with:
-          context: agent
+          context: ./agent/
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
