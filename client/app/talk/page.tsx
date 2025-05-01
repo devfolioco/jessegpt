@@ -75,7 +75,6 @@ const TalkComponent = () => {
     if (!mood) return;
     if (isInitialRender.current) return;
 
-    let cancelled = false;
     async function connect() {
       setConnecting(true);
       const url = new URL(
@@ -84,8 +83,6 @@ const TalkComponent = () => {
       );
       const response = await fetch(`${url.toString()}?mood=${mood}`);
       const connectionDetailsData: ConnectionDetails = await response.json();
-
-      if (cancelled) return;
 
       await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
       await room.localParticipant.setMicrophoneEnabled(true);
@@ -129,7 +126,7 @@ const TalkComponent = () => {
         }
       });
 
-      if (!cancelled) setConnected(true);
+      setConnected(true);
       setConnecting(false);
     }
 
@@ -138,7 +135,6 @@ const TalkComponent = () => {
     console.log('connecting to room...');
     return () => {
       console.log('clean up ran');
-      // cancelled = true;
     };
   }, [room, mood]);
 
