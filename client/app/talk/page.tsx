@@ -29,8 +29,18 @@ const TalkComponent = () => {
 
   const [isOneLinerReceived, setIsOneLinerReceived] = useState(true);
 
+  const projectIdeas = [
+    'Tax Weighted Voting',
+    'Talent Protocol',
+    'MailSprint',
+    'ZK-Insurance',
+    'Fanbase | Coldplay tickets',
+    'SwarmSense: Agentic Grant',
+    'Airdrop Sentinel',
+  ];
+
   const finalMintData = useRef<AgentShareData>({
-    oneLiner: 'Talent Protocol',
+    oneLiner: projectIdeas[4],
     summary: '',
   });
 
