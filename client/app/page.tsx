@@ -76,6 +76,8 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
+      {/* <appkit-button /> */}
+
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none w-screen h-screen"></canvas>
     </main>
   );
