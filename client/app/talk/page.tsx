@@ -19,6 +19,29 @@ const parseMoodQueryParam = (query: string | string[] | null): AgentMoodI | null
   return null;
 };
 
+const projectIdeas = [
+  'Tax Weighted Voting',
+  'Talent Protocol',
+  'MailSprint',
+  'ZK-Insurance',
+  'Fanbase | Coldplay tickets',
+  'SwarmSense: Agentic Grant',
+  'Airdrop Sentinel',
+];
+
+const testData = {
+  oneLiner: projectIdeas[4],
+  summary: `
+In a world drowning in lengthy emails, MailSprint revolutionizes the way you consume information. This Chrome extension streamlines communication by extracting the essence of any open email and delivering it in a concise easy-to-read summary. 
+Save time, stay focused, and conquer your inbox with MailSprint.
+    `,
+};
+
+const initialData = {
+  oneLiner: '',
+  summary: '',
+};
+
 const TalkComponent = () => {
   const searchParams = useSearchParams();
   const mood = parseMoodQueryParam(searchParams.get('mood'));
@@ -27,26 +50,11 @@ const TalkComponent = () => {
   const [room] = useState(new Room());
   const [connecting, setConnecting] = useState(false);
   const [connected, setConnected] = useState(false);
+  const isInitialRender = useRef(false);
 
-  const [isOneLinerReceived, setIsOneLinerReceived] = useState(true);
+  const [isOneLinerReceived, setIsOneLinerReceived] = useState(false);
 
-  const projectIdeas = [
-    'Tax Weighted Voting',
-    'Talent Protocol',
-    'MailSprint',
-    'ZK-Insurance',
-    'Fanbase | Coldplay tickets',
-    'SwarmSense: Agentic Grant',
-    'Airdrop Sentinel',
-  ];
-
-  const finalMintData = useRef<AgentShareData>({
-    oneLiner: projectIdeas[4],
-    summary: `
-In a world drowning in lengthy emails, MailSprint revolutionizes the way you consume information. This Chrome extension streamlines communication by extracting the essence of any open email and delivering it in a concise easy-to-read summary. 
-Save time, stay focused, and conquer your inbox with MailSprint.
-    `,
-  });
+  const finalMintData = useRef<AgentShareData>(initialData);
 
   const handleRetry = () => {
     // redirect to home page
@@ -65,6 +73,8 @@ Save time, stay focused, and conquer your inbox with MailSprint.
   // Connect to LiveKit when mood is selected
   useEffect(() => {
     if (!mood) return;
+    if (isInitialRender.current) return;
+
     let cancelled = false;
     async function connect() {
       setConnecting(true);
@@ -122,11 +132,13 @@ Save time, stay focused, and conquer your inbox with MailSprint.
       if (!cancelled) setConnected(true);
       setConnecting(false);
     }
-    //todo: remove this
-    // connect();
+
+    connect();
+    isInitialRender.current = true;
     console.log('connecting to room...');
     return () => {
-      cancelled = true;
+      console.log('clean up ran');
+      // cancelled = true;
     };
   }, [room, mood]);
 
