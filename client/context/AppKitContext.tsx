@@ -22,13 +22,24 @@ const metadata = {
   icons: ['https://avatars.githubusercontent.com/u/179229932'],
 };
 
+const featuredWalletIds = [
+  // coinbase
+  'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa',
+
+  // metamask
+  'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+];
+
 // Create the modal
 const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
   networks: [mainnet, base],
-  defaultNetwork: mainnet,
+  defaultNetwork: base,
   metadata: metadata,
+  themeMode: 'dark',
+  featuredWalletIds,
+
   features: {
     analytics: true, // Optional - defaults to your Cloud configuration
     email: false,
