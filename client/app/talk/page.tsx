@@ -1,14 +1,15 @@
 'use client';
 
+import { PrefetchJesseFrameAssets } from '@/components/JesseFrame';
 import LoadingPage from '@/components/LoadingPage';
+import ShareModal from '@/components/ShareModal';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
-import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
+import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
 import { RoomContext } from '@livekit/components-react';
 import { Room, RoomEvent } from 'livekit-client';
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import type { ConnectionDetails } from '../api/connection-details/route';
 
 const parseMoodQueryParam = (query: string | string[] | null): AgentMoodI | null => {
@@ -16,6 +17,29 @@ const parseMoodQueryParam = (query: string | string[] | null): AgentMoodI | null
     return query as AgentMoodI;
   }
   return null;
+};
+
+const projectIdeas = [
+  'Tax Weighted Voting',
+  'Talent Protocol',
+  'MailSprint',
+  'ZK-Insurance',
+  'Fanbase | Coldplay tickets',
+  'SwarmSense: Agentic Grant',
+  'Airdrop Sentinel',
+];
+
+const testData = {
+  oneLiner: projectIdeas[4],
+  summary: `
+In a world drowning in lengthy emails, MailSprint revolutionizes the way you consume information. This Chrome extension streamlines communication by extracting the essence of any open email and delivering it in a concise easy-to-read summary. 
+Save time, stay focused, and conquer your inbox with MailSprint.
+    `,
+};
+
+const initialData = {
+  oneLiner: '',
+  summary: '',
 };
 
 const TalkComponent = () => {
@@ -26,8 +50,18 @@ const TalkComponent = () => {
   const [room] = useState(new Room());
   const [connecting, setConnecting] = useState(false);
   const [connected, setConnected] = useState(false);
+  const isInitialRender = useRef(false);
+
+  const [isOneLinerReceived, setIsOneLinerReceived] = useState(false);
+
+  const finalMintData = useRef<AgentShareData>(initialData);
+
+  const handleRetry = () => {
+    // redirect to home page
+    router.push(`/`);
+  };
+
   // Holds object URL of image received via byte stream
-  const [endImageUrl, setEndImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     // redirect to home page if no mood is selected
@@ -39,7 +73,8 @@ const TalkComponent = () => {
   // Connect to LiveKit when mood is selected
   useEffect(() => {
     if (!mood) return;
-    let cancelled = false;
+    if (isInitialRender.current) return;
+
     async function connect() {
       setConnecting(true);
       const url = new URL(
@@ -48,8 +83,6 @@ const TalkComponent = () => {
       );
       const response = await fetch(`${url.toString()}?mood=${mood}`);
       const connectionDetailsData: ConnectionDetails = await response.json();
-
-      if (cancelled) return;
 
       await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
       await room.localParticipant.setMicrophoneEnabled(true);
@@ -64,53 +97,59 @@ const TalkComponent = () => {
             `  ID: ${info.id}\n` +
             `  Size: ${info.size}`
         );
-
         for await (const chunk of reader) {
           console.log(`One Liner: ${chunk}`);
+          finalMintData.current.oneLiner += chunk;
         }
+
+        // conversation is over, disconnect from room
+
+        console.log('room disconnected');
+        room.disconnect();
+        setIsOneLinerReceived(true);
       });
 
-      // Register handler for PNG image byte stream (chunk-by-chunk)
-      room.registerByteStreamHandler('end_conversation_image', async (reader, participantInfo) => {
+      // Register handler for the one liner text stream
+      room.registerTextStreamHandler('end_conversation_summary', async (reader, participantInfo) => {
         const info = reader.info;
-
         console.log(
-          `Received byte stream from ${participantInfo.identity}\n` +
+          `Received text stream from ${participantInfo.identity}\n` +
             `  Topic: ${info.topic}\n` +
             `  Timestamp: ${info.timestamp}\n` +
-            `  ID: ${info.id}\n`
+            `  ID: ${info.id}\n` +
+            `  Size: ${info.size}`
         );
 
-        // Collect chunks as they arrive
-        const chunks: Uint8Array[] = [];
-
         for await (const chunk of reader) {
-          chunks.push(chunk);
+          finalMintData.current.summary += chunk;
+          console.log(`Summary: ${chunk}`);
         }
-
-        const blob = new Blob(chunks, {
-          type: info.mimeType || 'image/png',
-        });
-
-        setEndImageUrl(prev => {
-          if (prev) URL.revokeObjectURL(prev);
-          return URL.createObjectURL(blob);
-        });
       });
 
-      if (!cancelled) setConnected(true);
+      setConnected(true);
       setConnecting(false);
     }
+
     connect();
+    isInitialRender.current = true;
+    console.log('connecting to room...');
     return () => {
-      cancelled = true;
+      console.log('clean up ran');
     };
   }, [room, mood]);
 
   useEffect(() => {
     room.on(RoomEvent.MediaDevicesError, onDeviceFailure);
+
+    const handleDisconnected = () => {
+      console.log('Disconnected from room');
+    };
+
+    room.on(RoomEvent.Disconnected, handleDisconnected);
+
     return () => {
       room.off(RoomEvent.MediaDevicesError, onDeviceFailure);
+      room.off(RoomEvent.Disconnected, handleDisconnected);
     };
   }, [room]);
 
@@ -136,23 +175,24 @@ const TalkComponent = () => {
   // Voice assistant UI
   return (
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
+      {/* Prefetch assets for the JesseFrame */}
+      <PrefetchJesseFrameAssets />
+
       <RoomContext.Provider value={room}>
         <div className="lk-room-container max-h-[90vh]">
           <VoiceAssistant mood={mood} />
         </div>
-        {endImageUrl && (
-          <div className="fixed bottom-4 right-4 z-50 bg-white p-2 rounded shadow-lg">
-            {/* Using a regular img tag to avoid Next/Image restrictions on object URLs */}
-            <Image
-              src={endImageUrl}
-              alt="Conversation result"
-              className="max-w-[200px] max-h-[200px]"
-              width={200}
-              height={200}
-            />
-          </div>
-        )}
       </RoomContext.Provider>
+
+      <ShareModal
+        isOpen={isOneLinerReceived}
+        data={finalMintData.current}
+        onClose={() => {
+          // on close
+          // retry
+          handleRetry();
+        }}
+      />
     </main>
   );
 };

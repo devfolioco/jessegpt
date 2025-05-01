@@ -2,6 +2,7 @@
 
 import { AgentSelection } from '@/components/AgentSelection';
 import { Button } from '@/components/Button';
+import { BASE_BATCH_APPLY_URL } from '@/constants';
 import useButtonPointerAnimation from '@/hooks/useButtonPointerAnimation';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
@@ -51,7 +52,7 @@ export default function HomePage() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
-          <Button href="https://www.basebatches.xyz/" target="_blank" appearance="secondary">
+          <Button href={BASE_BATCH_APPLY_URL} target="_blank" appearance="secondary">
             Apply to Base Batches: 001
           </Button>
           <Button ref={targetRef} onClick={handleAgentSelection}>

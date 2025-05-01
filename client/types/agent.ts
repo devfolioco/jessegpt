@@ -4,3 +4,8 @@ export enum AgentMoodEnum {
 }
 
 export type AgentMoodI = AgentMoodEnum.CRITICAL | AgentMoodEnum.EXCITED;
+
+export interface AgentShareData {
+  oneLiner: string;
+  summary: string;
+}
