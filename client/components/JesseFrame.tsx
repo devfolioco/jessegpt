@@ -146,6 +146,24 @@ const JesseFrame = ({ idea }: JesseFrameProps) => {
   };
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check for CMD+. (Mac) or CTRL+. (Windows)
+      if ((e.metaKey || e.ctrlKey) && e.key === '.') {
+        e.preventDefault();
+        handleDownload();
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Clean up
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
     if (canvasRef.current) {
       drawFrame(canvasRef.current, frameWidth, frameHeight, idea);
     }
@@ -162,37 +180,24 @@ const JesseFrame = ({ idea }: JesseFrameProps) => {
   }, [idea]);
 
   return (
-    <div className={`flex flex-col items-center gap-4`}>
-      {/* Image prefetch */}
+    <canvas
+      ref={canvasRef}
+      width={frameWidth}
+      height={frameHeight}
+      // this is important to load the font family, before canvas is drawn
+      className={`w-full h-full ${nyghtMedium.className}`}
+      style={{ width: `${frameWidth}px`, height: `${frameHeight}px` }}
+    ></canvas>
+  );
+};
+
+export const PrefetchJesseFrameAssets = () => {
+  return (
+    <>
       <link rel="prefetch" href="/frame/dot-grid.svg" as="image" type="image/svg+xml" />
       <link rel="prefetch" href="/frame/jesse-t.png" as="image" type="image/png" />
-
-      <canvas
-        ref={canvasRef}
-        width={frameWidth}
-        height={frameHeight}
-        // this is important to load the font family, before canvas is drawn
-        className={`w-full h-full ${nyghtMedium.className}`}
-        style={{ width: `${frameWidth}px`, height: `${frameHeight}px` }}
-      ></canvas>
-      <button
-        onClick={handleDownload}
-        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-      >
-        Download Image
-      </button>
-    </div>
+    </>
   );
-  //   return (
-  //     <div>
-  //       <h1 className="text-4xl font-bold text-center">Base</h1>
-  //       <h1 className="text-4xl font-bold text-center">is for</h1>
-  //       <div ref={ideaBoxRef} className="flex items-center justify-center relative p-6 max-w-[400px]">
-  //         <h1 className="text-4xl font-bold text-center">{idea}</h1>
-  //         <canvas ref={canvasRef} className="absolute" />
-  //       </div>
-  //     </div>
-  //   );
 };
 
 export default JesseFrame;

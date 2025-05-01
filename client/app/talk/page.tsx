@@ -1,5 +1,6 @@
 'use client';
 
+import { PrefetchJesseFrameAssets } from '@/components/JesseFrame';
 import LoadingPage from '@/components/LoadingPage';
 import ShareModal from '@/components/ShareModal';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
@@ -41,8 +42,16 @@ const TalkComponent = () => {
 
   const finalMintData = useRef<AgentShareData>({
     oneLiner: projectIdeas[4],
-    summary: '',
+    summary: `
+In a world drowning in lengthy emails, MailSprint revolutionizes the way you consume information. This Chrome extension streamlines communication by extracting the essence of any open email and delivering it in a concise easy-to-read summary. 
+Save time, stay focused, and conquer your inbox with MailSprint.
+    `,
   });
+
+  const handleRetry = () => {
+    // redirect to home page
+    router.push(`/`);
+  };
 
   // Holds object URL of image received via byte stream
 
@@ -158,6 +167,9 @@ const TalkComponent = () => {
   // Voice assistant UI
   return (
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
+      {/* Prefetch assets for the JesseFrame */}
+      <PrefetchJesseFrameAssets />
+
       <RoomContext.Provider value={room}>
         <div className="lk-room-container max-h-[90vh]">
           <VoiceAssistant mood={mood} />
@@ -170,6 +182,7 @@ const TalkComponent = () => {
         onClose={() => {
           // on close
           // retry
+          handleRetry();
         }}
       />
     </main>

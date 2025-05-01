@@ -17,6 +17,9 @@ importers:
       '@livekit/krisp-noise-filter':
         specifier: ^0.2.14
         version: 0.2.16(livekit-client@2.11.2)
+      clsx:
+        specifier: 2.1.1
+        version: 2.1.1
       framer-motion:
         specifier: ^11.18.0
         version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
