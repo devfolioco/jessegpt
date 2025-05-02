@@ -1,6 +1,0 @@
-{
-	"dependencies": {
-		"@helia/http": "2.0.5",
-		"kubo-rpc-client": "5.1.0"
-	}
-}
