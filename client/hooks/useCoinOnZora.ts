@@ -56,7 +56,7 @@ const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps):
       return;
     }
 
-    return 'QmU2gomJzpwDJHwiCpfD6YZzty6PmuZiRBgqWJtogE5ncb';
+    return 'bafybeigoxzqzbnxsn35vq7lls3ljxdcwjafxvbvkivprsodzrptpiguysy';
 
     return uploadToIPFS(title, description, base64Image);
   };
@@ -79,26 +79,27 @@ const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps):
     const walletClient = createWalletClient({
       account: account,
       chain: base,
+      //   @ts-expect-error
+      //   transport: custom(window.ethereum),
       transport: http('https://base-rpc.publicnode.com'),
-      //   transport: http('https://base-rpc.publicnode.com'),
     });
 
-    // const addresses = await walletClient.requestAddresses();
-    // console.log('addresses', addresses);
+    const addresses = await walletClient.requestAddresses();
+    console.log('addresses', addresses);
 
     const coinParams = {
       name: title,
       symbol: 'DEVFOLIO',
       uri: `ipfs://${cid}`,
       payoutRecipient: address,
-      account: address,
+      //   account: address,
 
       //   initialPurchaseWei: 0n, // Optional: Initial amount to purchase in Wei
     };
 
     try {
       // Create write config for the contract call
-      const callConfig = await createCoinCall(coinParams);
+      //   const callConfig = await createCoinCall(coinParams);
 
       // Get public client for simulation (optional but good practice)
       // Set up Viem clients
@@ -108,16 +109,16 @@ const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps):
         transport: http('https://base-rpc.publicnode.com'),
       });
 
-      //   const result = await createCoin(coinParams, walletClient, publicClient);
-      //   console.log('result', result);
+      const result = await createCoin(coinParams, walletClient, publicClient);
+      console.log('result', result);
 
       //   // Simulate to get prepared config (optional but safe)
-      const { request, result } = await publicClient.simulateContract({
-        ...callConfig,
-        // account,
-      });
+      //   const { request, result } = await publicClient.simulateContract({
+      //     ...callConfig,
+      //     // account,
+      //   });
 
-      console.log(request, result);
+      //   console.log(request, result);
 
       // Create wallet client
       //   const walletClient = createWalletClient({
