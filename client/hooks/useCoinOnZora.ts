@@ -1,6 +1,7 @@
+import { config as wagmiConfig } from '@/config/wagmi';
 import { uploadToIPFS } from '@/helpers/ipfs';
 import { useAppKit, useAppKitAccount, useAppKitNetwork, useDisconnect } from '@reown/appkit/react';
-import { getAccount } from '@wagmi/core';
+import { getWalletClient } from '@wagmi/core';
 import { createCoin, createCoinCall } from '@zoralabs/coins-sdk';
 import { useEffect } from 'react';
 import { Address, createPublicClient, createWalletClient, custom, http } from 'viem';
@@ -76,13 +77,15 @@ const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps):
 
     const account = toAccount(address);
 
-    const walletClient = createWalletClient({
-      account: account,
-      chain: base,
-      //   @ts-expect-error
-      //   transport: custom(window.ethereum),
-      transport: http('https://base-rpc.publicnode.com'),
-    });
+    // const walletClient = createWalletClient({
+    //   account: account,
+    //   chain: base,
+    //   // @ts-expect-error
+    //   transport: custom(window.ethereum),
+    //   // transport: http('https://base-rpc.publicnode.com'),
+    // });
+
+    const walletClient = await getWalletClient(wagmiConfig, { chainId: base.id });
 
     const addresses = await walletClient.requestAddresses();
     console.log('addresses', addresses);
