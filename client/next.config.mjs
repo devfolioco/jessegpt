@@ -26,10 +26,6 @@ const nextConfig = {
     config.externals.push('pino-pretty');
     return config;
   },
-
-  experimental: {
-    serverComponentsExternalPackages: ['ipfs-http-client'],
-  },
 };
 
 export default nextConfig;

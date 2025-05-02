@@ -1,4 +1,4 @@
-import { create } from 'ipfs-http-client';
+import { create } from 'kubo-rpc-client';
 import { NextRequest, NextResponse } from 'next/server';
 
 type CoinMetadata = {
@@ -35,6 +35,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<{ cid: st
   });
 
   const { cid: imageCid } = await ipfsClient.add(imageBuffer);
+  await ipfsClient.pin.add(imageCid);
 
   const metadata: CoinMetadata = {
     name,
@@ -49,6 +50,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<{ cid: st
   };
 
   const { cid } = await ipfsClient.add(JSON.stringify(metadata));
+  await ipfsClient.pin.add(cid);
 
   return NextResponse.json({
     cid: cid.toString(),
