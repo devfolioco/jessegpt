@@ -4,6 +4,7 @@ import rough from 'roughjs';
 
 interface JesseFrameProps {
   idea: string;
+  onImageReady: (base64Image: string) => void;
 }
 
 const frameWidth = 650;
@@ -125,7 +126,7 @@ const drawFrame = (canvasElement: HTMLCanvasElement, width: number, height: numb
   drawRoughEllipse(canvasElement, frameWidth, frameHeight, { ideaTextWidth });
 };
 
-const JesseFrame = ({ idea }: JesseFrameProps) => {
+const JesseFrame = ({ idea, onImageReady }: JesseFrameProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleDownload = () => {
@@ -166,6 +167,9 @@ const JesseFrame = ({ idea }: JesseFrameProps) => {
   useEffect(() => {
     if (canvasRef.current) {
       drawFrame(canvasRef.current, frameWidth, frameHeight, idea);
+      const image = canvasRef.current.toDataURL();
+      console.log(image);
+      onImageReady(image);
     }
 
     return () => {

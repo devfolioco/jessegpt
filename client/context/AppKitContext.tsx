@@ -28,10 +28,10 @@ const featuredWalletIds = [
 ];
 
 // Create the modal
-const modal = createAppKit({
+createAppKit({
   adapters: [wagmiAdapter],
   projectId,
-  networks: [mainnet, base],
+  networks: [base],
   defaultNetwork: base,
   metadata: metadata,
   themeMode: 'dark',

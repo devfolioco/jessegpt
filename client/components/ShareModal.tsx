@@ -3,6 +3,7 @@ import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
 import { AgentShareData } from '@/types/agent';
 import { AnimatePresence, motion } from 'motion/react';
+import { useRef } from 'react';
 import { Button } from './Button';
 import { CloseIcon } from './CloseIcon';
 import JesseFrame from './JesseFrame';
@@ -20,7 +21,17 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
     e.stopPropagation();
   };
 
-  const { onClick: handleCoinOnZoraClick } = useCoinOnZora();
+  const ideaImageRef = useRef<string | null>(null);
+
+  const { onClick: handleCoinOnZoraClick } = useCoinOnZora({
+    title: data.oneLiner,
+    description: data.summary,
+    base64Image: ideaImageRef.current,
+  });
+
+  const onImageReady = (base64Image: string) => {
+    ideaImageRef.current = base64Image;
+  };
 
   return (
     <div
@@ -31,7 +42,7 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
         <CloseIcon color="#2D2D2D" className="w-6 h-6" />
       </button>
       <div className="flex flex-col items-start rounded-xl overflow-hidden">
-        <JesseFrame idea={data.oneLiner} />
+        <JesseFrame idea={data.oneLiner} onImageReady={onImageReady} />
 
         <div className="flex justify-center items-center gap-2 self-stretch p-3 px-4 bg-[#1D1D1D] text-white font-['Nunito_Sans'] text-[18px] leading-[28px]">
           {data.summary}

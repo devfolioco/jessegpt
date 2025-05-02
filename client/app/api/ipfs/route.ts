@@ -14,8 +14,8 @@ type CoinMetadata = {
 };
 
 export async function POST(request: NextRequest): Promise<NextResponse<{ cid: string }>> {
-  const { oneLiner, description, image } = (await request.json()) as {
-    oneLiner: string;
+  const { name, description, image } = (await request.json()) as {
+    name: string;
     description: string;
     image: Buffer;
   };
@@ -35,9 +35,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<{ cid: st
   const { cid: imageCid } = await ipfsClient.add(image);
 
   const metadata: CoinMetadata = {
-    name: oneLiner,
+    name,
     description,
-    symbol: oneLiner,
+    symbol: name,
     image: `https://api.devfolio.co/api/ipfs/${imageCid}`,
     animation_url: `https://api.devfolio.co/api/ipfs/${imageCid}`,
     content: {
