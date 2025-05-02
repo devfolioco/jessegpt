@@ -36,6 +36,7 @@ enum ZoraCoinFlowStep {
   FAILURE = 'failure',
 }
 
+// todo: remove this (simulate success)
 const test = false;
 
 const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps): UseCoinOnZoraReturn => {
