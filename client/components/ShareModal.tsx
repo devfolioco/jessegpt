@@ -3,6 +3,7 @@ import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
 import { AgentShareData } from '@/types/agent';
 import { AnimatePresence, motion } from 'motion/react';
+import { useRef, useState } from 'react';
 import { Button } from './Button';
 import { CloseIcon } from './CloseIcon';
 import JesseFrame from './JesseFrame';
@@ -14,13 +15,39 @@ interface ShareModalProps {
   data: AgentShareData;
 }
 
+enum ShareModalError {
+  FRAME_RENDER_ERROR = 'frame-render-error',
+}
+
 const MainContent = ({ data, onClose }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  const { onClick: handleCoinOnZoraClick } = useCoinOnZora();
+  const [error, setError] = useState<ShareModalError | null>(null);
+  // todo: show error to user
+
+  const ideaImageRef = useRef<string | null>(null);
+
+  const {
+    onClick: handleCoinOnZoraClick,
+    isLoading,
+    result: zoraResult,
+  } = useCoinOnZora({
+    title: data.oneLiner,
+    description: data.summary,
+    base64Image: ideaImageRef.current,
+  });
+
+  const onImageReady = (base64Image: string) => {
+    ideaImageRef.current = base64Image;
+  };
+
+  const handleFrameError = (error: Error) => {
+    console.error('Error rendering frame', error);
+    setError(ShareModalError.FRAME_RENDER_ERROR);
+  };
 
   return (
     <div
@@ -31,33 +58,54 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
         <CloseIcon color="#2D2D2D" className="w-6 h-6" />
       </button>
       <div className="flex flex-col items-start rounded-xl overflow-hidden">
-        <JesseFrame idea={data.oneLiner} />
+        <JesseFrame idea={data.oneLiner} onImageReady={onImageReady} onError={handleFrameError} />
 
         <div className="flex justify-center items-center gap-2 self-stretch p-3 px-4 bg-[#1D1D1D] text-white font-['Nunito_Sans'] text-[18px] leading-[28px]">
           {data.summary}
         </div>
       </div>
 
-      <div className="flex gap-4 items-center w-full mt-2">
-        <Button appearance="colored" className="bg-optimism  text-black" onClick={onClose}>
-          <MicIcon color="black" />
-          Chat again
-        </Button>
+      {zoraResult ? (
+        // Zora Success UI
+        <div className="flex gap-4 items-center w-full mt-2">
+          <Button appearance="colored" className="bg-farcaster  text-white">
+            <MicIcon color="black" />
+            Cast
+          </Button>
 
-        <Button appearance="colored" className="bg-white text-black" onClick={handleCoinOnZoraClick}>
-          {/* todo: add zora icon and loading state */}
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          Coin on Zora
-        </Button>
-      </div>
+          <Button appearance="colored" className="bg-x  text-white">
+            <MicIcon color="black" />
+            Cast
+          </Button>
+
+          <Button appearance="colored" className="bg-white text-black" href={zoraResult.zoraLink}>
+            {/* todo: add zora icon and loading state */}
+            View
+          </Button>
+        </div>
+      ) : (
+        // Zora Flow
+        <div className="flex gap-4 items-center w-full mt-2">
+          <Button appearance="colored" className="bg-optimism  text-black" onClick={onClose}>
+            <MicIcon color="black" />
+            Chat again
+          </Button>
+
+          <Button appearance="colored" className="bg-white text-black" onClick={handleCoinOnZoraClick}>
+            {/* todo: add zora icon and loading state */}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            {isLoading ? 'Creating...' : 'Coin on Zora'}
+          </Button>
+        </div>
+      )}
 
       {/* todo: add devfolio icon */}
       <Button appearance="colored" className="bg-devfolio text-white" href={BASE_BATCH_APPLY_URL}>

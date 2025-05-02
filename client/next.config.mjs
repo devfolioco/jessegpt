@@ -21,6 +21,10 @@ const nextConfig = {
       },
     ];
   },
+
+  experimental: {
+    serverComponentsExternalPackages: ['ipfs-http-client'],
+  },
 };
 
 export default nextConfig;

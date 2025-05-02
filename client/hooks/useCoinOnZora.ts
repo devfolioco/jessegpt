@@ -1,43 +1,162 @@
-import { useAppKit, useAppKitAccount, useDisconnect } from '@reown/appkit/react';
-import { useEffect } from 'react';
+import { config as wagmiConfig } from '@/config/wagmi';
+import { uploadToIPFS } from '@/helpers/ipfs';
+import { useAppKit, useAppKitAccount, useAppKitEvents, useAppKitState, useDisconnect } from '@reown/appkit/react';
+import { getWalletClient } from '@wagmi/core';
+import { createCoin } from '@zoralabs/coins-sdk';
+import { RequestCookiesAdapter } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import { useEffect, useRef, useState } from 'react';
+import { Address, createPublicClient, http } from 'viem';
+import { base } from 'viem/chains';
 
 interface UseCoinOnZoraProps {
-  //
+  title: string;
+  description: string;
+  base64Image: string | null;
+}
+
+interface ZoraCoinResult {
+  zoraLink: string;
+  coinAddress: `0x${string}`;
+  hash: `0x${string}`;
 }
 
 interface UseCoinOnZoraReturn {
   onClick: () => void;
+  isDisabled: boolean;
+  isLoading: boolean;
+  result: ZoraCoinResult | null;
 }
 
-const useCoinOnZora = ({}: UseCoinOnZoraProps = {}): UseCoinOnZoraReturn => {
+enum ZoraCoinFlowStep {
+  IDLE = 'idle',
+  CONNECTING_WALLET = 'connecting_wallet',
+  UPLOADING_IMAGE = 'uploading_image',
+  CREATING_COIN = 'creating_coin',
+  SUCCESS = 'success',
+  FAILURE = 'failure',
+}
+
+// todo: remove this (simulate success)
+const test = false;
+
+const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps): UseCoinOnZoraReturn => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
+  const { open: isOpen, loading } = useAppKitState();
+
+  const [currentStep, setCurrentStep] = useState<ZoraCoinFlowStep>(ZoraCoinFlowStep.IDLE);
+  const zoraResult = useRef<ZoraCoinResult | null>(null);
+
   const { disconnect } = useDisconnect();
 
-  const onSuccess = () => {
+  //   image is not base64 encoded
+  const isDisabled = typeof base64Image !== 'string';
+
+  const onSuccess = (result: ZoraCoinResult) => {
+    setCurrentStep(ZoraCoinFlowStep.SUCCESS);
+    zoraResult.current = result;
+
     // disconnect wallet
     disconnect();
   };
 
-  const onFailure = () => {
+  const onFailure = (error: Error) => {
+    setCurrentStep(ZoraCoinFlowStep.FAILURE);
+    console.error('Error creating coin on zora:', error);
+
     // disconnect wallet
     disconnect();
   };
 
+  //   step 1: connect wallet
   const onClickHandler = () => {
     if (isConnected) {
       return;
     }
 
+    setCurrentStep(ZoraCoinFlowStep.CONNECTING_WALLET);
     open({
       view: 'Connect',
     });
   };
 
   useEffect(() => {
-    if (isConnected) {
+    if (currentStep === ZoraCoinFlowStep.CONNECTING_WALLET && !isOpen) {
+      // if the modal is not open, means user closed the modal
+      setCurrentStep(ZoraCoinFlowStep.IDLE);
+    }
+  }, [isOpen]);
+
+  const uploadImageToIPFS = async () => {
+    if (!base64Image) {
+      return;
+    }
+
+    // return 'bafybeigoxzqzbnxsn35vq7lls3ljxdcwjafxvbvkivprsodzrptpiguysy';
+
+    return uploadToIPFS(title, description, base64Image);
+  };
+
+  const initiateZoraFlow = async (address: Address) => {
+    if (test) {
+      onSuccess({
+        zoraLink: 'https://zora.co/coin/base:0x29bD2273DC8e865e045AFdeCC6B3c138a39A8f2E',
+        coinAddress: '0x29bD2273DC8e865e045AFdeCC6B3c138a39A8f2E',
+        hash: '0x29bD2273DC8e865e045AFdeCC6B3c138a39A8f2E',
+      });
+
+      return;
+    }
+
+    try {
+      setCurrentStep(ZoraCoinFlowStep.UPLOADING_IMAGE);
+      //   step 2: upload image to ipfs
+      const cid = await uploadImageToIPFS();
+      console.log(cid);
+      console.log('url', `https://api.devfolio.co/api/ipfs/${cid}`);
+
+      //   step 3: create coin
+      setCurrentStep(ZoraCoinFlowStep.CREATING_COIN);
+
+      const coinParams = {
+        name: title,
+        symbol: 'DEVFOLIO',
+        uri: `ipfs://${cid}`,
+        payoutRecipient: address,
+      };
+
+      const walletClient = await getWalletClient(wagmiConfig, { chainId: base.id });
+
+      const publicClient = createPublicClient({
+        chain: base,
+        transport: http('https://base-rpc.publicnode.com'),
+      });
+
+      const result = await createCoin(coinParams, walletClient, publicClient);
+
+      if (result.address) {
+        const zoraLink = `https://zora.co/coin/base:${result.address}`;
+
+        console.log('result', result);
+        console.log('zoraLink', zoraLink);
+
+        onSuccess({
+          zoraLink,
+          coinAddress: result.address,
+          hash: result.hash,
+        });
+      }
+    } catch (error) {
+      onFailure(error as Error);
+    }
+  };
+
+  useEffect(() => {
+    if (isConnected && address) {
       console.log(address);
+
       //   initiate the zora flow
+      initiateZoraFlow(address as Address);
 
       // Handle tab close to disconnect wallet
       const handleBeforeUnload = () => {
@@ -56,7 +175,16 @@ const useCoinOnZora = ({}: UseCoinOnZoraProps = {}): UseCoinOnZoraReturn => {
     }
   }, [isConnected]);
 
-  return { onClick: onClickHandler };
+  const isLoading = ![ZoraCoinFlowStep.IDLE, ZoraCoinFlowStep.SUCCESS, ZoraCoinFlowStep.FAILURE].includes(currentStep);
+
+  console.log('currentStep: ', currentStep);
+
+  return {
+    onClick: onClickHandler,
+    isDisabled,
+    isLoading,
+    result: currentStep === ZoraCoinFlowStep.SUCCESS ? zoraResult.current : null,
+  };
 };
 
 export { useCoinOnZora };

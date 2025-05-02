@@ -4,6 +4,8 @@ import rough from 'roughjs';
 
 interface JesseFrameProps {
   idea: string;
+  onImageReady: (base64Image: string) => void;
+  onError: (error: Error) => void;
 }
 
 const frameWidth = 650;
@@ -42,7 +44,9 @@ const drawRoughEllipse = (
   const ellipseHeight = 100;
 
   const jitter = 10;
-  const roughness = 0.5;
+  const roughness = 1;
+
+  console.log('draw ellipse');
 
   rc.ellipse(centerX, centerY, ellipseWidth, ellipseHeight - 20, {
     stroke: '#0061F2',
@@ -62,7 +66,27 @@ const drawRoughEllipse = (
   });
 };
 
-const drawFrame = (canvasElement: HTMLCanvasElement, width: number, height: number, idea: string) => {
+const loadJesseAsset = async (): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const jesseImage = new Image();
+    jesseImage.onload = () => {
+      resolve(jesseImage);
+    };
+    jesseImage.src = '/frame/jesse-t.png';
+  });
+};
+
+const loadBackgroundAsset = async (): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const backgroundImage = new Image();
+    backgroundImage.onload = () => {
+      resolve(backgroundImage);
+    };
+    backgroundImage.src = '/frame/dot-grid.svg';
+  });
+};
+
+const drawFrame = async (canvasElement: HTMLCanvasElement, width: number, height: number, idea: string) => {
   // Resize the canvas for the display resolution
   resizeCanvas(canvasElement);
 
@@ -70,17 +94,13 @@ const drawFrame = (canvasElement: HTMLCanvasElement, width: number, height: numb
 
   if (!ctx) return;
 
-  var background = new Image();
-  background.src = '/frame/dot-grid.svg';
-
-  // Make sure the image is loaded first otherwise nothing will draw.
-  background.onload = function () {
-    ctx.drawImage(background, 6, 4);
-  };
-
   // Set background color
   ctx.fillStyle = '#638596';
   ctx.fillRect(0, 0, width, height);
+
+  // Draw background image
+  const backgroundImage = await loadBackgroundAsset();
+  ctx.drawImage(backgroundImage, 6, 4);
 
   // Set up text styling
   ctx.textAlign = 'center';
@@ -112,20 +132,16 @@ const drawFrame = (canvasElement: HTMLCanvasElement, width: number, height: numb
 
   ctx.fillText(idea, width / 2, height / 3 + (120 - (1 - scaleDownRatio) * 14));
 
-  // Load and draw the jesse image
-  const jesseImage = new Image();
-  jesseImage.onload = () => {
-    // Draw the image in the bottom left corner
-    const imageSize = 114;
-    ctx.drawImage(jesseImage, 32, frameHeight - imageSize, imageSize, imageSize);
-  };
-  jesseImage.src = '/frame/jesse-t.png';
+  // Load and draw the jesse image in the bottom left corner
+  const jesseImage = await loadJesseAsset();
+  const imageSize = 114;
+  ctx.drawImage(jesseImage, 32, frameHeight - imageSize, imageSize, imageSize);
 
   // Draw the rough ellipse
   drawRoughEllipse(canvasElement, frameWidth, frameHeight, { ideaTextWidth });
 };
 
-const JesseFrame = ({ idea }: JesseFrameProps) => {
+const JesseFrame = ({ idea, onImageReady, onError }: JesseFrameProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleDownload = () => {
@@ -163,9 +179,21 @@ const JesseFrame = ({ idea }: JesseFrameProps) => {
     };
   }, []);
 
+  const renderFrame = async () => {
+    try {
+      if (canvasRef.current) {
+        await drawFrame(canvasRef.current, frameWidth, frameHeight, idea);
+        const image = canvasRef.current.toDataURL();
+        onImageReady(image);
+      }
+    } catch (error) {
+      onError(error as Error);
+    }
+  };
+
   useEffect(() => {
     if (canvasRef.current) {
-      drawFrame(canvasRef.current, frameWidth, frameHeight, idea);
+      renderFrame();
     }
 
     return () => {
@@ -177,7 +205,7 @@ const JesseFrame = ({ idea }: JesseFrameProps) => {
         }
       }
     };
-  }, [idea]);
+  }, [idea, renderFrame]);
 
   return (
     <canvas

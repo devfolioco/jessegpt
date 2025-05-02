@@ -52,7 +52,7 @@ const TalkComponent = () => {
   const [connected, setConnected] = useState(false);
   const isInitialRender = useRef(false);
 
-  const [isOneLinerReceived, setIsOneLinerReceived] = useState(false);
+  const [isSummaryReceived, setIsSummaryReceived] = useState(false);
 
   const finalMintData = useRef<AgentShareData>(initialData);
 
@@ -103,10 +103,6 @@ const TalkComponent = () => {
         }
 
         // conversation is over, disconnect from room
-
-        console.log('room disconnected');
-        room.disconnect();
-        setIsOneLinerReceived(true);
       });
 
       // Register handler for the one liner text stream
@@ -124,6 +120,10 @@ const TalkComponent = () => {
           finalMintData.current.summary += chunk;
           console.log(`Summary: ${chunk}`);
         }
+
+        room.disconnect();
+        console.log('room disconnected');
+        setIsSummaryReceived(true);
       });
 
       setConnected(true);
@@ -185,7 +185,7 @@ const TalkComponent = () => {
       </RoomContext.Provider>
 
       <ShareModal
-        isOpen={isOneLinerReceived}
+        isOpen={isSummaryReceived}
         data={finalMintData.current}
         onClose={() => {
           // on close

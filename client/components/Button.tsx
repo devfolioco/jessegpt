@@ -20,7 +20,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       primary: 'text-[#6B8A96] bg-white hover:bg-gray-100',
       secondary: 'border border-white/40 text-white bg-white/10 hover:bg-white/20',
       colored: clsx(
-        'flex items-center justify-center gap-2 py-4 px-10 w-full rounded-lg font-semibold text-xl hover:opacity-80 transition-opacity',
+        'flex items-center justify-center gap-2 py-4 px-10 w-full rounded-lg !font-semibold !text-xl hover:opacity-80 transition-opacity',
         inter.className
       ),
     };
