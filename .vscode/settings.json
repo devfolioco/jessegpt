@@ -3,6 +3,7 @@
         "IPFS",
         "viem",
         "Wagmi",
-        "Zora"
+        "Zora",
+        "zoralabs"
     ]
 }
