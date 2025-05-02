@@ -9,14 +9,11 @@
 
 export async function uploadToIPFS(name: string, description: string, imageBase64: string): Promise<string> {
   try {
-    // Remove the data URL prefix to get just the base64 data
-    const base64Data = imageBase64.split(',')[1];
-    // todo: send image file as buffer
     // Create the request payload
     const payload = {
       name,
       description,
-      image: base64Data,
+      image: imageBase64,
     };
 
     // Make the POST request to the API

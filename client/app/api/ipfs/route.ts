@@ -17,8 +17,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<{ cid: st
   const { name, description, image } = (await request.json()) as {
     name: string;
     description: string;
-    image: Buffer;
+    image: string; // base64 file string
   };
+
+  const imageBuffer = Buffer.from(image.split(',')[1], 'base64');
 
   const infuraAuth =
     'Basic ' + Buffer.from(process.env.INFURA_API_KEY + ':' + process.env.INFURA_API_SECRET).toString('base64');
@@ -32,7 +34,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<{ cid: st
     },
   });
 
-  const { cid: imageCid } = await ipfsClient.add(image);
+  const { cid: imageCid } = await ipfsClient.add(imageBuffer);
 
   const metadata: CoinMetadata = {
     name,
