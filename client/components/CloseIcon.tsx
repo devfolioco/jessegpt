@@ -12,8 +12,8 @@ export function CloseIcon({ color = 'white', className }: { color?: string; clas
       <path
         d="M3.33398 3.33334L12.6673 12.6667M12.6673 3.33334L3.33398 12.6667"
         stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="square"
+        strokeWidth="2"
+        strokeLinecap="square"
       />
     </svg>
   );
