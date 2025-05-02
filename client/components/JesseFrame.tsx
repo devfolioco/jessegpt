@@ -46,8 +46,6 @@ const drawRoughEllipse = (
   const jitter = 10;
   const roughness = 1;
 
-  console.log('draw ellipse');
-
   rc.ellipse(centerX, centerY, ellipseWidth, ellipseHeight - 20, {
     stroke: '#0061F2',
     strokeWidth: 4,

@@ -22,6 +22,11 @@ const nextConfig = {
     ];
   },
 
+  webpack: config => {
+    config.externals.push('pino-pretty');
+    return config;
+  },
+
   experimental: {
     serverComponentsExternalPackages: ['ipfs-http-client'],
   },

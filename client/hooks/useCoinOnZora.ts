@@ -92,6 +92,7 @@ const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps):
       return;
     }
 
+    // test cid ->
     // return 'bafybeigoxzqzbnxsn35vq7lls3ljxdcwjafxvbvkivprsodzrptpiguysy';
 
     return uploadToIPFS(title, description, base64Image);
@@ -112,15 +113,14 @@ const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps):
       setCurrentStep(ZoraCoinFlowStep.UPLOADING_IMAGE);
       //   step 2: upload image to ipfs
       const cid = await uploadImageToIPFS();
-      console.log(cid);
-      console.log('url', `https://api.devfolio.co/api/ipfs/${cid}`);
+      console.log('asset url', `https://api.devfolio.co/api/ipfs/${cid}`);
 
       //   step 3: create coin
       setCurrentStep(ZoraCoinFlowStep.CREATING_COIN);
 
       const coinParams = {
         name: title,
-        symbol: 'DEVFOLIO',
+        symbol: title,
         uri: `ipfs://${cid}`,
         payoutRecipient: address,
       };
@@ -153,7 +153,7 @@ const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps):
 
   useEffect(() => {
     if (isConnected && address) {
-      console.log(address);
+      console.log('connected address: ', address);
 
       //   initiate the zora flow
       initiateZoraFlow(address as Address);
