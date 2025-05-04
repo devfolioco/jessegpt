@@ -3,6 +3,7 @@
 import { AgentSelection } from '@/components/AgentSelection';
 import { Button } from '@/components/Button';
 import { BASE_BATCH_APPLY_URL } from '@/constants';
+import { Desktop } from '@/helpers/responsive';
 import useButtonPointerAnimation from '@/hooks/useButtonPointerAnimation';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
@@ -40,7 +41,7 @@ export default function HomePage() {
           alt="JesseXBT Avatar"
           width={180}
           height={180}
-          className="rounded-none mx-auto"
+          className="rounded-none mx-auto -z-10"
           priority
         />
 
@@ -64,7 +65,7 @@ export default function HomePage() {
       <AnimatePresence>
         {showAgentSelection && (
           <motion.div
-            className="flex items-center justify-center absolute inset-0 bg-black bg-opacity-80 w-screen h-screen backdrop-blur-lg z-20"
+            className="flex items-center justify-center absolute inset-0 bg-black bg-opacity-80 w-screen min-h-screen backdrop-blur-lg z-20"
             onClick={() => setShowAgentSelection(false)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -76,9 +77,9 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      {/* <appkit-button /> */}
-
-      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none w-screen h-screen"></canvas>
+      <Desktop>
+        <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none w-screen h-screen z-10"></canvas>
+      </Desktop>
     </main>
   );
 }
