@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 import time
 from typing import Optional
 
@@ -14,6 +15,7 @@ from livekit.agents import (
 from livekit.plugins import deepgram, elevenlabs, openai
 from livekit.plugins.elevenlabs import VoiceSettings
 from livekit.plugins.turn_detector.english import EnglishModel
+import requests
 
 from voice_agent.assistant import Assistant, prewarm
 from voice_agent.constants import (
@@ -50,6 +52,24 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         logger.warning("Room name does not contain a mood prefix – using default mood")
         mood = "excited"  # sensible default
     logger.debug("Conversation mood resolved to '%s'", mood)
+
+    try:
+        room_id = ctx.room.name.split("_")[2]
+
+        response = requests.post(
+            f"{os.environ.get('DATALAYER_BASE_URL')}miscellaneous/jessegpt/conversations",
+            json={
+                "roomId": room_id,
+            },
+            headers={"x_api_key": os.environ.get("DATALAYER_API_KEY")},
+        )
+        response.raise_for_status()
+        logger.info("Successfully saved conversation to database")
+    except IndexError:
+        logger.error("Room name does not contain a room ID")
+        raise ValueError("Room name does not contain a room ID")
+    except Exception as e:
+        logger.error(f"Failed to save initial conversation: {e}")
 
     system_prompt = mood_system_prompts[mood]
     initial_prompt = mood_initial_prompts[mood]

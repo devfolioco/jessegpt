@@ -1,4 +1,6 @@
 from __future__ import annotations
+import os
+import requests
 
 from livekit.agents import Agent, RunContext, function_tool, get_job_context, JobProcess
 from livekit.plugins import silero
@@ -6,6 +8,35 @@ from livekit.plugins import silero
 from voice_agent.logger import get_logger
 
 logger = get_logger()
+
+# ------------------------------------------------------------------
+# Transcript upload ------------------------------------------------
+# ------------------------------------------------------------------
+
+
+def save_conversation(
+    room_id: str, transcript: dict, has_enough_information: bool, is_inappropriate: bool
+) -> None:
+    """Save conversation to the database."""
+
+    # Save to file as backup
+    # with open("transcript.json", "w") as f:
+    #     json.dump(session.history.to_dict(), f, indent=2)
+
+    try:
+        response = requests.post(
+            f"{os.environ.get('DATALAYER_BASE_URL')}miscellaneous/jessegpt/conversations/{room_id}",
+            json={
+                "messages": transcript,
+                "has_enough_information": has_enough_information,
+                "is_inappropriate": is_inappropriate,
+            },
+            headers={"x_api_key": os.environ.get("DATALAYER_API_KEY")},
+        )
+        response.raise_for_status()
+        logger.info("Successfully saved conversation to database")
+    except Exception as e:
+        logger.error(f"Failed to save conversation to database: {e}")
 
 
 # ---------------------------------------------------------------------------
@@ -78,6 +109,10 @@ class Assistant(Agent):
             If `has_enough_information` is False or `is_inappropriate` is True, this parameter may be an empty string.
         """
 
+        logger.debug(
+            f"Ending conversation with has_enough_information: {has_enough_information}, is_inappropriate: {is_inappropriate}, super_short_summary: {super_short_summary}, summary: {summary}"
+        )
+
         job_context = get_job_context()
         room = job_context.room
 
@@ -118,6 +153,13 @@ class Assistant(Agent):
                 has_enough_information,
                 is_inappropriate,
             )
+
+        save_conversation(
+            room.name.split("_")[2],
+            context.session.history.to_dict(),
+            has_enough_information,
+            is_inappropriate,
+        )
 
         await context.session.aclose()
 
