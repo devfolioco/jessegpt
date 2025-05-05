@@ -3,7 +3,6 @@
 import { AgentSelection } from '@/components/AgentSelection';
 import { Button } from '@/components/Button';
 import { BASE_BATCH_APPLY_URL } from '@/constants';
-import { Desktop } from '@/helpers/responsive';
 import useButtonPointerAnimation from '@/hooks/useButtonPointerAnimation';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
@@ -77,9 +76,10 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      <Desktop>
-        <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none w-screen h-screen z-10"></canvas>
-      </Desktop>
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 pointer-events-none w-screen h-screen z-10 hidden md:block"
+      ></canvas>
     </main>
   );
 }
