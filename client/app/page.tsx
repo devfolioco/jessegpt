@@ -82,10 +82,7 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 pointer-events-none w-screen h-screen z-10 hidden md:block"
-      ></canvas>
+      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none w-screen h-screen z-10 hidden"></canvas>
     </main>
   );
 }
