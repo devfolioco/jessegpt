@@ -50,9 +50,7 @@ export default function HomePage() {
           priority
         />
 
-        <h1 className={clsx('text-5xl md:text-6xl text-white drop-shadow-lg mt-6', nyghtMedium.className)}>
-          Talk to JesseXBT
-        </h1>
+        <h1 className={clsx('text-5xl md:text-6xl text-white mt-6', nyghtMedium.className)}>Talk to JesseXBT</h1>
 
         <p className={clsx('text-lg md:text-xl text-white/90 max-w-xl mx-auto font-light mt-2 font-inter')}>
           Get feedback on your ideas from Base creator Jesse Pollak&apos;s AI avatar. Choose between optimistic hype
