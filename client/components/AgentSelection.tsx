@@ -1,9 +1,12 @@
 'use client';
 
+import { nyghtBold, nyghtMedium } from '@/app/fonts/fonts';
 import { MicIcon } from '@/components/MicIcon';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
+import clsx from 'clsx';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Button } from './Button';
 
 interface AgentSelectionProps extends React.HTMLAttributes<HTMLDivElement> {
   // add new props here
@@ -33,21 +36,22 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
             className="rounded-none mb-6"
             priority
           />
-          <h2 className="text-4xl font-serif font-bold text-white mb-2">JesseXBT</h2>
-          <p className="text-lg text-white/90 mb-2">The relentlessly optimistic Jesse Pollak.</p>
-          <p className="text-base text-white/80 mb-8 max-w-xs">
+          <h2 className={clsx('text-4xl text-white mb-2', nyghtMedium.className)}>JesseXBT</h2>
+          <p className="text-xl text-white/80 mb-2 font-inter font-light">The relentlessly optimistic Jesse Pollak.</p>
+          <p className="text-xl text-white/80 mb-8 max-w-[427px] font-inter font-light">
             Sees massive potential everywhere, bursting with Onchain Summer energy, &amp; ready to hype your vision to
             the moon.
           </p>
-          <button
-            className="flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-lg font-semibold bg-yellow-300 text-black hover:bg-yellow-200 transition-all shadow-md"
+          <Button
+            appearance="colored"
             onClick={() => updateMood(AgentMoodEnum.EXCITED)}
+            className="bg-optimism w-auto text-black"
           >
             <span role="img" aria-label="microphone">
               <MicIcon color="black" />
             </span>{' '}
             Start talking
-          </button>
+          </Button>
         </div>
         {/* SupaBald JesseXBT (Critical) */}
         <div className="flex-1 flex flex-col items-center text-center bg-transparent" onClick={clickHandler}>
@@ -59,21 +63,22 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
             className="rounded-none mb-6"
             priority
           />
-          <h2 className="text-4xl font-serif font-bold text-white mb-2">SupaBald JesseXBT</h2>
-          <p className="text-lg text-white/90 mb-2">The brutally honest Jesse Pollak.</p>
-          <p className="text-base text-white/80 mb-8 max-w-xs">
+          <h2 className={clsx('text-4xl text-white mb-2', nyghtMedium.className)}>SupaBald JesseXBT</h2>
+          <p className="text-xl text-white/80 mb-2 font-inter font-light">The brutally honest Jesse Pollak.</p>
+          <p className="text-xl text-white/80 mb-8 max-w-[427px] font-inter font-light">
             Cuts through the hype, challenges every premise, &amp; believes great ideas must survive intense scrutiny to
             succeed.
           </p>
-          <button
-            className="flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-lg font-semibold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md"
+          <Button
+            appearance="colored"
+            className="bg-critical w-auto"
             onClick={() => updateMood(AgentMoodEnum.CRITICAL)}
           >
             <span role="img" aria-label="microphone">
               <MicIcon />
             </span>{' '}
             Start talking
-          </button>
+          </Button>
         </div>
       </div>
     </main>

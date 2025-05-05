@@ -1,5 +1,5 @@
-import localFont from 'next/font/local';
 import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 
 export const nyghtRegular = localFont({
   src: '../fonts/NyghtSerif-Regular.ttf',
@@ -16,4 +16,4 @@ export const nyghtMedium = localFont({
   display: 'swap',
 });
 
-export const inter = Inter({ subsets: ['latin'] });
+export const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });

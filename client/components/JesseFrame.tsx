@@ -1,9 +1,11 @@
 import { nyghtMedium } from '@/app/fonts/fonts';
+import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { useEffect, useRef } from 'react';
 import rough from 'roughjs';
 
 interface JesseFrameProps {
   idea: string;
+  mood: AgentMoodI;
   onImageReady: (base64Image: string) => void;
   onError: (error: Error) => void;
 }
@@ -64,13 +66,23 @@ const drawRoughEllipse = (
   });
 };
 
-const loadJesseAsset = async (): Promise<HTMLImageElement> => {
+const loadJesseAsset = async (mood: AgentMoodI): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
     const jesseImage = new Image();
+
     jesseImage.onload = () => {
       resolve(jesseImage);
     };
-    jesseImage.src = '/frame/jesse-t.png';
+
+    jesseImage.onerror = () => {
+      reject(new Error('Failed to load jesse image'));
+    };
+
+    if (mood === AgentMoodEnum.EXCITED) {
+      jesseImage.src = '/frame/jesse-t-excited.png';
+    } else {
+      jesseImage.src = '/frame/jesse-t-critical.png';
+    }
   });
 };
 
@@ -80,11 +92,20 @@ const loadBackgroundAsset = async (): Promise<HTMLImageElement> => {
     backgroundImage.onload = () => {
       resolve(backgroundImage);
     };
+    backgroundImage.onerror = () => {
+      reject(new Error('Failed to load background image'));
+    };
     backgroundImage.src = '/frame/dot-grid.svg';
   });
 };
 
-const drawFrame = async (canvasElement: HTMLCanvasElement, width: number, height: number, idea: string) => {
+const drawFrame = async (
+  canvasElement: HTMLCanvasElement,
+  width: number,
+  height: number,
+  idea: string,
+  mood: AgentMoodI
+) => {
   // Resize the canvas for the display resolution
   resizeCanvas(canvasElement);
 
@@ -131,7 +152,7 @@ const drawFrame = async (canvasElement: HTMLCanvasElement, width: number, height
   ctx.fillText(idea, width / 2, height / 3 + (120 - (1 - scaleDownRatio) * 14));
 
   // Load and draw the jesse image in the bottom left corner
-  const jesseImage = await loadJesseAsset();
+  const jesseImage = await loadJesseAsset(mood);
   const imageSize = 114;
   ctx.drawImage(jesseImage, 32, frameHeight - imageSize, imageSize, imageSize);
 
@@ -139,7 +160,7 @@ const drawFrame = async (canvasElement: HTMLCanvasElement, width: number, height
   drawRoughEllipse(canvasElement, frameWidth, frameHeight, { ideaTextWidth });
 };
 
-const JesseFrame = ({ idea, onImageReady, onError }: JesseFrameProps) => {
+const JesseFrame = ({ idea, onImageReady, onError, mood }: JesseFrameProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleDownload = () => {
@@ -180,7 +201,7 @@ const JesseFrame = ({ idea, onImageReady, onError }: JesseFrameProps) => {
   const renderFrame = async () => {
     try {
       if (canvasRef.current) {
-        await drawFrame(canvasRef.current, frameWidth, frameHeight, idea);
+        await drawFrame(canvasRef.current, frameWidth, frameHeight, idea, mood);
         const image = canvasRef.current.toDataURL();
         onImageReady(image);
       }

@@ -30,7 +30,7 @@ const projectIdeas = [
 ];
 
 const testData = {
-  oneLiner: projectIdeas[4],
+  oneLiner: projectIdeas[2],
   summary: `
 In a world drowning in lengthy emails, MailSprint revolutionizes the way you consume information. This Chrome extension streamlines communication by extracting the essence of any open email and delivering it in a concise easy-to-read summary. 
 Save time, stay focused, and conquer your inbox with MailSprint.
@@ -187,6 +187,7 @@ const TalkComponent = () => {
       <ShareModal
         isOpen={isSummaryReceived}
         data={finalMintData.current}
+        mood={mood}
         onClose={() => {
           // on close
           // retry
