@@ -18,7 +18,7 @@ if (!projectId) {
 const metadata = {
   name: 'jessegpt',
   description: 'Talk to Jesse Poll',
-  url: 'https://jessegpt.com', // origin must match your domain & subdomain
+  url: 'https://jessegpt.xyz', // origin must match your domain & subdomain
   icons: ['https://avatars.githubusercontent.com/u/179229932'],
 };
 

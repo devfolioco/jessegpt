@@ -7,7 +7,7 @@ import { inter } from './fonts/fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(`https://jessegpt.com`),
+  metadataBase: new URL(`https://jessegpt.xyz`),
   title: 'JesseGPT',
   description: "Talk to JesseXBT - Get feedback on your ideas from Base creator Jesse Pollak's AI avatar.",
   openGraph: {
