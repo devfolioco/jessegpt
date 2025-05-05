@@ -6,12 +6,12 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef, useState } from 'react';
 import { Button } from './Button';
-import { CloseIcon } from './CloseIcon';
 import JesseFrame from './JesseFrame';
 import { Loader } from './Loader';
-import { MicIcon } from './MicIcon';
+import { CloseIcon } from './icons/CloseIcon';
 import { DevfolioIcon } from './icons/DevfolioIcon';
 import { FarcasterIcon } from './icons/FarcasterIcon';
+import { MicIcon } from './icons/MicIcon';
 import { XIcon } from './icons/XIcon';
 import { ZoraIcon } from './icons/ZoraIcon';
 
@@ -28,7 +28,6 @@ enum ShareModalError {
 
 const MainContent = ({ data, onClose, mood }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // e.preventDefault();
     e.stopPropagation();
   };
 
