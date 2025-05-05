@@ -1,5 +1,6 @@
 import { inter } from '@/app/fonts/fonts';
 import { BASE_BATCH_APPLY_URL } from '@/constants';
+import { getFarcasterCopy, getTweetCopy, getTwitterIntentURL, getWarpcastIntentURL } from '@/helpers/copy';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
 import { AgentShareData } from '@/types/agent';
 import { AnimatePresence, motion } from 'motion/react';
@@ -7,7 +8,12 @@ import { useRef, useState } from 'react';
 import { Button } from './Button';
 import { CloseIcon } from './CloseIcon';
 import JesseFrame from './JesseFrame';
+import { Loader } from './Loader';
 import { MicIcon } from './MicIcon';
+import { DevfolioIcon } from './icons/DevfolioIcon';
+import { FarcasterIcon } from './icons/FarcasterIcon';
+import { XIcon } from './icons/XIcon';
+import { ZoraIcon } from './icons/ZoraIcon';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -21,7 +27,7 @@ enum ShareModalError {
 
 const MainContent = ({ data, onClose }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
+    // e.preventDefault();
     e.stopPropagation();
   };
 
@@ -49,6 +55,30 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
     setError(ShareModalError.FRAME_RENDER_ERROR);
   };
 
+  const handleTweet = () => {
+    const tweetCopy = getTweetCopy({
+      title: data.oneLiner,
+      summary: data.summary,
+      zoraUrl: zoraResult?.zoraLink ?? '',
+    });
+
+    const twitterShareURL = getTwitterIntentURL({ text: tweetCopy });
+
+    window.open(twitterShareURL, '_blank');
+  };
+
+  const handleFarcaster = () => {
+    const farcasterCopy = getFarcasterCopy({
+      title: data.oneLiner,
+      summary: data.summary,
+      zoraUrl: zoraResult?.zoraLink ?? '',
+    });
+
+    const warpcastShareURL = getWarpcastIntentURL({ text: farcasterCopy });
+
+    window.open(warpcastShareURL, '_blank');
+  };
+
   return (
     <div
       className="flex flex-col items-center gap-4 max-w-[682px] bg-secondary rounded-2xl p-4 relative"
@@ -68,18 +98,18 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
       {zoraResult ? (
         // Zora Success UI
         <div className="flex gap-4 items-center w-full mt-2">
-          <Button appearance="colored" className="bg-farcaster  text-white">
-            <MicIcon color="black" />
+          <Button appearance="colored" className="bg-farcaster  text-white" onClick={handleFarcaster}>
+            <FarcasterIcon />
             Cast
           </Button>
 
-          <Button appearance="colored" className="bg-x  text-white">
-            <MicIcon color="black" />
+          <Button appearance="colored" className="bg-x  text-white" onClick={handleTweet}>
+            <XIcon />
             Cast
           </Button>
 
-          <Button appearance="colored" className="bg-white text-black" href={zoraResult.zoraLink}>
-            {/* todo: add zora icon and loading state */}
+          <Button appearance="colored" className="bg-white text-black" href={zoraResult.zoraLink} target="_blank">
+            <ZoraIcon />
             View
           </Button>
         </div>
@@ -92,23 +122,15 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
           </Button>
 
           <Button appearance="colored" className="bg-white text-black" onClick={handleCoinOnZoraClick}>
-            {/* todo: add zora icon and loading state */}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            {isLoading ? 'Creating...' : 'Coin on Zora'}
+            {isLoading ? <Loader /> : <ZoraIcon />}
+
+            {isLoading ? '' : 'Coin on Zora'}
           </Button>
         </div>
       )}
 
-      {/* todo: add devfolio icon */}
-      <Button appearance="colored" className="bg-devfolio text-white" href={BASE_BATCH_APPLY_URL}>
+      <Button appearance="colored" className="bg-devfolio text-white" href={BASE_BATCH_APPLY_URL} target="_blank">
+        <DevfolioIcon />
         Build your idea at Base Batches: 001
       </Button>
     </div>

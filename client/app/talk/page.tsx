@@ -48,13 +48,13 @@ const TalkComponent = () => {
   const router = useRouter();
 
   const [room] = useState(new Room());
-  const [connecting, setConnecting] = useState(false);
-  const [connected, setConnected] = useState(false);
-  const isInitialRender = useRef(false);
+  const [connecting, setConnecting] = useState(true);
+  const [connected, setConnected] = useState(true);
+  const isInitialRender = useRef(true);
 
-  const [isSummaryReceived, setIsSummaryReceived] = useState(false);
+  const [isSummaryReceived, setIsSummaryReceived] = useState(true);
 
-  const finalMintData = useRef<AgentShareData>(initialData);
+  const finalMintData = useRef<AgentShareData>(testData);
 
   const handleRetry = () => {
     // redirect to home page
