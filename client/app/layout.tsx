@@ -1,13 +1,9 @@
 import AppKitContextProvider from '@/context/AppKitContext';
 import '@livekit/components-styles';
-import { Public_Sans } from 'next/font/google';
+import clsx from 'clsx';
 import { headers } from 'next/headers';
+import { inter } from './fonts/fonts';
 import './globals.css';
-
-const publicSans400 = Public_Sans({
-  weight: '400',
-  subsets: ['latin'],
-});
 
 export default function RootLayout({
   children,
@@ -18,8 +14,8 @@ export default function RootLayout({
   const cookies = headersObj.get('cookie');
 
   return (
-    <html lang="en" className={`h-full ${publicSans400.className}`}>
-      <body className="h-full">
+    <html lang="en" className={'h-full'}>
+      <body className={clsx('h-full', inter.variable)}>
         <AppKitContextProvider cookies={cookies}>{children}</AppKitContextProvider>
       </body>
     </html>

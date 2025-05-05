@@ -1,7 +1,7 @@
 const colors = {
   // project theme colors
   optimism: '#FFF68E',
-  brutal: '#0157FA',
+  critical: '#0157FA',
   danger: '#F06444',
   secondary: '#2D2D2D',
 

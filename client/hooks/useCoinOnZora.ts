@@ -37,7 +37,7 @@ enum ZoraCoinFlowStep {
 }
 
 // todo: remove this (simulate success)
-const test = false;
+const test = true;
 
 const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps): UseCoinOnZoraReturn => {
   const { open } = useAppKit();

@@ -1,27 +1,33 @@
-import { inter } from '@/app/fonts/fonts';
 import { BASE_BATCH_APPLY_URL } from '@/constants';
+import { getFarcasterCopy, getTweetCopy, getTwitterIntentURL, getWarpcastIntentURL } from '@/helpers/copy';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
-import { AgentShareData } from '@/types/agent';
+import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef, useState } from 'react';
 import { Button } from './Button';
-import { CloseIcon } from './CloseIcon';
 import JesseFrame from './JesseFrame';
-import { MicIcon } from './MicIcon';
+import { Loader } from './Loader';
+import { CloseIcon } from './icons/CloseIcon';
+import { DevfolioIcon } from './icons/DevfolioIcon';
+import { FarcasterIcon } from './icons/FarcasterIcon';
+import { MicIcon } from './icons/MicIcon';
+import { XIcon } from './icons/XIcon';
+import { ZoraIcon } from './icons/ZoraIcon';
 
 interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
   data: AgentShareData;
+  mood: AgentMoodI;
 }
 
 enum ShareModalError {
   FRAME_RENDER_ERROR = 'frame-render-error',
 }
 
-const MainContent = ({ data, onClose }: ShareModalProps) => {
+const MainContent = ({ data, onClose, mood }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
     e.stopPropagation();
   };
 
@@ -49,6 +55,30 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
     setError(ShareModalError.FRAME_RENDER_ERROR);
   };
 
+  const handleTweet = () => {
+    const tweetCopy = getTweetCopy({
+      title: data.oneLiner,
+      summary: data.summary,
+      zoraUrl: zoraResult?.zoraLink ?? '',
+    });
+
+    const twitterShareURL = getTwitterIntentURL({ text: tweetCopy });
+
+    window.open(twitterShareURL, '_blank');
+  };
+
+  const handleFarcaster = () => {
+    const farcasterCopy = getFarcasterCopy({
+      title: data.oneLiner,
+      summary: data.summary,
+      zoraUrl: zoraResult?.zoraLink ?? '',
+    });
+
+    const warpcastShareURL = getWarpcastIntentURL({ text: farcasterCopy });
+
+    window.open(warpcastShareURL, '_blank');
+  };
+
   return (
     <div
       className="flex flex-col items-center gap-4 max-w-[682px] bg-secondary rounded-2xl p-4 relative"
@@ -58,57 +88,56 @@ const MainContent = ({ data, onClose }: ShareModalProps) => {
         <CloseIcon color="#2D2D2D" className="w-6 h-6" />
       </button>
       <div className="flex flex-col items-start rounded-xl overflow-hidden">
-        <JesseFrame idea={data.oneLiner} onImageReady={onImageReady} onError={handleFrameError} />
+        <JesseFrame idea={data.oneLiner} mood={mood} onImageReady={onImageReady} onError={handleFrameError} />
 
-        <div className="flex justify-center items-center gap-2 self-stretch p-3 px-4 bg-[#1D1D1D] text-white font-['Nunito_Sans'] text-[18px] leading-[28px]">
+        <div className="flex justify-center items-center gap-2 self-stretch p-3 px-4 bg-[#1D1D1D] text-white text-[18px] leading-[28px] font-extralight font-inter">
           {data.summary}
         </div>
       </div>
 
       {zoraResult ? (
         // Zora Success UI
-        <div className="flex gap-4 items-center w-full mt-2">
-          <Button appearance="colored" className="bg-farcaster  text-white">
-            <MicIcon color="black" />
+        <div className="flex gap-4 items-center w-full mt-2 font-inter">
+          <Button appearance="colored" className="bg-farcaster  text-white" onClick={handleFarcaster}>
+            <FarcasterIcon />
             Cast
           </Button>
 
-          <Button appearance="colored" className="bg-x  text-white">
-            <MicIcon color="black" />
+          <Button appearance="colored" className="bg-x  text-white" onClick={handleTweet}>
+            <XIcon />
             Cast
           </Button>
 
-          <Button appearance="colored" className="bg-white text-black" href={zoraResult.zoraLink}>
-            {/* todo: add zora icon and loading state */}
+          <Button appearance="colored" className="bg-white text-black" href={zoraResult.zoraLink} target="_blank">
+            <ZoraIcon />
             View
           </Button>
         </div>
       ) : (
         // Zora Flow
         <div className="flex gap-4 items-center w-full mt-2">
-          <Button appearance="colored" className="bg-optimism  text-black" onClick={onClose}>
-            <MicIcon color="black" />
+          <Button
+            appearance="colored"
+            className={clsx(mood === AgentMoodEnum.EXCITED ? 'text-black bg-optimism' : 'text-white bg-critical')}
+            onClick={onClose}
+          >
+            <MicIcon color={mood === AgentMoodEnum.EXCITED ? 'black' : 'white'} />
             Chat again
           </Button>
 
-          <Button appearance="colored" className="bg-white text-black" onClick={handleCoinOnZoraClick}>
-            {/* todo: add zora icon and loading state */}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            {isLoading ? 'Creating...' : 'Coin on Zora'}
+          <Button
+            appearance="colored"
+            className={clsx('bg-white ', isLoading ? 'text-grey-7' : 'text-black')}
+            onClick={handleCoinOnZoraClick}
+          >
+            {isLoading ? <Loader /> : <ZoraIcon />}
+            Coin on Zora
           </Button>
         </div>
       )}
 
-      {/* todo: add devfolio icon */}
-      <Button appearance="colored" className="bg-devfolio text-white" href={BASE_BATCH_APPLY_URL}>
+      <Button appearance="colored" className="bg-devfolio text-white" href={BASE_BATCH_APPLY_URL} target="_blank">
+        <DevfolioIcon />
         Build your idea at Base Batches: 001
       </Button>
     </div>

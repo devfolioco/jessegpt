@@ -10,6 +10,9 @@ const config: Config = {
   theme: {
     extend: {
       colors,
+      fontFamily: {
+        inter: ['var(--font-inter)'],
+      },
     },
   },
   plugins: [],

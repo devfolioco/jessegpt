@@ -1,7 +1,7 @@
-import { CloseIcon } from '@/components/CloseIcon';
 import { CustomVoiceAssistantControlBar } from '@/components/CustomVoiceAssistantControlBar';
 import { NoAgentNotification } from '@/components/NoAgentNotification';
 import TranscriptionView from '@/components/TranscriptionView';
+import { CloseIcon } from '@/components/icons/CloseIcon';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { BarVisualizer, DisconnectButton, RoomAudioRenderer, useVoiceAssistant } from '@livekit/components-react';
 import Image from 'next/image';
