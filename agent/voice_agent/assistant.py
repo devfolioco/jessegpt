@@ -48,7 +48,14 @@ class Assistant(Agent):
         Parameters
         ----------
         super_short_summary:
-            One or two (three at most) words that captures the essence of the user's project idea. Be creative, make it a noun if possible. And BE SURE to restrict yourself to ONLY A FEW WORDS AT MOST.
+            Craft a highly concise (1-3 words MAX) and impactful phrase that encapsulates the user's project idea. This phrase will complete the sentence "Base is for __" on a shareable image.
+            Think creatively:
+            *   Aim for a noun or a very short noun phrase.
+            *   Make it catchy, memorable, and inspiring if possible.
+            *   It should feel like a bold declaration or a core identity for the project.
+            *   Examples of good fits: "Global Unity", "Indie Creators", "Transparent Finance", "Healing the Planet", "Decentralized Art".
+            *   Ensure it makes perfect sense when read as "Base is for [Your Phrase]".
+            *   STRICTLY ADHERE to the 1-3 word limit.
         summary:
             A concise yet detailed summary of the user's project idea.
         """
