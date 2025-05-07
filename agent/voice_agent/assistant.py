@@ -88,14 +88,14 @@ class Assistant(Agent):
         if monitor_task is not None and not monitor_task.done():
             monitor_task.cancel()
 
-        # Send has_enough_information status first
-        await room.local_participant.send_text(
-            str(has_enough_information).lower(), topic="has_enough_information"
-        )
-
         # Send is_inappropriate status
         await room.local_participant.send_text(
             str(is_inappropriate).lower(), topic="is_inappropriate"
+        )
+
+        # Send has_enough_information status first
+        await room.local_participant.send_text(
+            str(has_enough_information).lower(), topic="has_enough_information"
         )
 
         if has_enough_information and not is_inappropriate:
