@@ -53,9 +53,10 @@ class Assistant(Agent):
         Parameters
         ----------
         has_enough_information:
-            A boolean indicating whether the AI has gathered sufficient information
-            about the user's project. If False, `super_short_summary` and `summary`
-            can be empty, and their content will not be used or sent.
+            A boolean indicating whether the AI has gathered a reasonable understanding of the user's project idea or main topic of conversation.
+            Lean towards True if the user has shared some specifics about their project, even if not every detail is covered.
+            If the conversation was very short, or the user did not meaningfully engage or share any project details, set this to False.
+            If False, `super_short_summary` and `summary` can be empty, and their content will not be used or sent.
         is_inappropriate:
             A boolean indicating whether the conversation was ended due to
             inappropriate content or behavior. If True, `super_short_summary`
