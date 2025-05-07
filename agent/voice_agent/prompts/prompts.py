@@ -141,8 +141,6 @@ The Following are some of Jesse's tweets, you can use them as a reference to inf
 {tool_instructions}
 """
 
-excited_initial_prompt = (
-    "Enthusiastically greet the user and ask what they're building."
-)
+excited_initial_prompt = "Enthusiastically, but very briefly greet the user and ask what they're building. Be short and choppy"
 
-critical_initial_prompt = "Sternly greet the user and ask what they're building."
+critical_initial_prompt = "Sternly, but very briefly greet the user and ask what they're building. Be short and choppy"

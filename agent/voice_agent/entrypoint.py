@@ -95,27 +95,6 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         still_there_prompt_sent = False
         last_interaction_time = time.time()
 
-    async def hangup() -> None:
-        logger.info("Idle too long, hanging up")
-        try:
-            await ctx.room.disconnect()
-        except Exception as exc:  # pragma: no cover – best-effort clean-up
-            logger.warning("Error while ending call: %s", exc)
-
-    # ------------------------------------------------------------------
-    # Transcript handling ------------------------------------------------
-    # ------------------------------------------------------------------
-
-    async def upload_transcript() -> None:
-        """Serialize *session* history and save it to the DB"""
-
-        if len(session.history.items) == 0:
-            logger.debug("Skipping transcript upload for empty transcript")
-            return
-        pass
-
-    # ctx.add_shutdown_callback(upload_transcript)
-
     # ------------------------------------------------------------------
     # Helper coroutines --------------------------------------------------
     # ------------------------------------------------------------------
@@ -150,8 +129,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
             still_there_prompt_sent = True
             await session.generate_reply(
                 instructions=(
-                    "The user has been inactive for a while. EXPLICITLY ask them if they "
-                    "are still there and if they'd like to continue the conversation."
+                    "The user has been inactive. Say something like 'Hello?! Are you still there!?' to get their attention and ask if they want to continue."
                 ),
                 allow_interruptions=True,
             )
@@ -213,8 +191,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
 
                 await session.generate_reply(
                     instructions=(
-                        "The conversation has concluded. Please call the `end_conversation` "
-                        "function to end the call..."
+                        "The conversation has concluded. Please call the `end_conversation` function to end the call..."
                     ),
                     allow_interruptions=False,
                 )
@@ -226,15 +203,23 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
             if await should_end_call():
                 logger.info("Ending call due to inactivity")
 
-                await session.generate_reply(
+                end_handle = session.generate_reply(
                     instructions=(
-                        "The user has been inactive for too long. EXPLICITLY say goodbye, and call the `end_conversation` function to end the call..."
+                        "The user has remained inactive even after reminding them. They seem to be busy at the moment. Just Inform them you are now have to hang up the call for now. There is nothing inappropriate about this, Please dont bring that up. Just let the user know that you're hanging up..."
                     ),
                     allow_interruptions=False,
                 )
 
-                await asyncio.sleep(SPEAK_DELAY)
-                # await hangup()
+                await end_handle.wait_for_playout()
+
+                await session.generate_reply(
+                    instructions=(
+                        "The conversation has concluded. Please call the `end_conversation` function to end the call... YOU MUST CALL THE `end_conversation` FUNCTION"
+                    ),
+                    allow_interruptions=False,
+                )
+
+                # await asyncio.sleep(SPEAK_DELAY)
                 break
 
             await send_idle_prompt()
@@ -251,7 +236,6 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         is_agent_speaking = ev.new_state == "speaking"
         if not is_agent_speaking:
             logger.info("Agent stopped speaking")
-        # reset_timeout()
 
     @session.on("user_state_changed")
     def _on_user_state_changed(ev):
@@ -266,8 +250,13 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
 
     await session.start(room=ctx.room, agent=agent)
 
-    await session.generate_reply(instructions=initial_prompt, allow_interruptions=False)
-    await asyncio.sleep(SPEAK_DELAY)
+    greet_handle = await session.generate_reply(
+        instructions=initial_prompt, allow_interruptions=False
+    )
+
+    await greet_handle.wait_for_playout()
+
+    reset_timeout()
 
     monitor_task = asyncio.create_task(monitor_interaction())
     # Expose the task so other components (e.g., tools) can cancel it when needed
