@@ -22,18 +22,25 @@ export const getWarpcastIntentURL = (queryParams: { text?: string; 'embeds[]'?: 
   return `${intentBaseURL}${params.toString()}`;
 };
 
+const tweetAndCastCopies = [
+  `Pitched my project to JesseGPT.\n\nFeedback was half compliment, half therapy session.\n\nTry it here → jessegpt.com\n@devfolio`,
+  `JesseGPT: “This sounds like an MVP you haven’t validated.”\n\nMe: “fair.”\n\nGood feedback engine by @devfolio.\nTry it here: jessegpt.com`,
+  `Encouraging JesseGPT is like your cofounder on a good day.\n\nGentle roast. Useful advice.\n\nIf you’re building something, go vibe → jessegpt.com\n@devfolio`,
+  `JesseGPT didn’t roast me.\n\nHe actually liked my idea 😳\n\nIf you’re looking for a confidence boost with real feedback, try the green Jesse → jessegpt.com\n@devfolio`,
+  `Picked Critical Jesse on JesseGPT.\n\nGot cooked.\nLearned a lot.\nMight go cry a little.\n\nMade by @devfolio — jessegpt.com`,
+];
+
 export const getTweetCopy = ({ title, summary, zoraUrl }: { title: string; summary: string; zoraUrl: string }) => {
-  return `${title}
-  
-  ${summary}
-  
-  ${zoraUrl}
+  const randomCopy = tweetAndCastCopies[Math.floor(Math.random() * tweetAndCastCopies.length)];
+  return `
+    ${randomCopy}
   `;
 };
 
 export const getFarcasterCopy = ({ title, summary, zoraUrl }: { title: string; summary: string; zoraUrl: string }) => {
-  return `${title}
-  
-  ${summary}
+  const randomCopy = tweetAndCastCopies[Math.floor(Math.random() * tweetAndCastCopies.length)];
+
+  return `
+    ${randomCopy}
   `;
 };
