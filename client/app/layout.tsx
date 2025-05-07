@@ -8,21 +8,22 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(`https://jessegpt.xyz`),
-  title: 'JesseGPT',
-  description: "Talk to JesseXBT - Get feedback on your ideas from Base creator Jesse Pollak's AI avatar.",
+  title: 'JesseGPT – Onchain Feedback That Pays Off',
+  description:
+    'An AI trained on Jesse Pollak to give you real feedback on your onchain idea. Part of the Base Batches #001 Global Buildathon. Powered by Base.',
   openGraph: {
     type: 'website',
     url: './',
-    title: 'JesseGPT',
+    title: 'JesseGPT – Onchain Feedback That Pays Off',
     description:
-      "Get feedback on your ideas from Base creator Jesse Pollak's AI avatar. Choose between optimistic hype mode or brutally honest critique to level up your project.",
+      'An AI trained on Jesse Pollak to give you real feedback on your onchain idea. Part of the Base Batches #001 Global Buildathon. Powered by Base.',
     images: '/og-image.png',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'JesseGPT',
+    title: 'JesseGPT – Onchain Feedback That Pays Off',
     description:
-      "Get feedback on your ideas from Base creator Jesse Pollak's AI avatar. Choose between optimistic hype mode or brutally honest critique to level up your project.",
+      'An AI trained on Jesse Pollak to give you real feedback on your onchain idea. Part of the Base Batches #001 Global Buildathon. Powered by Base.',
     images: '/og-image.png',
   },
   icons: {
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     apple: '/favicon_io/apple-touch-icon.png',
   },
   alternates: {
-    canonical: './',
+    canonical: 'https://www.jessegpt.xyz',
   },
 };
 
