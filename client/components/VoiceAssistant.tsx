@@ -44,9 +44,7 @@ export function VoiceAssistant({ mood }: { mood: AgentMoodI }) {
       </div>
 
       <div className="w-full flex-1 flex flex-col items-center overflow-hidden z-10 mt-16">
-        <div className="max-w-2xl h-[560px] overflow-y-auto">
-          <TranscriptionView mood={mood} />
-        </div>
+        <TranscriptionView mood={mood} />
       </div>
 
       <RoomAudioRenderer />
