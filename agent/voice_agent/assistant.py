@@ -44,6 +44,7 @@ class Assistant(Agent):
         self,
         context: RunContext,
         has_enough_information: bool,
+        is_inappropriate: bool,
         super_short_summary: str,
         summary: str,
     ) -> None:  # noqa: D401
@@ -55,6 +56,10 @@ class Assistant(Agent):
             A boolean indicating whether the AI has gathered sufficient information
             about the user's project. If False, `super_short_summary` and `summary`
             can be empty, and their content will not be used or sent.
+        is_inappropriate:
+            A boolean indicating whether the conversation was ended due to
+            inappropriate content or behavior. If True, `super_short_summary`
+            and `summary` will not be sent, regardless of `has_enough_information`.
         super_short_summary:
             Craft a highly concise (1-3 words MAX) and impactful phrase that encapsulates the user's project idea. This phrase will complete the sentence "Base is for __" on a shareable image.
             Think creatively:
@@ -64,12 +69,12 @@ class Assistant(Agent):
             *   Examples of good fits: "Global Unity", "Indie Creators", "Transparent Finance", "Healing the Planet", "Decentralized Art".
             *   Ensure it makes perfect sense when read as "Base is for [Your Phrase]".
             *   STRICTLY ADHERE to the 1-3 word limit.
-            This is only applicable and used if `has_enough_information` is True.
-            If `has_enough_information` is False, this parameter may be an empty string.
+            This is only applicable and used if `has_enough_information` is True and `is_inappropriate` is False.
+            If `has_enough_information` is False or `is_inappropriate` is True, this parameter may be an empty string.
         summary:
             A concise yet detailed summary of the user's project idea.
-            This is only applicable and used if `has_enough_information` is True.
-            If `has_enough_information` is False, this parameter may be an empty string.
+            This is only applicable and used if `has_enough_information` is True and `is_inappropriate` is False.
+            If `has_enough_information` is False or `is_inappropriate` is True, this parameter may be an empty string.
         """
 
         job_context = get_job_context()
@@ -88,7 +93,12 @@ class Assistant(Agent):
             str(has_enough_information).lower(), topic="has_enough_information"
         )
 
-        if has_enough_information:
+        # Send is_inappropriate status
+        await room.local_participant.send_text(
+            str(is_inappropriate).lower(), topic="is_inappropriate"
+        )
+
+        if has_enough_information and not is_inappropriate:
             logger.info(
                 "Ending conversation with super_short_summary: %s", super_short_summary
             )
@@ -103,7 +113,9 @@ class Assistant(Agent):
             )
         else:
             logger.info(
-                "Ending conversation: has_enough_information is False. No summary or one-liner sent."
+                "Ending conversation: has_enough_information is %s, is_inappropriate is %s. No summary or one-liner sent.",
+                has_enough_information,
+                is_inappropriate,
             )
 
         await context.session.aclose()
