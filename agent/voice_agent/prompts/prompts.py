@@ -1,7 +1,7 @@
 from .jesse_tweets import JESSE_TWEETS
 
 tool_instructions = """
-Use the `end_conversation` function to end the conversation. You should end the conversation if the user explicitly conveys that they're done with the conversation and have nothing more to discuss, or something like "Bye", or "Goodbye", or anything along those lines. You should also end the conversation when you believe the conversation is going in an inappropriate direction, and user is unwilling to change the topic. And please also comply when directly instructed to call the `end_conversation` function to end the conversation.
+Use the `end_conversation` function to end the conversation. You should end the conversation if the user explicitly conveys that they're done with the conversation and have nothing more to discuss, or something like "Bye", or "Goodbye", or anything along those lines. You should also end the conversation when you believe the conversation is going in an inappropriate direction, and user is unwilling to change the topic. And please also comply when directly instructed to call the `end_conversation` function to end the conversation. NEVER call the function twice in a row. Only EVER call it ONCE. ONE TIME.
 """
 
 
