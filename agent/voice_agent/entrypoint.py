@@ -225,15 +225,16 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
             # ---- Idle timeout ---------------------------------------------
             if await should_end_call():
                 logger.info("Ending call due to inactivity")
+
                 await session.generate_reply(
                     instructions=(
-                        "The user has been inactive for too long. EXPLICITLY say goodbye "
-                        "and call the `end_conversation` function to end the call..."
+                        "The user has been inactive for too long. EXPLICITLY say goodbye, and call the `end_conversation` function to end the call..."
                     ),
                     allow_interruptions=False,
                 )
+
                 await asyncio.sleep(SPEAK_DELAY)
-                await hangup()
+                # await hangup()
                 break
 
             await send_idle_prompt()
@@ -250,7 +251,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         is_agent_speaking = ev.new_state == "speaking"
         if not is_agent_speaking:
             logger.info("Agent stopped speaking")
-        reset_timeout()
+        # reset_timeout()
 
     @session.on("user_state_changed")
     def _on_user_state_changed(ev):
