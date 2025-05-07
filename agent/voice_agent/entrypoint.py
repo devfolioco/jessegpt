@@ -273,7 +273,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     ctx.proc.userdata["monitor_task"] = monitor_task
 
     # Example starter message via data-channel
-    await ctx.room.local_participant.send_text("Hello from ECS", topic="hello")
+    await ctx.room.local_participant.send_text("Agent v1.2.0", topic="agent_version")
 
 
 # ----------------------------------------------------------------------
