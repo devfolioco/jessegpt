@@ -171,7 +171,7 @@ const TalkComponent = () => {
           finalMintData.current.summary += chunk;
 
           // Logs agent version
-          console.log(`Agent Version: ${chunk}`);
+          console.log(`CurrentVersion: ${chunk}`);
         }
       });
 
