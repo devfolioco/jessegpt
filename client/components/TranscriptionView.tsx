@@ -148,7 +148,7 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
   const lastUserTranscription = onlyUserTranscriptions[onlyUserTranscriptions.length - 1];
 
   return (
-    <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden py-8 w-[700px] pb-32">
+    <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden py-8 w-[700px] pb-40">
       {combinedTranscriptions.map(segment => (
         <ChatBubble
           key={segment.id}
