@@ -32,6 +32,48 @@ from voice_agent.logger import get_logger
 
 logger = get_logger()
 
+_active_tasks = set()
+
+
+async def async_handle_user_end_conversation(
+    reader, participant_identity, ctx: JobContext, session: AgentSession
+):
+    info = reader.info
+    logger.info(
+        f"Text stream received from {participant_identity}\\n"
+        f"  Topic: {info.topic}\\n"
+        f"  Timestamp: {info.timestamp}\\n"
+        f"  ID: {info.id}"
+    )
+
+    text = await reader.read_all()
+    logger.info(f"Received text from user_end_conversation: {text}")
+
+    # Stop listening to the user and cancel monitor task as we are ending the conversation
+    session.input.set_audio_enabled(False)
+    session.clear_user_turn()
+
+    monitor_task = ctx.proc.userdata.get("monitor_task")
+    if monitor_task is not None and not monitor_task.done():
+        monitor_task.cancel()
+
+    await session.generate_reply(
+        instructions=(
+            "The conversation has concluded. Please call the `end_conversation` function to end the call..."
+        ),
+        allow_interruptions=False,
+    )
+
+
+def handle_user_end_conversation(
+    reader, participant_identity, ctx: JobContext, session: AgentSession
+):
+    task = asyncio.create_task(
+        async_handle_user_end_conversation(reader, participant_identity, ctx, session)
+    )
+    _active_tasks.add(task)
+    task.add_done_callback(lambda t: _active_tasks.remove(t))
+
 
 async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity for now
     """Entrypoint for LiveKit worker processes.
@@ -278,6 +320,14 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     await greet_handle.wait_for_playout()
 
     reset_timeout()
+
+    # Register text stream handler for user_end_conversation
+    ctx.room.register_text_stream_handler(
+        "user_end_conversation",
+        lambda reader, participant_identity: handle_user_end_conversation(
+            reader, participant_identity, ctx, session
+        ),
+    )
 
     monitor_task = asyncio.create_task(monitor_interaction())
     # Expose the task so other components (e.g., tools) can cancel it when needed
