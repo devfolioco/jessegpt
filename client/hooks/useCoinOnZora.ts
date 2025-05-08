@@ -1,5 +1,7 @@
+import { storeZoraCoin } from '@/api';
 import { config as wagmiConfig } from '@/config/wagmi';
 import { uploadToIPFS } from '@/helpers/ipfs';
+import { ZoraCoinResult } from '@/types/agent';
 import { useAppKit, useAppKitAccount, useAppKitState, useDisconnect } from '@reown/appkit/react';
 import { getWalletClient } from '@wagmi/core';
 import { createCoin } from '@zoralabs/coins-sdk';
@@ -8,16 +10,12 @@ import { Address, createPublicClient, http } from 'viem';
 import { base } from 'viem/chains';
 
 interface UseCoinOnZoraProps {
+  roomId: string;
   title: string;
   description: string;
   base64Image: string | null;
   onSuccess?: () => void;
-}
-
-interface ZoraCoinResult {
-  zoraLink: string;
-  coinAddress: `0x${string}`;
-  hash: `0x${string}`;
+  onFailure?: (error: Error) => void;
 }
 
 interface UseCoinOnZoraReturn {
@@ -44,6 +42,7 @@ const useCoinOnZora = ({
   description,
   base64Image,
   onSuccess: successCallback,
+  onFailure: failureCallback,
 }: UseCoinOnZoraProps): UseCoinOnZoraReturn => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
@@ -61,6 +60,12 @@ const useCoinOnZora = ({
     setCurrentStep(ZoraCoinFlowStep.SUCCESS);
     zoraResult.current = result;
 
+    // store zora coin URL in DB (We store it to track all the created coins so that we can buy some of them later)
+    storeZoraCoin('', {
+      wallet: address as Address,
+      zoraResult: result,
+    });
+
     // disconnect wallet
     disconnect();
 
@@ -73,6 +78,8 @@ const useCoinOnZora = ({
 
     // disconnect wallet
     disconnect();
+
+    failureCallback?.(error);
   };
 
   //   step 1: connect wallet

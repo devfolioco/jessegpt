@@ -1,5 +1,5 @@
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
-import { base, mainnet } from '@reown/appkit/networks';
+import { base } from '@reown/appkit/networks';
 import { cookieStorage, createStorage } from '@wagmi/core';
 
 // Get projectId from https://cloud.reown.com

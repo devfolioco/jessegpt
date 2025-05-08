@@ -66,6 +66,8 @@ const TalkComponent = () => {
 
   const finalMintData = useRef<AgentShareData>(initialData);
 
+  const [roomId, setRoomId] = useState<string | null>(null);
+
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
@@ -75,103 +77,120 @@ const TalkComponent = () => {
   };
 
   async function connect() {
-    setConnecting(true);
-    const url = new URL(
-      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',
-      window.location.origin
-    );
-    const response = await fetch(`${url.toString()}?mood=${mood}`);
-    const connectionDetailsData: ConnectionDetails = await response.json();
-
-    await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
-    await room.localParticipant.setMicrophoneEnabled(true);
-
-    room.registerTextStreamHandler('has_enough_information', async (reader, participantInfo) => {
-      const info = reader.info;
-      console.log(
-        `Received text stream from ${participantInfo.identity}\n` +
-          `  Topic: ${info.topic}\n` +
-          `  Timestamp: ${info.timestamp}\n` +
-          `  ID: ${info.id}\n` +
-          `  Size: ${info.size}`
+    try {
+      setConnecting(true);
+      const url = new URL(
+        process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',
+        window.location.origin
       );
-      for await (const chunk of reader) {
-        console.log(`Has enough information: ${chunk}`);
-        setIsConversationEnded(true);
-        if (chunk === 'false') {
-          handleNotEnoughInformation();
+      const response = await fetch(`${url.toString()}?mood=${mood}`);
+      const connectionDetailsData: ConnectionDetails = await response.json();
+
+      if (connectionDetailsData.roomName) {
+        setRoomId(connectionDetailsData.roomName.split('_')[2]); // format is: <mood>_room_<roomId>
+      }
+
+      await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
+      await room.localParticipant.setMicrophoneEnabled(true);
+
+      room.registerTextStreamHandler('has_enough_information', async (reader, participantInfo) => {
+        const info = reader.info;
+        console.log(
+          `Received text stream from ${participantInfo.identity}\n` +
+            `  Topic: ${info.topic}\n` +
+            `  Timestamp: ${info.timestamp}\n` +
+            `  ID: ${info.id}\n` +
+            `  Size: ${info.size}`
+        );
+        for await (const chunk of reader) {
+          console.log(`Has enough information: ${chunk}`);
+          setIsConversationEnded(true);
+          if (chunk === 'false') {
+            handleNotEnoughInformation();
+          }
         }
-      }
-    });
+      });
 
-    room.registerTextStreamHandler('is_inappropriate', async (reader, participantInfo) => {
-      const info = reader.info;
-      console.log(
-        `Received text stream from ${participantInfo.identity}\n` +
-          `  Topic: ${info.topic}\n` +
-          `  Timestamp: ${info.timestamp}\n` +
-          `  ID: ${info.id}\n` +
-          `  Size: ${info.size}`
-      );
-      for await (const chunk of reader) {
-        console.log(`Is inappropriate: ${chunk}`);
-        if (chunk === 'true') {
-          handleIsInappropriate();
+      room.registerTextStreamHandler('is_inappropriate', async (reader, participantInfo) => {
+        const info = reader.info;
+        console.log(
+          `Received text stream from ${participantInfo.identity}\n` +
+            `  Topic: ${info.topic}\n` +
+            `  Timestamp: ${info.timestamp}\n` +
+            `  ID: ${info.id}\n` +
+            `  Size: ${info.size}`
+        );
+        for await (const chunk of reader) {
+          console.log(`Is inappropriate: ${chunk}`);
+          if (chunk === 'true') {
+            handleIsInappropriate();
+          }
         }
-      }
-    });
+      });
 
-    // Register handler for the one liner text stream
-    room.registerTextStreamHandler('end_conversation_one_liner', async (reader, participantInfo) => {
-      const info = reader.info;
-      console.log(
-        `Received text stream from ${participantInfo.identity}\n` +
-          `  Topic: ${info.topic}\n` +
-          `  Timestamp: ${info.timestamp}\n` +
-          `  ID: ${info.id}\n` +
-          `  Size: ${info.size}`
-      );
-      for await (const chunk of reader) {
-        console.log(`One Liner: ${chunk}`);
-        finalMintData.current.oneLiner += chunk;
-      }
-    });
+      // Register handler for the one liner text stream
+      room.registerTextStreamHandler('end_conversation_one_liner', async (reader, participantInfo) => {
+        const info = reader.info;
+        console.log(
+          `Received text stream from ${participantInfo.identity}\n` +
+            `  Topic: ${info.topic}\n` +
+            `  Timestamp: ${info.timestamp}\n` +
+            `  ID: ${info.id}\n` +
+            `  Size: ${info.size}`
+        );
+        for await (const chunk of reader) {
+          console.log(`One Liner: ${chunk}`);
+          finalMintData.current.oneLiner += chunk;
+        }
+      });
 
-    // Register handler for the one liner text stream
-    room.registerTextStreamHandler('end_conversation_summary', async (reader, participantInfo) => {
-      const info = reader.info;
-      console.log(
-        `Received text stream from ${participantInfo.identity}\n` +
-          `  Topic: ${info.topic}\n` +
-          `  Timestamp: ${info.timestamp}\n` +
-          `  ID: ${info.id}\n` +
-          `  Size: ${info.size}`
-      );
+      // Register handler for the one liner text stream
+      room.registerTextStreamHandler('end_conversation_summary', async (reader, participantInfo) => {
+        const info = reader.info;
+        console.log(
+          `Received text stream from ${participantInfo.identity}\n` +
+            `  Topic: ${info.topic}\n` +
+            `  Timestamp: ${info.timestamp}\n` +
+            `  ID: ${info.id}\n` +
+            `  Size: ${info.size}`
+        );
 
-      for await (const chunk of reader) {
-        finalMintData.current.summary += chunk;
-        console.log(`Summary: ${chunk}`);
-      }
+        for await (const chunk of reader) {
+          finalMintData.current.summary += chunk;
+          console.log(`Summary: ${chunk}`);
+        }
 
-      room.disconnect();
-      console.log('room disconnected');
-      setIsSummaryReceived(true);
-      setIsModalOpen(true);
-    });
+        room.disconnect();
+        console.log('room disconnected');
+        setIsSummaryReceived(true);
+        setIsModalOpen(true);
+      });
 
-    setConnected(true);
-    setConnecting(false);
+      room.registerTextStreamHandler('agent_version', async (reader, participantInfo) => {
+        for await (const chunk of reader) {
+          finalMintData.current.summary += chunk;
+
+          // Logs agent version
+          console.log(`CurrentVersion: ${chunk}`);
+        }
+      });
+
+      setConnected(true);
+      setConnecting(false);
+    } catch (error) {
+      console.error('Error connecting to room', error);
+    }
   }
 
   const handleRetry = () => {
-    window.location.reload();
+    setIsSummaryReceived(false);
+    setIsConversationEnded(false);
+    setIsModalOpen(false);
+    finalMintData.current = initialData;
+    setConnected(false);
+    setConnecting(false);
 
-    // setIsSummaryReceived(false);
-    // setIsConversationEnded(false);
-    // setIsModalOpen(false);
-    // finalMintData.current = initialData;
-    // setConnected(false);
-    // setConnecting(false);
+    window.location.reload();
 
     // // connect to room again
     // connect();
@@ -279,7 +298,13 @@ const TalkComponent = () => {
         </div>
       )}
 
-      <ShareModal isOpen={isModalOpen} data={finalMintData.current} mood={mood} onClose={handleModalClose} />
+      <ShareModal
+        isOpen={isModalOpen}
+        data={finalMintData.current}
+        mood={mood}
+        onClose={handleModalClose}
+        roomId={roomId ?? ''}
+      />
     </main>
   );
 };

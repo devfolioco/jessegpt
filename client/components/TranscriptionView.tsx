@@ -151,6 +151,7 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
     <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden py-8 w-[700px] pb-32">
       {combinedTranscriptions.map(segment => (
         <ChatBubble
+          key={segment.id}
           id={segment.id}
           text={segment.text}
           role={segment.role}

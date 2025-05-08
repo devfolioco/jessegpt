@@ -1,3 +1,4 @@
+import { storeZoraCoin } from '@/api';
 import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { getFarcasterCopy, getTweetCopy, getTwitterIntentURL, getWarpcastIntentURL } from '@/helpers/copy';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
@@ -17,6 +18,7 @@ import { XIcon } from './icons/XIcon';
 import { ZoraIcon } from './icons/ZoraIcon';
 
 interface ShareModalProps {
+  roomId: string;
   isOpen: boolean;
   onClose: () => void;
   data: AgentShareData;
@@ -25,9 +27,10 @@ interface ShareModalProps {
 
 enum ShareModalError {
   FRAME_RENDER_ERROR = 'frame-render-error',
+  ZORA_COIN_CREATION_ERROR = 'zora-coin-creation-error',
 }
 
-const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
+const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
@@ -42,6 +45,7 @@ const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
     isLoading,
     result: zoraResult,
   } = useCoinOnZora({
+    roomId: roomId,
     title: data.oneLiner,
     description: data.summary,
     base64Image: ideaImageRef.current,
@@ -50,6 +54,10 @@ const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
         triggerConfetti();
         setZoraToastVisible(true);
       }, 1000);
+    },
+    onFailure: error => {
+      console.error('Error creating Zora coin', error);
+      setError(ShareModalError.ZORA_COIN_CREATION_ERROR);
     },
   });
 
@@ -86,7 +94,7 @@ const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
     window.open(warpcastShareURL, '_blank');
   };
 
-  const [zoraToastVisible, setZoraToastVisible] = useState(false);
+  const [zoraSuccessToastVisible, setZoraToastVisible] = useState(false);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -175,7 +183,7 @@ const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
             </Button>
 
             <AnimatePresence initial={false}>
-              {zoraToastVisible && (
+              {zoraSuccessToastVisible && (
                 <motion.div
                   className="flex gap-4 p-4 justify-center items-center self-stretch rounded-2xl bg-secondary absolute w-full top-full mt-4 left-0 font-inter text-lg"
                   initial={{ opacity: 0, y: 10 }}
@@ -193,9 +201,27 @@ const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
                   </p>
                 </motion.div>
               )}
-            </AnimatePresence>
 
-            {/* {zoraToastVisible && <ConfettiContainer />} */}
+              {/* 
+              {error && (
+                <motion.div
+                  className="flex gap-4 p-4 justify-center items-center self-stretch rounded-2xl bg-secondary absolute w-full top-full mt-4 left-0 font-inter text-lg"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.4 }}
+                  viewport={{ once: true }}
+                >
+                  <p>
+                    {error === ShareModalError.ZORA_COIN_CREATION_ERROR ? (
+                      <p>Something went wrong while creating your Zora coin. Please try again.</p>
+                    ) : (
+                      <p>Error: Something went wrong while generating your idea frame. Please try again.</p>
+                    )}
+                  </p>
+                </motion.div>
+              )} */}
+            </AnimatePresence>
           </div>
         </motion.div>
       )}
