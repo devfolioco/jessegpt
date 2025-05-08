@@ -6,7 +6,7 @@ import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { BarVisualizer, DisconnectButton, RoomAudioRenderer, useVoiceAssistant } from '@livekit/components-react';
 import Image from 'next/image';
 
-export function VoiceAssistant({ mood }: { mood: AgentMoodI }) {
+export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideControls?: boolean }) {
   const { state: agentState, audioTrack: agentAudioTrack } = useVoiceAssistant();
   return (
     <div className="fixed inset-0 flex flex-col items-center bg-[#638596] pt-8">
@@ -51,24 +51,32 @@ export function VoiceAssistant({ mood }: { mood: AgentMoodI }) {
       <NoAgentNotification state={agentState} />
 
       {/* Centered controls at the bottom - Fixed */}
-      <div className="w-full flex justify-center fixed bottom-0 left-0 px-4 py-6 z-10 gap-4">
-        <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg py-3">
-          <CustomVoiceAssistantControlBar controls={{ leave: false }} />
+      {!hideControls && (
+        <div className="w-full flex flex-col items-center fixed bottom-0 left-0 px-4 py-8 z-10 gap-4">
+          <div className="flex justify-center gap-4">
+            <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg py-3">
+              <CustomVoiceAssistantControlBar controls={{ leave: false }} />
+            </div>
+            <div className="flex items-center gap-4 bg-white/90 rounded-xl shadow-lg px-3 py-3">
+              <DisconnectButton
+                className="h-[40px]"
+                style={{
+                  backgroundColor: '#F06444',
+                  borderRadius: '8px',
+                  border: 'none',
+                  color: 'white',
+                }}
+              >
+                <CloseIcon /> End
+              </DisconnectButton>
+            </div>
+          </div>
+
+          <div className="text-base text-white font-inter">
+            You can say ‘Bye’ or press the ‘End’ button to finish this conversation
+          </div>
         </div>
-        <div className="flex flex-row items-center gap-4 bg-white/90 rounded-xl shadow-lg px-3 py-3">
-          <DisconnectButton
-            className="w-[40px] h-[40px] "
-            style={{
-              backgroundColor: '#F06444',
-              borderRadius: '8px',
-              border: 'none',
-              color: 'white',
-            }}
-          >
-            <CloseIcon />
-          </DisconnectButton>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

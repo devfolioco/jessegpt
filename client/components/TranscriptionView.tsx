@@ -156,7 +156,7 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
           role={segment.role}
           mood={mood}
           isLast={
-            (!isThinking && segment.id === lastAssistantTranscription.id) || segment.id === lastUserTranscription.id
+            (!isThinking && segment.id === lastAssistantTranscription?.id) || segment.id === lastUserTranscription?.id
           }
         />
       ))}
