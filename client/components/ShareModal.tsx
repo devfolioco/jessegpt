@@ -105,7 +105,7 @@ const MainContent = ({ data, onClose, mood }: ShareModalProps) => {
 
           <Button appearance="colored" className="bg-x  text-white" onClick={handleTweet}>
             <XIcon />
-            Cast
+            Post
           </Button>
 
           <Button appearance="colored" className="bg-white text-black" href={zoraResult.zoraLink} target="_blank">
@@ -116,27 +116,35 @@ const MainContent = ({ data, onClose, mood }: ShareModalProps) => {
       ) : (
         // Zora Flow
         <div className="flex gap-4 items-center w-full mt-2">
-          <Button
-            appearance="colored"
-            className={clsx(mood === AgentMoodEnum.EXCITED ? 'text-black bg-optimism' : 'text-white bg-critical')}
-            onClick={onClose}
-          >
-            <MicIcon color={mood === AgentMoodEnum.EXCITED ? 'black' : 'white'} />
-            Chat again
+          <Button appearance="colored" className="bg-farcaster  text-white" onClick={handleFarcaster} stretch>
+            <FarcasterIcon />
+            Cast
+          </Button>
+
+          <Button appearance="colored" className="bg-x  text-white" onClick={handleTweet} stretch>
+            <XIcon />
+            Post
           </Button>
 
           <Button
             appearance="colored"
             className={clsx('bg-white ', isLoading ? 'text-grey-7' : 'text-black')}
             onClick={handleCoinOnZoraClick}
+            stretch
           >
             {isLoading ? <Loader /> : <ZoraIcon />}
-            Coin on Zora
+            Coin
           </Button>
         </div>
       )}
 
-      <Button appearance="colored" className="bg-devfolio text-white" href={BASE_BATCH_APPLY_URL} target="_blank">
+      <Button
+        appearance="colored"
+        className="bg-devfolio text-white"
+        href={BASE_BATCH_APPLY_URL}
+        target="_blank"
+        stretch
+      >
         <DevfolioIcon />
         Build your idea at Base Batches: 001
       </Button>
