@@ -166,6 +166,15 @@ const TalkComponent = () => {
         setIsModalOpen(true);
       });
 
+      room.registerTextStreamHandler('agent_version', async (reader, participantInfo) => {
+        for await (const chunk of reader) {
+          finalMintData.current.summary += chunk;
+
+          // Logs agent version
+          console.log(`Agent Version: ${chunk}`);
+        }
+      });
+
       setConnected(true);
       setConnecting(false);
     } catch (error) {
