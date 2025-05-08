@@ -1,9 +1,8 @@
 import { config as wagmiConfig } from '@/config/wagmi';
 import { uploadToIPFS } from '@/helpers/ipfs';
-import { useAppKit, useAppKitAccount, useAppKitEvents, useAppKitState, useDisconnect } from '@reown/appkit/react';
+import { useAppKit, useAppKitAccount, useAppKitState, useDisconnect } from '@reown/appkit/react';
 import { getWalletClient } from '@wagmi/core';
 import { createCoin } from '@zoralabs/coins-sdk';
-import { RequestCookiesAdapter } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { useEffect, useRef, useState } from 'react';
 import { Address, createPublicClient, http } from 'viem';
 import { base } from 'viem/chains';
@@ -12,6 +11,7 @@ interface UseCoinOnZoraProps {
   title: string;
   description: string;
   base64Image: string | null;
+  onSuccess?: () => void;
 }
 
 interface ZoraCoinResult {
@@ -39,7 +39,12 @@ enum ZoraCoinFlowStep {
 // todo: remove this (simulate success)
 const test = false;
 
-const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps): UseCoinOnZoraReturn => {
+const useCoinOnZora = ({
+  title,
+  description,
+  base64Image,
+  onSuccess: successCallback,
+}: UseCoinOnZoraProps): UseCoinOnZoraReturn => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
   const { open: isOpen, loading } = useAppKitState();
@@ -58,6 +63,8 @@ const useCoinOnZora = ({ title, description, base64Image }: UseCoinOnZoraProps):
 
     // disconnect wallet
     disconnect();
+
+    successCallback?.();
   };
 
   const onFailure = (error: Error) => {

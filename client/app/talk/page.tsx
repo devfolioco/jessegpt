@@ -1,11 +1,17 @@
 'use client';
 
+import { Button } from '@/components/Button';
 import { PrefetchJesseFrameAssets } from '@/components/JesseFrame';
 import LoadingPage from '@/components/LoadingPage';
 import ShareModal from '@/components/ShareModal';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
+import { DevfolioIcon } from '@/components/icons/DevfolioIcon';
+import { MicIcon } from '@/components/icons/MicIcon';
+import { ShareIcon } from '@/components/icons/ShareIcon';
+import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
 import { RoomContext } from '@livekit/components-react';
+import clsx from 'clsx';
 import { Room, RoomEvent } from 'livekit-client';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
@@ -54,14 +60,132 @@ const TalkComponent = () => {
 
   const [isSummaryReceived, setIsSummaryReceived] = useState(false);
 
+  const [isConversationEnded, setIsConversationEnded] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const finalMintData = useRef<AgentShareData>(initialData);
 
-  const handleRetry = () => {
-    // redirect to home page
-    router.push(`/`);
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
-  // Holds object URL of image received via byte stream
+  const handleShareModal = () => {
+    setIsModalOpen(true);
+  };
+
+  async function connect() {
+    setConnecting(true);
+    const url = new URL(
+      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',
+      window.location.origin
+    );
+    const response = await fetch(`${url.toString()}?mood=${mood}`);
+    const connectionDetailsData: ConnectionDetails = await response.json();
+
+    await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
+    await room.localParticipant.setMicrophoneEnabled(true);
+
+    room.registerTextStreamHandler('has_enough_information', async (reader, participantInfo) => {
+      const info = reader.info;
+      console.log(
+        `Received text stream from ${participantInfo.identity}\n` +
+          `  Topic: ${info.topic}\n` +
+          `  Timestamp: ${info.timestamp}\n` +
+          `  ID: ${info.id}\n` +
+          `  Size: ${info.size}`
+      );
+      for await (const chunk of reader) {
+        console.log(`Has enough information: ${chunk}`);
+        setIsConversationEnded(true);
+        if (chunk === 'false') {
+          handleNotEnoughInformation();
+        }
+      }
+    });
+
+    room.registerTextStreamHandler('is_inappropriate', async (reader, participantInfo) => {
+      const info = reader.info;
+      console.log(
+        `Received text stream from ${participantInfo.identity}\n` +
+          `  Topic: ${info.topic}\n` +
+          `  Timestamp: ${info.timestamp}\n` +
+          `  ID: ${info.id}\n` +
+          `  Size: ${info.size}`
+      );
+      for await (const chunk of reader) {
+        console.log(`Is inappropriate: ${chunk}`);
+        if (chunk === 'true') {
+          handleIsInappropriate();
+        }
+      }
+    });
+
+    // Register handler for the one liner text stream
+    room.registerTextStreamHandler('end_conversation_one_liner', async (reader, participantInfo) => {
+      const info = reader.info;
+      console.log(
+        `Received text stream from ${participantInfo.identity}\n` +
+          `  Topic: ${info.topic}\n` +
+          `  Timestamp: ${info.timestamp}\n` +
+          `  ID: ${info.id}\n` +
+          `  Size: ${info.size}`
+      );
+      for await (const chunk of reader) {
+        console.log(`One Liner: ${chunk}`);
+        finalMintData.current.oneLiner += chunk;
+      }
+    });
+
+    // Register handler for the one liner text stream
+    room.registerTextStreamHandler('end_conversation_summary', async (reader, participantInfo) => {
+      const info = reader.info;
+      console.log(
+        `Received text stream from ${participantInfo.identity}\n` +
+          `  Topic: ${info.topic}\n` +
+          `  Timestamp: ${info.timestamp}\n` +
+          `  ID: ${info.id}\n` +
+          `  Size: ${info.size}`
+      );
+
+      for await (const chunk of reader) {
+        finalMintData.current.summary += chunk;
+        console.log(`Summary: ${chunk}`);
+      }
+
+      room.disconnect();
+      console.log('room disconnected');
+      setIsSummaryReceived(true);
+      setIsModalOpen(true);
+    });
+
+    setConnected(true);
+    setConnecting(false);
+  }
+
+  const handleRetry = () => {
+    window.location.reload();
+
+    // setIsSummaryReceived(false);
+    // setIsConversationEnded(false);
+    // setIsModalOpen(false);
+    // finalMintData.current = initialData;
+    // setConnected(false);
+    // setConnecting(false);
+
+    // // connect to room again
+    // connect();
+  };
+
+  const handleNotEnoughInformation = () => {
+    console.log('Not enough information');
+    room.disconnect();
+  };
+
+  const handleIsInappropriate = () => {
+    console.log('Is inappropriate');
+    room.disconnect();
+  };
 
   useEffect(() => {
     // redirect to home page if no mood is selected
@@ -75,61 +199,6 @@ const TalkComponent = () => {
     if (!mood) return;
     if (isInitialRender.current) return;
 
-    async function connect() {
-      setConnecting(true);
-      const url = new URL(
-        process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',
-        window.location.origin
-      );
-      const response = await fetch(`${url.toString()}?mood=${mood}`);
-      const connectionDetailsData: ConnectionDetails = await response.json();
-
-      await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
-      await room.localParticipant.setMicrophoneEnabled(true);
-
-      // Register handler for the one liner text stream
-      room.registerTextStreamHandler('end_conversation_one_liner', async (reader, participantInfo) => {
-        const info = reader.info;
-        console.log(
-          `Received text stream from ${participantInfo.identity}\n` +
-            `  Topic: ${info.topic}\n` +
-            `  Timestamp: ${info.timestamp}\n` +
-            `  ID: ${info.id}\n` +
-            `  Size: ${info.size}`
-        );
-        for await (const chunk of reader) {
-          console.log(`One Liner: ${chunk}`);
-          finalMintData.current.oneLiner += chunk;
-        }
-
-        // conversation is over, disconnect from room
-      });
-
-      // Register handler for the one liner text stream
-      room.registerTextStreamHandler('end_conversation_summary', async (reader, participantInfo) => {
-        const info = reader.info;
-        console.log(
-          `Received text stream from ${participantInfo.identity}\n` +
-            `  Topic: ${info.topic}\n` +
-            `  Timestamp: ${info.timestamp}\n` +
-            `  ID: ${info.id}\n` +
-            `  Size: ${info.size}`
-        );
-
-        for await (const chunk of reader) {
-          finalMintData.current.summary += chunk;
-          console.log(`Summary: ${chunk}`);
-        }
-
-        room.disconnect();
-        console.log('room disconnected');
-        setIsSummaryReceived(true);
-      });
-
-      setConnected(true);
-      setConnecting(false);
-    }
-
     connect();
     isInitialRender.current = true;
     console.log('connecting to room...');
@@ -142,6 +211,7 @@ const TalkComponent = () => {
     room.on(RoomEvent.MediaDevicesError, onDeviceFailure);
 
     const handleDisconnected = () => {
+      room.removeAllListeners();
       console.log('Disconnected from room');
     };
 
@@ -180,20 +250,36 @@ const TalkComponent = () => {
 
       <RoomContext.Provider value={room}>
         <div className="lk-room-container max-h-[90vh]">
-          <VoiceAssistant mood={mood} />
+          <VoiceAssistant mood={mood} hideControls={isConversationEnded} />
         </div>
       </RoomContext.Provider>
 
-      <ShareModal
-        isOpen={isSummaryReceived}
-        data={finalMintData.current}
-        mood={mood}
-        onClose={() => {
-          // on close
-          // retry
-          handleRetry();
-        }}
-      />
+      {isConversationEnded && (
+        <div className="w-full flex items-center justify-center fixed bottom-0 left-0 px-4 py-8 z-10 gap-6">
+          <Button
+            appearance="colored"
+            className={clsx(mood === AgentMoodEnum.EXCITED ? 'text-black bg-optimism' : 'text-white bg-critical')}
+            onClick={handleRetry}
+          >
+            <MicIcon color={mood === AgentMoodEnum.EXCITED ? 'black' : 'white'} />
+            Chat again
+          </Button>
+
+          <Button appearance="colored" className="bg-devfolio text-white" href={BASE_BATCH_APPLY_URL} target="_blank">
+            <DevfolioIcon />
+            Apply to Base Batches
+          </Button>
+
+          {isSummaryReceived && (
+            <Button appearance="colored" className="bg-white text-black" onClick={handleShareModal}>
+              <ShareIcon color="black" />
+              Share on socials
+            </Button>
+          )}
+        </div>
+      )}
+
+      <ShareModal isOpen={isModalOpen} data={finalMintData.current} mood={mood} onClose={handleModalClose} />
     </main>
   );
 };

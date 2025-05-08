@@ -1,6 +1,6 @@
 {
   "name": "jessegpt",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -19,6 +19,7 @@
     "@tanstack/react-query": "5.74.11",
     "@wagmi/core": "2.17.0",
     "@zoralabs/coins-sdk": "0.1.0",
+    "canvas-confetti": "1.9.3",
     "clsx": "2.1.1",
     "framer-motion": "^11.18.0",
     "kubo-rpc-client": "5.1.0",
@@ -36,6 +37,7 @@
     "@types/node": "^20.17.13",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@types/canvas-confetti": "1.9.0",
     "eslint": "^9.25.1",
     "eslint-config-next": "15.3.1",
     "eslint-config-prettier": "10.1.2",
