@@ -38,29 +38,15 @@ _active_tasks = set()
 async def async_handle_user_end_conversation(
     reader, participant_identity, ctx: JobContext, session: AgentSession
 ):
-    info = reader.info
-    logger.info(
-        f"Text stream received from {participant_identity}\\n"
-        f"  Topic: {info.topic}\\n"
-        f"  Timestamp: {info.timestamp}\\n"
-        f"  ID: {info.id}"
-    )
+    await session.interrupt()
 
-    text = await reader.read_all()
-    logger.info(f"Received text from user_end_conversation: {text}")
-
-    # Stop listening to the user and cancel monitor task as we are ending the conversation
     session.input.set_audio_enabled(False)
     session.clear_user_turn()
 
-    monitor_task = ctx.proc.userdata.get("monitor_task")
-    if monitor_task is not None and not monitor_task.done():
-        monitor_task.cancel()
+    await reader.read_all()
 
     await session.generate_reply(
-        instructions=(
-            "The conversation has concluded. Please call the `end_conversation` function to end the call..."
-        ),
+        user_input="Goodbye for now. Please end the conversation",
         allow_interruptions=False,
     )
 
@@ -308,6 +294,17 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         reset_timeout()
 
     # ------------------------------------------------------------------
+    # Register Text Stream Handlers ------------------------------------
+    # ------------------------------------------------------------------
+
+    ctx.room.register_text_stream_handler(
+        "user_end_conversation",
+        lambda reader, participant_identity: handle_user_end_conversation(
+            reader, participant_identity, ctx, session
+        ),
+    )
+
+    # ------------------------------------------------------------------
     # Kick off the conversation -----------------------------------------
     # ------------------------------------------------------------------
 
@@ -315,19 +312,11 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
 
     greeting = random.choice(greetings)
 
-    greet_handle = await session.say(text=greeting, allow_interruptions=False)
+    greet_handle = await session.say(text=greeting)
 
     await greet_handle.wait_for_playout()
 
     reset_timeout()
-
-    # Register text stream handler for user_end_conversation
-    ctx.room.register_text_stream_handler(
-        "user_end_conversation",
-        lambda reader, participant_identity: handle_user_end_conversation(
-            reader, participant_identity, ctx, session
-        ),
-    )
 
     monitor_task = asyncio.create_task(monitor_interaction())
     # Expose the task so other components (e.g., tools) can cancel it when needed
