@@ -15,6 +15,7 @@ interface UseCoinOnZoraProps {
   description: string;
   base64Image: string | null;
   onSuccess?: () => void;
+  onFailure?: (error: Error) => void;
 }
 
 interface UseCoinOnZoraReturn {
@@ -41,6 +42,7 @@ const useCoinOnZora = ({
   description,
   base64Image,
   onSuccess: successCallback,
+  onFailure: failureCallback,
 }: UseCoinOnZoraProps): UseCoinOnZoraReturn => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
@@ -76,6 +78,8 @@ const useCoinOnZora = ({
 
     // disconnect wallet
     disconnect();
+
+    failureCallback?.(error);
   };
 
   //   step 1: connect wallet
