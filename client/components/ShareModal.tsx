@@ -1,13 +1,14 @@
 import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { getFarcasterCopy, getTweetCopy, getTwitterIntentURL, getWarpcastIntentURL } from '@/helpers/copy';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
-import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
+import { AgentMoodI, AgentShareData } from '@/types/agent';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from './Button';
 import JesseFrame from './JesseFrame';
 import { Loader } from './Loader';
+import { CheckIcon } from './icons/CheckIcon';
 import { CloseIcon } from './icons/CloseIcon';
 import { DevfolioIcon } from './icons/DevfolioIcon';
 import { FarcasterIcon } from './icons/FarcasterIcon';
@@ -26,7 +27,7 @@ enum ShareModalError {
   FRAME_RENDER_ERROR = 'frame-render-error',
 }
 
-const MainContent = ({ data, onClose, mood }: ShareModalProps) => {
+const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
@@ -44,6 +45,11 @@ const MainContent = ({ data, onClose, mood }: ShareModalProps) => {
     title: data.oneLiner,
     description: data.summary,
     base64Image: ideaImageRef.current,
+    onSuccess: () => {
+      setTimeout(() => {
+        setZoraToastVisible(true);
+      }, 1000);
+    },
   });
 
   const onImageReady = (base64Image: string) => {
@@ -79,92 +85,115 @@ const MainContent = ({ data, onClose, mood }: ShareModalProps) => {
     window.open(warpcastShareURL, '_blank');
   };
 
-  return (
-    <div
-      className="flex flex-col items-center gap-4 max-w-[682px] bg-secondary rounded-2xl p-4 relative"
-      onClick={handleDefaultClick}
-    >
-      <button className="absolute top-10 right-10 hover:opacity-80 transition-opacity cursor-pointer" onClick={onClose}>
-        <CloseIcon color="#2D2D2D" className="w-6 h-6" />
-      </button>
-      <div className="flex flex-col items-start rounded-xl overflow-hidden">
-        <JesseFrame idea={data.oneLiner} mood={mood} onImageReady={onImageReady} onError={handleFrameError} />
+  const [zoraToastVisible, setZoraToastVisible] = useState(false);
 
-        <div className="flex justify-center items-center gap-2 self-stretch p-3 px-4 bg-[#1D1D1D] text-white text-[18px] leading-[28px] font-extralight font-inter">
-          {data.summary}
-        </div>
-      </div>
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
 
-      {zoraResult ? (
-        // Zora Success UI
-        <div className="flex gap-4 items-center w-full mt-2 font-inter">
-          <Button appearance="colored" className="bg-farcaster  text-white" onClick={handleFarcaster}>
-            <FarcasterIcon />
-            Cast
-          </Button>
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isOpen]);
 
-          <Button appearance="colored" className="bg-x  text-white" onClick={handleTweet}>
-            <XIcon />
-            Post
-          </Button>
-
-          <Button appearance="colored" className="bg-white text-black" href={zoraResult.zoraLink} target="_blank">
-            <ZoraIcon />
-            View
-          </Button>
-        </div>
-      ) : (
-        // Zora Flow
-        <div className="flex gap-4 items-center w-full mt-2">
-          <Button appearance="colored" className="bg-farcaster  text-white" onClick={handleFarcaster} stretch>
-            <FarcasterIcon />
-            Cast
-          </Button>
-
-          <Button appearance="colored" className="bg-x  text-white" onClick={handleTweet} stretch>
-            <XIcon />
-            Post
-          </Button>
-
-          <Button
-            appearance="colored"
-            className={clsx('bg-white ', isLoading ? 'text-grey-7' : 'text-black')}
-            onClick={handleCoinOnZoraClick}
-            stretch
-          >
-            {isLoading ? <Loader /> : <ZoraIcon />}
-            Coin
-          </Button>
-        </div>
-      )}
-
-      <Button
-        appearance="colored"
-        className="bg-devfolio text-white"
-        href={BASE_BATCH_APPLY_URL}
-        target="_blank"
-        stretch
-      >
-        <DevfolioIcon />
-        Build your idea at Base Batches: 001
-      </Button>
-    </div>
-  );
-};
-
-const ShareModal = (props: ShareModalProps) => {
   return (
     <AnimatePresence>
-      {props.isOpen && (
+      {isOpen && (
         <motion.div
           className="flex items-center justify-center absolute inset-0 bg-black bg-opacity-80 w-screen h-screen backdrop-blur-lg z-20"
-          onClick={props.onClose}
+          onClick={onClose}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.1 } }}
           transition={{ duration: 0.2 }}
         >
-          <MainContent {...props} />
+          <div
+            className="flex flex-col items-center gap-4 max-w-[682px] bg-secondary rounded-2xl p-4 relative"
+            onClick={handleDefaultClick}
+          >
+            <button
+              className="absolute top-10 right-10 hover:opacity-80 transition-opacity cursor-pointer"
+              onClick={onClose}
+            >
+              <CloseIcon color="#2D2D2D" className="w-6 h-6" />
+            </button>
+            <div className="flex flex-col items-start rounded-xl overflow-hidden">
+              <JesseFrame idea={data.oneLiner} mood={mood} onImageReady={onImageReady} onError={handleFrameError} />
+
+              <div className="flex justify-center items-center gap-2 self-stretch p-3 px-4 bg-[#1D1D1D] text-white text-[18px] leading-[28px] font-extralight font-inter">
+                {data.summary}
+              </div>
+            </div>
+
+            <div className="flex gap-4 items-center w-full mt-2">
+              <Button appearance="colored" className="bg-farcaster  text-white" onClick={handleFarcaster} stretch>
+                <FarcasterIcon />
+                Cast
+              </Button>
+
+              <Button appearance="colored" className="bg-x  text-white" onClick={handleTweet} stretch>
+                <XIcon />
+                Post
+              </Button>
+
+              {zoraResult ? (
+                <Button
+                  appearance="colored"
+                  className="bg-white text-black"
+                  href={zoraResult.zoraLink}
+                  target="_blank"
+                  stretch
+                >
+                  <ZoraIcon />
+                  View
+                </Button>
+              ) : (
+                <Button
+                  appearance="colored"
+                  className={clsx('bg-white ', isLoading ? 'text-grey-7' : 'text-black')}
+                  onClick={handleCoinOnZoraClick}
+                  stretch
+                >
+                  {isLoading ? <Loader /> : <ZoraIcon />}
+                  Coin
+                </Button>
+              )}
+            </div>
+
+            <Button
+              appearance="colored"
+              className="bg-devfolio text-white"
+              href={BASE_BATCH_APPLY_URL}
+              target="_blank"
+              stretch
+            >
+              <DevfolioIcon />
+              Build your idea at Base Batches: 001
+            </Button>
+
+            <AnimatePresence initial={false}>
+              {zoraToastVisible && (
+                <motion.div
+                  className="flex gap-4 p-4 justify-center items-center self-stretch rounded-2xl bg-secondary absolute w-full top-full mt-4 left-0 font-inter text-lg"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.4 }}
+                  viewport={{ once: true }}
+                >
+                  <CheckIcon />
+                  <p>
+                    Your idea has been successfully coined on Zora.{' '}
+                    <a href={zoraResult?.zoraLink ?? ''} target="_blank" className="underline">
+                      Check it out here.
+                    </a>
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
