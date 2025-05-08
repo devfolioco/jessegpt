@@ -3,11 +3,26 @@ import { NoAgentNotification } from '@/components/NoAgentNotification';
 import TranscriptionView from '@/components/TranscriptionView';
 import { CloseIcon } from '@/components/icons/CloseIcon';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
-import { BarVisualizer, DisconnectButton, RoomAudioRenderer, useVoiceAssistant } from '@livekit/components-react';
+import { BarVisualizer, RoomAudioRenderer, useChat, useVoiceAssistant } from '@livekit/components-react';
 import Image from 'next/image';
+import { useState } from 'react';
+import { Loader } from './Loader';
 
 export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideControls?: boolean }) {
   const { state: agentState, audioTrack: agentAudioTrack } = useVoiceAssistant();
+
+  const { send } = useChat();
+
+  const [loading, setLoading] = useState(false);
+
+  const handleEndConversation = () => {
+    send('Goodbye for now. Please end the conversation', {
+      topic: 'user_end_conversation',
+    });
+
+    setLoading(true);
+  };
+
   return (
     <div className="fixed inset-0 flex flex-col items-center bg-[#638596] pt-8">
       <div
@@ -58,8 +73,10 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
               <CustomVoiceAssistantControlBar controls={{ leave: false }} />
             </div>
             <div className="flex items-center gap-4 bg-white/90 rounded-xl shadow-lg px-3 py-3">
-              <DisconnectButton
-                className="h-[40px]"
+              <button
+                className="h-[40px] flex items-center justify-center gap-2 px-6"
+                onClick={handleEndConversation}
+                disabled={loading}
                 style={{
                   backgroundColor: '#F06444',
                   borderRadius: '8px',
@@ -67,8 +84,9 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
                   color: 'white',
                 }}
               >
-                <CloseIcon /> End
-              </DisconnectButton>
+                {loading ? <Loader color="white" /> : <CloseIcon />}
+                End
+              </button>
             </div>
           </div>
 
