@@ -54,9 +54,9 @@ const TalkComponent = () => {
   const router = useRouter();
 
   const [room] = useState(new Room());
-  const [connecting, setConnecting] = useState(true);
-  const [connected, setConnected] = useState(true);
-  const isInitialRender = useRef(true);
+  const [connecting, setConnecting] = useState(false);
+  const [connected, setConnected] = useState(false);
+  const isInitialRender = useRef(false);
 
   const [isSummaryReceived, setIsSummaryReceived] = useState(false);
 

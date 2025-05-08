@@ -37,7 +37,7 @@ enum ZoraCoinFlowStep {
 }
 
 // todo: remove this (simulate success)
-const test = true;
+const test = false;
 
 const useCoinOnZora = ({
   title,
