@@ -66,6 +66,8 @@ const TalkComponent = () => {
 
   const finalMintData = useRef<AgentShareData>(initialData);
 
+  const roomId = useRef<string | null>(null);
+
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
@@ -82,6 +84,10 @@ const TalkComponent = () => {
     );
     const response = await fetch(`${url.toString()}?mood=${mood}`);
     const connectionDetailsData: ConnectionDetails = await response.json();
+
+    if (connectionDetailsData.roomName) {
+      roomId.current = connectionDetailsData.roomName;
+    }
 
     await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
     await room.localParticipant.setMicrophoneEnabled(true);
@@ -279,7 +285,13 @@ const TalkComponent = () => {
         </div>
       )}
 
-      <ShareModal isOpen={isModalOpen} data={finalMintData.current} mood={mood} onClose={handleModalClose} />
+      <ShareModal
+        isOpen={isModalOpen}
+        data={finalMintData.current}
+        mood={mood}
+        onClose={handleModalClose}
+        roomId={roomId.current ?? ''}
+      />
     </main>
   );
 };

@@ -17,6 +17,7 @@ import { XIcon } from './icons/XIcon';
 import { ZoraIcon } from './icons/ZoraIcon';
 
 interface ShareModalProps {
+  roomId: string;
   isOpen: boolean;
   onClose: () => void;
   data: AgentShareData;
@@ -27,7 +28,7 @@ enum ShareModalError {
   FRAME_RENDER_ERROR = 'frame-render-error',
 }
 
-const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
+const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
@@ -42,6 +43,7 @@ const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
     isLoading,
     result: zoraResult,
   } = useCoinOnZora({
+    roomId: roomId,
     title: data.oneLiner,
     description: data.summary,
     base64Image: ideaImageRef.current,
