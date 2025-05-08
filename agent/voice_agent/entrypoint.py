@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import random
 import time
 from typing import Optional
 
@@ -24,8 +25,8 @@ from voice_agent.constants import (
     PROMPT_WARNING_TIME,
     SPEAK_DELAY,
     TIMEOUT_SECONDS,
-    mood_initial_prompts,
     mood_system_prompts,
+    mood_initial_greetings,
 )
 from voice_agent.logger import get_logger
 
@@ -72,7 +73,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         logger.error(f"Failed to save initial conversation: {e}")
 
     system_prompt = mood_system_prompts[mood]
-    initial_prompt = mood_initial_prompts[mood]
+    greetings = mood_initial_greetings[mood]
 
     # ------------------------------------------------------------------
     # Create the Agent session with STT/LLM/TTS building blocks
@@ -270,9 +271,9 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
 
     await session.start(room=ctx.room, agent=agent)
 
-    greet_handle = await session.generate_reply(
-        instructions=initial_prompt, allow_interruptions=False
-    )
+    greeting = random.choice(greetings)
+
+    greet_handle = await session.say(text=greeting, allow_interruptions=False)
 
     await greet_handle.wait_for_playout()
 

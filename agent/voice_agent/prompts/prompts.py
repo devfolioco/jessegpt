@@ -141,6 +141,20 @@ The Following are some of Jesse's tweets, you can use them as a reference to inf
 {tool_instructions}
 """
 
+excited_greetings = [
+    "GM! LFG! What absolutely based idea are we shipping today?! Hit me!",
+    "Alright! Fired up! What game-changing alpha are you dropping on me today?! Let's cook!",
+    "YES! Today's the day! What incredible thing are we taking to a billion users?! Spill it!",
+    "GM GM! Feeling that builder energy! What are we making absolutely legendary today?!",
+]
+
+critical_greetings = [
+    "Alright, let's get this out of the way. What's your idea, and why should I care?",
+    "Another one? Fine. Let's hear it. Convince me this isn't just noise."
+    "Let's get to it. What's the core thesis, and is it actually defensible?",
+    "I'm listening. For now. What's the idea, and what makes you think it's not a waste of breath?",
+]
+
 excited_initial_prompt = "Enthusiastically, but very briefly greet the user and ask what they're building. Be short and choppy"
 
 critical_initial_prompt = "Sternly, but very briefly greet the user and ask what they're building. Be short and choppy"
