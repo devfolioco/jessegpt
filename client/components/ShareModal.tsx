@@ -2,6 +2,7 @@ import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { getFarcasterCopy, getTweetCopy, getTwitterIntentURL, getWarpcastIntentURL } from '@/helpers/copy';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
 import { AgentMoodI, AgentShareData } from '@/types/agent';
+import confetti from 'canvas-confetti';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
@@ -12,7 +13,6 @@ import { CheckIcon } from './icons/CheckIcon';
 import { CloseIcon } from './icons/CloseIcon';
 import { DevfolioIcon } from './icons/DevfolioIcon';
 import { FarcasterIcon } from './icons/FarcasterIcon';
-import { MicIcon } from './icons/MicIcon';
 import { XIcon } from './icons/XIcon';
 import { ZoraIcon } from './icons/ZoraIcon';
 
@@ -47,6 +47,7 @@ const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
     base64Image: ideaImageRef.current,
     onSuccess: () => {
       setTimeout(() => {
+        triggerConfetti();
         setZoraToastVisible(true);
       }, 1000);
     },
@@ -193,11 +194,56 @@ const ShareModal = ({ data, onClose, mood, isOpen }: ShareModalProps) => {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* {zoraToastVisible && <ConfettiContainer />} */}
           </div>
         </motion.div>
       )}
     </AnimatePresence>
   );
+};
+
+const triggerConfetti = () => {
+  const canvas = document.createElement('canvas');
+
+  /**
+   * Set the dimensions of the canvas to 0 initially. This is so that
+   * no extra space is taken up by the canvas when it is idle.
+   *
+   * And since we've set the resize flag on confetti to true, it will
+   * auto-resize when required.
+   */
+  canvas.width = 0;
+  canvas.height = 0;
+
+  document.body.appendChild(canvas);
+
+  confetti.create(canvas, {
+    resize: true,
+  });
+
+  confetti({
+    angle: 80,
+    spread: 200,
+    particleCount: 500,
+    startVelocity: 100,
+    origin: { y: 0.8, x: 0.9 },
+  });
+
+  confetti({
+    angle: 80,
+    spread: 200,
+    particleCount: 500,
+    startVelocity: 100,
+    origin: { y: 0.8, x: 0.01 },
+  });
+
+  confetti({
+    spread: 200,
+    particleCount: 500,
+    startVelocity: 100,
+    origin: { y: 0.8 },
+  });
 };
 
 export default ShareModal;
