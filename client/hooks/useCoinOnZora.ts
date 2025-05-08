@@ -38,6 +38,7 @@ enum ZoraCoinFlowStep {
 const test = false;
 
 const useCoinOnZora = ({
+  roomId,
   title,
   description,
   base64Image,
@@ -61,7 +62,7 @@ const useCoinOnZora = ({
     zoraResult.current = result;
 
     // store zora coin URL in DB (We store it to track all the created coins so that we can buy some of them later)
-    storeZoraCoin('', {
+    storeZoraCoin(roomId, {
       wallet: address as Address,
       zoraResult: result,
     });
