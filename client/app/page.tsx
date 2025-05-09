@@ -83,6 +83,11 @@ export default function HomePage() {
       </AnimatePresence>
 
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none w-screen h-screen z-10 hidden"></canvas>
+
+      {/* Prefetch Jesse avatar images for faster loading */}
+      <link rel="prefetch" href="/mellow-jesse.gif" as="image" type="image/gif" />
+      <link rel="prefetch" href="/critical-jesse.gif" as="image" type="image/gif" />
+      <link rel="prefetch" href="/original.gif" as="image" type="image/gif" />
     </main>
   );
 }
