@@ -227,9 +227,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
                 session.clear_user_turn()
 
                 speech_handle = session.say(
-                    "Aha! This was fun, but I'm afraid that's all that we have for "
-                    "today. I can't wait to see your idea come to life during "
-                    "Onchain Summer! Stay based, and never stop building!!",
+                    "Aha! This was fun, but I'm afraid that's all that we have for today. I can't wait to see your idea come to life!",
                     allow_interruptions=False,
                 )
                 if session.current_speech is not None:
