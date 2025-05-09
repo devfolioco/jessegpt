@@ -944,6 +944,13 @@ my quick end of week thoughts on taking on @coinbasewallet and how we're going t
 
 ## 2024-10-02
 
+while i'm getting all personal doing this AMA, i'll just share publicly that i hate this photo and hope folks stop using it.
+why? this was captured during the first onchain summer and while from the outside lots seemed like it was going right, inside of jesse's brain it was far
+
+---
+
+## 2024-10-02
+
 how i think about privacy on @base
 TL;DR privacy is an important human right, it's going to be a priority for us in 2025, and there are short and long term paths — and a lot more work to do
 shoutout to @cass_on_mars for always asking great questions
@@ -1130,6 +1137,13 @@ None Conversation
 
 ---
 
+## 2024-07-07
+
+feeling so full, alive, and loved after a beautiful wedding and honeymoon with family &amp; friends.
+now i'm back and ready to build for the second half of onchain summer with all of you. job's not finished!
+
+---
+
 ## 2024-07-03
 
 Shout out to @JessePollak, real recognize real its time to build on @base
@@ -1173,6 +1187,11 @@ Quote
 Jesse Pollak (jesse.xyz)
 @jessepollak
 ·
+Jun 6
+PSA: I'm getting married and will be mostly away from the internet on my honeymoon from 6/14-7/5. I'll be sad to not be online for those weeks of onchain summer, but there will be many more summers and only one honeymoon. stay based and keep building.
+Show more
+12:41 AM · Jun 13, 2024
+·
 47.5K
 Views
 39
@@ -1206,10 +1225,25 @@ More
 
 ---
 
+## 2024-06-10
+
+a little history of onchain summer
+TL;DR it's all about the builders, always was, always will be
+
+---
+
 ## 2024-06-08
 
 base is now the #1 most used network on both @Uniswap and @aave
 and it's still only day one 📈
+
+---
+
+## 2024-06-06
+
+PSA: I'm getting married and will be mostly away from the internet on my honeymoon from 6/14-7/5.
+I'll be sad to not be online for those weeks of onchain summer, but there will be many more summers and only one honeymoon.
+stay based and keep building.
 
 ---
 
@@ -1230,6 +1264,13 @@ went on @Bloomberg this morning to spread the word on how we're building a globa
 ## 2024-06-04
 
 onchain is going absolutely vertical worldwide
+
+---
+
+## 2024-06-03
+
+you can now text 100+ tokens on @base to anyone, anywhere
+thanks @CoinbaseWallet for kicking off onchain summer
 
 ---
 
@@ -1260,7 +1301,9 @@ Jesse Pollak (jesse.xyz)
 @jessepollak
 you can now text 100+ tokens on
 @base
-to anyone, anywhere.
+to anyone, anywhere thanks
+@CoinbaseWallet
+for kicking off onchain summer
 0:29
 11:29 PM · Jun 3, 2024
 ·
@@ -1294,6 +1337,12 @@ Retry
 Terms of Service Privacy Policy Cookie Policy Accessibility Ads info
 More
 © 2024 X Corp.
+
+---
+
+## 2024-06-02
+
+if youre reading this its onchain summer.
 
 ---
 
@@ -1545,7 +1594,8 @@ time to upgrade the system.
 ## 2024-04-11
 
 if you're a @base meme community, start thinking about what you'll do to bring the world onchain this summer.
-we want your help bringing as millions of people onchain. get creative, think big, imagine real world experiences, stay based.
+we're running onchain summer back and we want your help bringing as millions of people onchain.
+get creative, think big, imagine real world experiences, stay based.
 
 ---
 
