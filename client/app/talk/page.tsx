@@ -282,8 +282,8 @@ const TalkComponent = () => {
             Chat again
           </Button>
 
-          <Button appearance="colored" className="bg-devfolio text-white" href={BASE_BATCH_APPLY_URL} target="_blank">
-            <DevfolioIcon />
+          <Button appearance="colored" className="bg-white text-black" href={BASE_BATCH_APPLY_URL} target="_blank">
+            <DevfolioIcon color="#3770FF" />
             Apply to Base Batches
           </Button>
 
