@@ -207,8 +207,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
                 session.clear_user_turn()
 
                 speech_handle = session.say(
-                    "You have about one minute left in this conversation. "
-                    "Please wrap up any important points you'd like to discuss!",
+                    "I goota run quick, but I'd love to hear more about what you're building! Please wrap up any important points you'd like to discuss soon!",
                     allow_interruptions=False,
                 )
                 if session.current_speech is not None:
