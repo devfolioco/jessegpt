@@ -107,7 +107,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     # Create the Agent session with STT/LLM/TTS building blocks
     # ------------------------------------------------------------------
     session = AgentSession(
-        stt=deepgram.STT(model="nova-3", language="en-US"),
+        stt=deepgram.STT(model="nova-3", language="en-US", keyterms=["Farcaster"]),
         llm=openai.LLM(model="gpt-4.1-mini"),
         tts=elevenlabs.TTS(
             model="eleven_multilingual_v2",
@@ -323,7 +323,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     ctx.proc.userdata["monitor_task"] = monitor_task
 
     # Example starter message via data-channel
-    await ctx.room.local_participant.send_text("Agent v1.2.0", topic="agent_version")
+    await ctx.room.local_participant.send_text("Agent v1.3.0", topic="agent_version")
 
 
 # ----------------------------------------------------------------------
