@@ -10,7 +10,6 @@ import type { TrackReferenceOrPlaceholder } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 
-/** @beta */
 export type VoiceAssistantControlBarControls = {
   microphone?: boolean;
   leave?: boolean;
@@ -103,7 +102,7 @@ export function CustomVoiceAssistantControlBar({
             <BarVisualizer
               trackRef={micTrackRef}
               barCount={7}
-              options={{ minHeight: 32 }}
+              options={{ minHeight: 16, maxHeight: 100 }}
               style={{ margin: '0 24px' }}
             />
           </TrackToggle>

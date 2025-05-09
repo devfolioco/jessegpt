@@ -6,6 +6,7 @@ import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { BarVisualizer, RoomAudioRenderer, useChat, useVoiceAssistant } from '@livekit/components-react';
 import Image from 'next/image';
 import { useState } from 'react';
+import AudioVisualizer from './AudioVisualizer/AudioVisualizer';
 import { Loader } from './Loader';
 
 export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideControls?: boolean }) {
@@ -43,16 +44,23 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
           <div
             className={`mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden ${mood === AgentMoodEnum.EXCITED ? 'bg-[#FFF68D]' : 'bg-[#0157FA]'}`}
           >
-            <BarVisualizer
+            {/* <BarVisualizer
               state={agentState}
               trackRef={agentAudioTrack}
               barCount={5}
               className="agent-visualizer"
-              options={{ maxHeight: 40 }}
+              options={{ minHeight: 8, maxHeight: 20 }}
               style={{
                 // @ts-expect-error variable update
                 '--lk-fg': mood === AgentMoodEnum.EXCITED ? '#20282D' : 'white',
+
+                '--lk-va-bg': mood === AgentMoodEnum.EXCITED ? '#20282D' : 'white',
               }}
+            /> */}
+
+            <AudioVisualizer
+              state={agentState === 'speaking' ? 'speaking' : 'idle'}
+              variant={mood === AgentMoodEnum.EXCITED ? 'optimism' : 'critical'}
             />
           </div>
         </div>
