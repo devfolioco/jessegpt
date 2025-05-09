@@ -113,6 +113,10 @@ import * as React from 'react';
 //   return transcriptions;
 // };
 
+const sanitizeText = (text: string) => {
+  return text.replaceAll(/[*"'`~#>]/g, '');
+};
+
 export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
   const combinedTranscriptions = useCombinedTranscriptions();
 
@@ -120,13 +124,15 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
 
   const isThinking = state === 'thinking' || state === 'connecting';
 
+  const lastScrolledID = React.useRef<string | null>(null);
+
   // for testing only
   // const combinedTranscriptions = useTestTranscriptions();
 
   // scroll to bottom when new transcription is added
   React.useEffect(() => {
     const transcription = combinedTranscriptions[combinedTranscriptions.length - 1];
-    if (transcription) {
+    if (transcription && transcription.id !== lastScrolledID.current) {
       const transcriptionElement = document.getElementById(transcription.id);
       if (transcriptionElement) {
         transcriptionElement.scrollIntoView({ behavior: 'smooth' });
@@ -147,13 +153,22 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
   const onlyUserTranscriptions = combinedTranscriptions.filter(segment => segment.role === 'user');
   const lastUserTranscription = onlyUserTranscriptions[onlyUserTranscriptions.length - 1];
 
+  const preventAutoScrollOnHumanScroll = () => {
+    const transcription = combinedTranscriptions[combinedTranscriptions.length - 1];
+    if (transcription) lastScrolledID.current = transcription.id;
+  };
+
   return (
-    <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden py-8 w-[700px] pb-40">
+    <div
+      className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden py-8 w-[700px] pb-40 px-4"
+      onWheel={preventAutoScrollOnHumanScroll}
+      onTouchStart={preventAutoScrollOnHumanScroll}
+    >
       {combinedTranscriptions.map(segment => (
         <ChatBubble
           key={segment.id}
           id={segment.id}
-          text={segment.text}
+          text={sanitizeText(segment.text)}
           role={segment.role}
           mood={mood}
           isLast={

@@ -78,6 +78,7 @@ const TalkComponent = () => {
 
   async function connect() {
     try {
+      room.localParticipant.setMicrophoneEnabled(true);
       setConnecting(true);
       const url = new URL(
         process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',
@@ -188,10 +189,7 @@ const TalkComponent = () => {
     setConnected(false);
     setConnecting(false);
 
-    window.location.reload();
-
-    // // connect to room again
-    // connect();
+    router.push('/');
   };
 
   const handleNotEnoughInformation = () => {
@@ -282,9 +280,9 @@ const TalkComponent = () => {
             Chat again
           </Button>
 
-          <Button appearance="colored" className="bg-devfolio text-white" href={BASE_BATCH_APPLY_URL} target="_blank">
-            <DevfolioIcon />
-            Apply to Base Batches
+          <Button appearance="colored" className="bg-white text-black" href={BASE_BATCH_APPLY_URL} target="_blank">
+            <DevfolioIcon color="black" />
+            <span className="-translate-y-[1.5px]">Apply to Base Batches</span>
           </Button>
 
           {isSummaryReceived && (
