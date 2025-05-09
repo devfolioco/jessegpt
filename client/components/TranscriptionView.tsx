@@ -135,7 +135,6 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
     if (transcription && transcription.id !== lastScrolledID.current) {
       const transcriptionElement = document.getElementById(transcription.id);
       if (transcriptionElement) {
-        lastScrolledID.current = transcription.id;
         transcriptionElement.scrollIntoView({ behavior: 'smooth' });
       }
     }
@@ -154,8 +153,17 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
   const onlyUserTranscriptions = combinedTranscriptions.filter(segment => segment.role === 'user');
   const lastUserTranscription = onlyUserTranscriptions[onlyUserTranscriptions.length - 1];
 
+  const preventAutoScrollOnHumanScroll = () => {
+    const transcription = combinedTranscriptions[combinedTranscriptions.length - 1];
+    if (transcription) lastScrolledID.current = transcription.id;
+  };
+
   return (
-    <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden py-8 w-[700px] pb-40">
+    <div
+      className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden py-8 w-[700px] pb-40 px-4"
+      onWheel={preventAutoScrollOnHumanScroll}
+      onTouchStart={preventAutoScrollOnHumanScroll}
+    >
       {combinedTranscriptions.map(segment => (
         <ChatBubble
           key={segment.id}
