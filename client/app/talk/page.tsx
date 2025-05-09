@@ -78,6 +78,7 @@ const TalkComponent = () => {
 
   async function connect() {
     try {
+      room.localParticipant.setMicrophoneEnabled(true);
       setConnecting(true);
       const url = new URL(
         process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',

@@ -1,6 +1,6 @@
 'use client';
 
-import { nyghtBold, nyghtMedium } from '@/app/fonts/fonts';
+import { nyghtMedium } from '@/app/fonts/fonts';
 import { MicIcon } from '@/components/icons/MicIcon';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import clsx from 'clsx';
