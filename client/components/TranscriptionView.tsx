@@ -113,6 +113,10 @@ import * as React from 'react';
 //   return transcriptions;
 // };
 
+const sanitizeText = (text: string) => {
+  return text.replaceAll(/[*"'`~#>]/g, '');
+};
+
 export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
   const combinedTranscriptions = useCombinedTranscriptions();
 
@@ -153,7 +157,7 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
         <ChatBubble
           key={segment.id}
           id={segment.id}
-          text={segment.text}
+          text={sanitizeText(segment.text)}
           role={segment.role}
           mood={mood}
           isLast={
