@@ -188,10 +188,7 @@ const TalkComponent = () => {
     setConnected(false);
     setConnecting(false);
 
-    window.location.reload();
-
-    // // connect to room again
-    // connect();
+    router.push('/');
   };
 
   const handleNotEnoughInformation = () => {

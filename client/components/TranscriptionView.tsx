@@ -124,15 +124,18 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
 
   const isThinking = state === 'thinking' || state === 'connecting';
 
+  const lastScrolledID = React.useRef<string | null>(null);
+
   // for testing only
   // const combinedTranscriptions = useTestTranscriptions();
 
   // scroll to bottom when new transcription is added
   React.useEffect(() => {
     const transcription = combinedTranscriptions[combinedTranscriptions.length - 1];
-    if (transcription) {
+    if (transcription && transcription.id !== lastScrolledID.current) {
       const transcriptionElement = document.getElementById(transcription.id);
       if (transcriptionElement) {
+        lastScrolledID.current = transcription.id;
         transcriptionElement.scrollIntoView({ behavior: 'smooth' });
       }
     }
