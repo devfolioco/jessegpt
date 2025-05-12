@@ -2,7 +2,7 @@ import { storeZoraCoin } from '@/api';
 import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { getFarcasterCopy, getTweetCopy, getTwitterIntentURL, getWarpcastIntentURL } from '@/helpers/copy';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
-import { AgentMoodI, AgentShareData } from '@/types/agent';
+import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
 import confetti from 'canvas-confetti';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
@@ -14,6 +14,7 @@ import { CheckIcon } from './icons/CheckIcon';
 import { CloseIcon } from './icons/CloseIcon';
 import { DevfolioIcon } from './icons/DevfolioIcon';
 import { FarcasterIcon } from './icons/FarcasterIcon';
+import { MicIcon } from './icons/MicIcon';
 import { XIcon } from './icons/XIcon';
 import { ZoraIcon } from './icons/ZoraIcon';
 
@@ -137,14 +138,14 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
             </div>
 
             <div className="flex gap-4 items-center w-full mt-2">
-              <Button appearance="colored" className="bg-farcaster  text-white" onClick={handleFarcaster} stretch>
-                <FarcasterIcon />
-                Cast
-              </Button>
-
-              <Button appearance="colored" className="bg-x  text-white" onClick={handleTweet} stretch>
-                <XIcon />
-                Post
+              <Button
+                appearance="colored"
+                className={clsx(mood === AgentMoodEnum.CRITICAL ? 'bg-critical text-white' : 'bg-optimism text-black')}
+                onClick={handleFarcaster}
+                stretch
+              >
+                <MicIcon />
+                Chat again
               </Button>
 
               {zoraResult ? (
@@ -156,7 +157,7 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
                   stretch
                 >
                   <ZoraIcon />
-                  View
+                  View on Zora
                 </Button>
               ) : (
                 <Button
@@ -166,12 +167,24 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
                   stretch
                 >
                   {isLoading ? <Loader /> : <ZoraIcon />}
-                  Coin
+                  Coin on Zora
                 </Button>
               )}
             </div>
 
-            <Button
+            <div className="flex gap-4 items-center w-full">
+              <Button appearance="colored" className="bg-farcaster  text-white" onClick={handleFarcaster} stretch>
+                <FarcasterIcon />
+                Cast
+              </Button>
+
+              <Button appearance="colored" className="bg-x  text-white" onClick={handleTweet} stretch>
+                <XIcon />
+                Post
+              </Button>
+            </div>
+
+            {/* <Button
               appearance="colored"
               className="bg-devfolio text-white"
               href={BASE_BATCH_APPLY_URL}
@@ -180,7 +193,7 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
             >
               <DevfolioIcon />
               Build your idea at Base Batches: 001
-            </Button>
+            </Button> */}
 
             <AnimatePresence initial={false}>
               {zoraSuccessToastVisible && (
