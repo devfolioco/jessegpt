@@ -280,10 +280,10 @@ const TalkComponent = () => {
             Chat again
           </Button>
 
-          <Button appearance="colored" className="bg-white text-black" href={BASE_BATCH_APPLY_URL} target="_blank">
+          {/* <Button appearance="colored" className="bg-white text-black" href={BASE_BATCH_APPLY_URL} target="_blank">
             <DevfolioIcon color="black" />
             <span className="-translate-y-[1.5px]">Apply to Base Batches</span>
-          </Button>
+          </Button> */}
 
           {isSummaryReceived && (
             <Button appearance="colored" className="bg-white text-black" onClick={handleShareModal}>

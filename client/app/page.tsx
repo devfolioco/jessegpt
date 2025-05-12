@@ -50,20 +50,40 @@ export default function HomePage() {
           priority
         />
 
-        <h1 className={clsx('text-5xl md:text-6xl text-white mt-6', nyghtMedium.className)}>Talk to JesseXBT</h1>
+        <h1 className={clsx('text-5xl md:text-6xl text-white mt-6', nyghtMedium.className)}>Talk to JesseGPT</h1>
 
-        <p className={clsx('text-lg md:text-xl text-white/90 max-w-xl mx-auto font-light mt-2 font-inter')}>
-          Get feedback on your ideas from Base creator Jesse Pollak&apos;s AI avatar. Choose between optimistic hype
-          mode or brutally honest critique to level up your project.
+        <p className={clsx('text-lg md:text-xl text-white/90 max-w-[515px] mx-auto font-light mt-2 font-inter')}>
+          Talk to Jesse’s AI avatar about your project idea and coin it on Zora.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 mt-14">
           <Button href={BASE_BATCH_APPLY_URL} target="_blank" appearance="secondary">
-            Apply to Base Batches: 001
+            Learn more
           </Button>
           <Button ref={targetRef} onClick={handleAgentSelection}>
             Start talking to Jesse
           </Button>
+        </div>
+      </div>
+
+      <div
+        className="fixed left-0 bottom-0 w-full flex justify-between text-white text-[22px] font-inter font-light"
+        style={{ padding: '40px 211px 48px 211px' }}
+      >
+        <div>
+          Made with {'<3'} at{' '}
+          <a href="https://devfolio.co" className="underline">
+            Devfolio
+          </a>
+        </div>
+
+        <div className="flex gap-8">
+          <a className="underline" href="https://twitter.com/devfolio">
+            Twitter / X
+          </a>
+          <a className="underline" href="https://warpcast.com/devfolio">
+            Farcaster
+          </a>
         </div>
       </div>
 
