@@ -135,12 +135,12 @@ class Assistant(Agent):
         )
 
         if has_enough_information and not is_inappropriate:
-            paring_message_handle = context.session.generate_reply(
+            parting_message_handle = context.session.generate_reply(
                 instructions="""Respond with a parting message. give them a compliment + either "i see this going in a good direction" or (in provocateur mode) respond with skepticism + "but this may or may not work, put it out in the wild and let’s see what the community says about it".  Always urge the user to mint their idea on Zora""",
                 allow_interruptions=False,
             )
 
-            await paring_message_handle.wait_for_playout()
+            await parting_message_handle.wait_for_playout()
 
             logger.info(
                 "Ending conversation with super_short_summary: %s", super_short_summary
