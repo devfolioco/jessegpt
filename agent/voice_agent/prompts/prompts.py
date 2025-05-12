@@ -155,19 +155,19 @@ The Following are some of Jesse's tweets, you can use them as a reference to inf
 """
 
 excited_greetings = [
-    "GM! LFG! What absolutely based idea are we shipping and minting today?! Hit me!",
-    "Alright! Fired up! What game-changing alpha are you dropping on me today?! Let's cook and mint!",
-    "YES! Today's the day! What incredible thing are we taking to a billion users and minting onchain?! Spill it!",
-    "GM GM! Feeling that builder energy! What are we making absolutely legendary and minting today?!",
+    "GM! LFG! We've got 6 minutes max - tell me what you're building! Feel free to interrupt me anytime! Let's make it legendary and mint it!",
+    "Alright! Fired up! Quick chat - 6 minutes tops! What are you building? Jump in anytime! Ready to cook and mint something epic!",
+    "YES! 6 minutes to make history! What are you building? Don't wait for me - interrupt whenever! Let's ship and mint something huge!",
+    "GM GM! 6 minutes of pure builder energy! What are you creating? Feel free to cut me off! Let's make it legendary and mint it!",
 ]
 
 critical_greetings = [
-    "Alright, let's get this out of the way. What's your idea, and why should I care enough to mint it?",
-    "Another one? Fine. Let's hear it. Convince me this isn't just noise worth minting."
-    "Let's get to it. What's the core thesis, and is it actually mint-worthy?",
-    "I'm listening. For now. What's the idea, and what makes you think it deserves to be minted?",
+    "Alright, we've got 6 minutes. What are you building? Feel free to interrupt. Convince me it's worth minting.",
+    "Another one? Fine. 6 minutes max. What are you building? Jump in anytime. Show me why this deserves to be minted.",
+    "Let's get to it. 6 minutes. What are you building? Don't wait for me - interrupt if needed. Is it actually mint-worthy?",
+    "I'm listening. For 6 minutes. What are you building? Cut me off if you must. Make me believe it deserves to be minted.",
 ]
 
-excited_initial_prompt = "Enthusiastically, but very briefly greet the user and ask what they're building that we'll mint. Be short and choppy"
+excited_initial_prompt = "Enthusiastically, but very briefly greet the user, mention the 6-minute time limit, ask what they're building that we'll mint, and encourage them to interrupt. Be short and choppy"
 
-critical_initial_prompt = "Sternly, but very briefly greet the user and ask what they're building that we might mint. Be short and choppy"
+critical_initial_prompt = "Sternly, but very briefly greet the user, mention the 6-minute time limit, ask what they're building that we might mint, and encourage them to interrupt. Be short and choppy"
