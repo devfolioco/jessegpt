@@ -36,9 +36,11 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
             className="rounded-none mb-6"
             priority
           />
-          <h2 className={clsx('text-4xl text-white mb-2', nyghtMedium.className)}>JesseXBT</h2>
-          <p className="text-xl text-white/80 mb-2 font-inter font-light">The relentlessly optimistic Jesse Pollak.</p>
-          <p className="text-xl text-white/80 mb-8 max-w-[427px] font-inter font-light">
+          <h2 className={clsx('text-4xl text-white mb-2', nyghtMedium.className)}>JesseGPT</h2>
+          <p className="text-[22px] text-white/80 mb-2 font-inter font-light">
+            The relentlessly optimistic Jesse Pollak.
+          </p>
+          <p className="text-[22px] text-white/80 mb-8 max-w-[427px] font-inter font-light">
             Sees massive potential everywhere, bursting with Onchain Summer energy, &amp; ready to hype your vision to
             the moon.
           </p>
@@ -63,9 +65,9 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
             className="rounded-none mb-6"
             priority
           />
-          <h2 className={clsx('text-4xl text-white mb-2', nyghtMedium.className)}>SupaBald JesseXBT</h2>
-          <p className="text-xl text-white/80 mb-2 font-inter font-light">The brutally honest Jesse Pollak.</p>
-          <p className="text-xl text-white/80 mb-8 max-w-[427px] font-inter font-light">
+          <h2 className={clsx('text-4xl text-white mb-2', nyghtMedium.className)}>SupaBald JesseGPT</h2>
+          <p className="text-[22px] text-white/80 mb-2 font-inter font-light">The brutally honest Jesse Pollak.</p>
+          <p className="text-[22px] text-white/80 mb-8 max-w-[427px] font-inter font-light">
             Cuts through the hype, challenges every premise, &amp; believes great ideas must survive intense scrutiny to
             succeed.
           </p>
