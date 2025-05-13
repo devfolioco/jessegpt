@@ -76,6 +76,7 @@ class Assistant(Agent):
         context: RunContext,
         has_enough_information: bool,
         is_inappropriate: bool,
+        end_message: str,
         super_short_summary: str,
         summary: str,
     ) -> None:  # noqa: D401
@@ -92,6 +93,10 @@ class Assistant(Agent):
             A boolean indicating whether the conversation was ended due to
             inappropriate content or behavior. If True, `super_short_summary`
             and `summary` will not be sent, regardless of `has_enough_information`.
+        end_message:
+            A message to be sent to the user to end the conversation. Respond briefly with your closing remarks, and urge the user to tokenize their idea on Zora. Do make sure to mention Zora.
+            This is only applicable and used if `has_enough_information` is True and `is_inappropriate` is False.
+            If `has_enough_information` is False or `is_inappropriate` is True, this parameter may be an empty string.
         super_short_summary:
             Craft a highly concise (1-3 words MAX) and impactful phrase that encapsulates the user's project idea. This phrase will complete the sentence "Base is for __" on a shareable image.
             Think creatively:
@@ -110,7 +115,7 @@ class Assistant(Agent):
         """
 
         logger.debug(
-            f"Ending conversation with has_enough_information: {has_enough_information}, is_inappropriate: {is_inappropriate}, super_short_summary: {super_short_summary}, summary: {summary}"
+            f"Ending conversation with has_enough_information: {has_enough_information}, is_inappropriate: {is_inappropriate}, end_message: {end_message}, super_short_summary: {super_short_summary}, summary: {summary}"
         )
 
         job_context = get_job_context()
@@ -135,10 +140,7 @@ class Assistant(Agent):
         )
 
         if has_enough_information and not is_inappropriate:
-            # await context.session.generate_reply(
-            #     instructions="""Respond with a parting message. give them a compliment + either "i see this going in a good direction" or (in provocateur mode) respond with skepticism + "but this may or may not work, put it out in the wild and let’s see what the community says about it".  Always urge the user to mint their idea on Zora""",
-            #     allow_interruptions=False,
-            # ).wait_for_playout()
+            await context.session.say(end_message, allow_interruptions=False)
 
             logger.info(
                 "Ending conversation with super_short_summary: %s", super_short_summary
