@@ -318,7 +318,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
 
     greeting = random.choice(greetings)
 
-    greet_handle = await session.say(text=greeting)
+    greet_handle = await session.say(text=greeting, allow_interruptions=False)
 
     await greet_handle.wait_for_playout()
 
@@ -329,7 +329,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     ctx.proc.userdata["monitor_task"] = monitor_task
 
     # Example starter message via data-channel
-    await ctx.room.local_participant.send_text("Agent v1.7.0", topic="agent_version")
+    await ctx.room.local_participant.send_text("Agent v1.8.0", topic="agent_version")
 
 
 # ----------------------------------------------------------------------
