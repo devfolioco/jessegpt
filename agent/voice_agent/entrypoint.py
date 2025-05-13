@@ -38,7 +38,10 @@ _active_tasks = set()
 async def async_handle_user_end_conversation(
     reader, participant_identity, ctx: JobContext, session: AgentSession
 ):
-    await session.interrupt()
+    try:
+        await session.interrupt()
+    except Exception as e:
+        await session.current_speech.wait_for_playout()
 
     session.input.set_audio_enabled(False)
     session.clear_user_turn()
@@ -108,7 +111,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     # ------------------------------------------------------------------
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="en-US", keyterms=["Farcaster"]),
-        llm=openai.LLM(model="gpt-4o-mini"),
+        llm=openai.LLM(model="gpt-4.1-mini"),
         tts=elevenlabs.TTS(
             model="eleven_multilingual_v2",
             voice_id="goljFZPfRhM9ZkyHrOmQ",
@@ -320,7 +323,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     ctx.proc.userdata["monitor_task"] = monitor_task
 
     # Example starter message via data-channel
-    await ctx.room.local_participant.send_text("Agent v1.5.0", topic="agent_version")
+    await ctx.room.local_participant.send_text("Agent v1.4.0", topic="agent_version")
 
 
 # ----------------------------------------------------------------------
