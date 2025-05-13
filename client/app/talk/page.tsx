@@ -76,10 +76,20 @@ const TalkComponent = () => {
     setIsModalOpen(true);
   };
 
+  const requestMicrophonePermission = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop());
+    } catch (error) {
+      console.error('Error requesting microphone permission', error);
+    }
+  };
+
   async function connect() {
     try {
-      room.localParticipant.setMicrophoneEnabled(true);
       setConnecting(true);
+      requestMicrophonePermission();
+
       const url = new URL(
         process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',
         window.location.origin
@@ -92,7 +102,6 @@ const TalkComponent = () => {
       }
 
       await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
-      await room.localParticipant.setMicrophoneEnabled(true);
 
       room.registerTextStreamHandler('has_enough_information', async (reader, participantInfo) => {
         const info = reader.info;
@@ -106,8 +115,15 @@ const TalkComponent = () => {
         for await (const chunk of reader) {
           console.log(`Has enough information: ${chunk}`);
           setIsConversationEnded(true);
+          room.disconnect();
+          console.log('room disconnected');
+
           if (chunk === 'false') {
             handleNotEnoughInformation();
+          } else {
+            // has enough information
+            setIsSummaryReceived(true);
+            setIsModalOpen(true);
           }
         }
       });
@@ -160,11 +176,6 @@ const TalkComponent = () => {
           finalMintData.current.summary += chunk;
           console.log(`Summary: ${chunk}`);
         }
-
-        room.disconnect();
-        console.log('room disconnected');
-        setIsSummaryReceived(true);
-        setIsModalOpen(true);
       });
 
       room.registerTextStreamHandler('agent_version', async (reader, participantInfo) => {
@@ -176,6 +187,7 @@ const TalkComponent = () => {
 
       setConnected(true);
       setConnecting(false);
+      await room.localParticipant.setMicrophoneEnabled(true);
     } catch (error) {
       console.error('Error connecting to room', error);
     }
