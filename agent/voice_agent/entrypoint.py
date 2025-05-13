@@ -17,7 +17,7 @@ from livekit.plugins import deepgram, elevenlabs, openai
 from livekit.plugins.elevenlabs import VoiceSettings
 from livekit.plugins.turn_detector.english import EnglishModel
 import requests
-
+from voice_agent.stt_words import stt_words
 from voice_agent.assistant import Assistant, prewarm
 from voice_agent.constants import (
     CALL_DURATION_WARNING_TIME,
@@ -110,7 +110,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     # Create the Agent session with STT/LLM/TTS building blocks
     # ------------------------------------------------------------------
     session = AgentSession(
-        stt=deepgram.STT(model="nova-3", language="en-US", keyterms=["Farcaster"]),
+        stt=deepgram.STT(model="nova-3", language="en-US", keyterms=stt_words),
         llm=openai.LLM(model="gpt-4.1"),
         tts=elevenlabs.TTS(
             model="eleven_multilingual_v2",
