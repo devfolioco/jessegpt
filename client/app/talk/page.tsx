@@ -194,12 +194,12 @@ const TalkComponent = () => {
   }
 
   const handleRetry = () => {
-    setIsSummaryReceived(false);
-    setIsConversationEnded(false);
-    setIsModalOpen(false);
-    finalMintData.current = initialData;
-    setConnected(false);
-    setConnecting(false);
+    // setIsSummaryReceived(false);
+    // setIsConversationEnded(false);
+    // setIsModalOpen(false);
+    // finalMintData.current = initialData;
+    // setConnected(false);
+    // setConnecting(false);
 
     router.push('/');
   };
