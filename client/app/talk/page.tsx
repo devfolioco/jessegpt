@@ -5,10 +5,8 @@ import { PrefetchJesseFrameAssets } from '@/components/JesseFrame';
 import LoadingPage from '@/components/LoadingPage';
 import ShareModal from '@/components/ShareModal';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
-import { DevfolioIcon } from '@/components/icons/DevfolioIcon';
 import { MicIcon } from '@/components/icons/MicIcon';
 import { ShareIcon } from '@/components/icons/ShareIcon';
-import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
 import { RoomContext } from '@livekit/components-react';
 import clsx from 'clsx';
@@ -54,17 +52,17 @@ const TalkComponent = () => {
   const router = useRouter();
 
   const [room] = useState(new Room());
-  const [connecting, setConnecting] = useState(false);
-  const [connected, setConnected] = useState(false);
-  const isInitialRender = useRef(false);
+  const [connecting, setConnecting] = useState(true);
+  const [connected, setConnected] = useState(true);
+  const isInitialRender = useRef(true);
 
-  const [isSummaryReceived, setIsSummaryReceived] = useState(false);
+  const [isSummaryReceived, setIsSummaryReceived] = useState(true);
 
-  const [isConversationEnded, setIsConversationEnded] = useState(false);
+  const [isConversationEnded, setIsConversationEnded] = useState(true);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
-  const finalMintData = useRef<AgentShareData>(initialData);
+  const finalMintData = useRef<AgentShareData>(testData);
 
   const [roomId, setRoomId] = useState<string | null>(null);
 

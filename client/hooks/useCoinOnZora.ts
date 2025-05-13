@@ -1,7 +1,7 @@
 import { storeZoraCoin } from '@/api';
 import { config as wagmiConfig } from '@/config/wagmi';
 import { uploadToIPFS } from '@/helpers/ipfs';
-import { ZoraCoinResult } from '@/types/agent';
+import { ZoraCoinFlowStep, ZoraCoinResult } from '@/types/agent';
 import { useAppKit, useAppKitAccount, useAppKitState, useDisconnect } from '@reown/appkit/react';
 import { getWalletClient } from '@wagmi/core';
 import { createCoin } from '@zoralabs/coins-sdk';
@@ -23,15 +23,7 @@ interface UseCoinOnZoraReturn {
   isDisabled: boolean;
   isLoading: boolean;
   result: ZoraCoinResult | null;
-}
-
-enum ZoraCoinFlowStep {
-  IDLE = 'idle',
-  CONNECTING_WALLET = 'connecting_wallet',
-  UPLOADING_IMAGE = 'uploading_image',
-  CREATING_COIN = 'creating_coin',
-  SUCCESS = 'success',
-  FAILURE = 'failure',
+  status: ZoraCoinFlowStep;
 }
 
 // todo: remove this (simulate success)
@@ -199,6 +191,7 @@ const useCoinOnZora = ({
     isDisabled,
     isLoading,
     result: currentStep === ZoraCoinFlowStep.SUCCESS ? zoraResult.current : null,
+    status: currentStep,
   };
 };
 
