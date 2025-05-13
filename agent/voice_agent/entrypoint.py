@@ -111,7 +111,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     # ------------------------------------------------------------------
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="en-US", keyterms=["Farcaster"]),
-        llm=openai.LLM(model="gpt-4.1-mini"),
+        llm=openai.LLM(model="gpt-4.1"),
         tts=elevenlabs.TTS(
             model="eleven_multilingual_v2",
             voice_id="goljFZPfRhM9ZkyHrOmQ",
@@ -259,11 +259,17 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
                     allow_interruptions=False,
                 )
 
+                logger.debug("Playing out the end handle")
+
                 await end_handle.wait_for_playout()
+
+                logger.debug(
+                    "end handle played out... Calling the end conversation function"
+                )
 
                 await session.generate_reply(
                     instructions=(
-                        "The conversation has concluded. Please call the `end_conversation` function to end the call... YOU MUST CALL THE `end_conversation` FUNCTION"
+                        "The conversation has concluded. Please call the `end_conversation` function to end the call... YOU MUST CALL THE `end_conversation` FUNCTION IMMEDIATELY"
                     ),
                     allow_interruptions=False,
                 )
