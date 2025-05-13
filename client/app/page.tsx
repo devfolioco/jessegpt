@@ -43,7 +43,7 @@ export default function HomePage() {
       <div className="z-10 flex flex-col items-center text-center">
         <Image
           src="/original.gif"
-          alt="JesseXBT Avatar"
+          alt="JesseGPT Avatar"
           width={328}
           height={328}
           className="rounded-none mx-auto -z-10"

@@ -261,7 +261,7 @@ const TalkComponent = () => {
       <main className="min-h-screen flex items-center justify-center bg-[#0C1110]">
         <div className="flex flex-col items-center justify-center">
           <div className="text-white text-2xl font-bold mb-4">
-            Connecting to {mood === AgentMoodEnum.EXCITED ? 'JesseXBT (Optimistic)' : 'SupaBald JesseXBT (Critical)'}...
+            Connecting to {mood === AgentMoodEnum.EXCITED ? 'JesseGPT (Optimistic)' : 'SupaBald JesseGPT (Critical)'}...
           </div>
           <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
         </div>
