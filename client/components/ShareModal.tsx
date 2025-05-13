@@ -1,18 +1,16 @@
-import { storeZoraCoin } from '@/api';
-import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { getFarcasterCopy, getTweetCopy, getTwitterIntentURL, getWarpcastIntentURL } from '@/helpers/copy';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
-import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
+import { AgentMoodEnum, AgentMoodI, AgentShareData, ZoraCoinFlowStep } from '@/types/agent';
 import confetti from 'canvas-confetti';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from './Button';
 import JesseFrame from './JesseFrame';
 import { Loader } from './Loader';
 import { CheckIcon } from './icons/CheckIcon';
 import { CloseIcon } from './icons/CloseIcon';
-import { DevfolioIcon } from './icons/DevfolioIcon';
 import { FarcasterIcon } from './icons/FarcasterIcon';
 import { MicIcon } from './icons/MicIcon';
 import { XIcon } from './icons/XIcon';
@@ -31,6 +29,21 @@ enum ShareModalError {
   ZORA_COIN_CREATION_ERROR = 'zora-coin-creation-error',
 }
 
+const getZoraStateCopy = (status: ZoraCoinFlowStep) => {
+  switch (status) {
+    case ZoraCoinFlowStep.CONNECTING_WALLET:
+      return 'Connecting wallet...';
+    case ZoraCoinFlowStep.UPLOADING_IMAGE:
+      return 'Generating Zora post...';
+    case ZoraCoinFlowStep.CREATING_COIN:
+      return 'Waiting for approval...';
+    case ZoraCoinFlowStep.SUCCESS:
+      return 'View on Zora';
+    default:
+      return 'Coin on Zora';
+  }
+};
+
 const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -45,6 +58,7 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
     onClick: handleCoinOnZoraClick,
     isLoading,
     result: zoraResult,
+    status: zoraStatus,
   } = useCoinOnZora({
     roomId: roomId,
     title: data.oneLiner,
@@ -94,6 +108,11 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
 
     window.open(warpcastShareURL, '_blank');
   };
+  const router = useRouter();
+
+  const handleChatAgain = () => {
+    router.push('/');
+  };
 
   const [zoraSuccessToastVisible, setZoraToastVisible] = useState(false);
 
@@ -141,10 +160,10 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
               <Button
                 appearance="colored"
                 className={clsx(mood === AgentMoodEnum.CRITICAL ? 'bg-critical text-white' : 'bg-optimism text-black')}
-                onClick={handleFarcaster}
+                onClick={handleChatAgain}
                 stretch
               >
-                <MicIcon />
+                <MicIcon color={mood === AgentMoodEnum.CRITICAL ? 'white' : 'black'} />
                 Chat again
               </Button>
 
@@ -167,7 +186,7 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
                   stretch
                 >
                   {isLoading ? <Loader /> : <ZoraIcon />}
-                  Coin on Zora
+                  {getZoraStateCopy(zoraStatus)}
                 </Button>
               )}
             </div>

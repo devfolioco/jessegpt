@@ -5,10 +5,8 @@ import { PrefetchJesseFrameAssets } from '@/components/JesseFrame';
 import LoadingPage from '@/components/LoadingPage';
 import ShareModal from '@/components/ShareModal';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
-import { DevfolioIcon } from '@/components/icons/DevfolioIcon';
 import { MicIcon } from '@/components/icons/MicIcon';
 import { ShareIcon } from '@/components/icons/ShareIcon';
-import { BASE_BATCH_APPLY_URL } from '@/constants';
 import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
 import { RoomContext } from '@livekit/components-react';
 import clsx from 'clsx';
@@ -76,10 +74,20 @@ const TalkComponent = () => {
     setIsModalOpen(true);
   };
 
+  const requestMicrophonePermission = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop());
+    } catch (error) {
+      console.error('Error requesting microphone permission', error);
+    }
+  };
+
   async function connect() {
     try {
-      room.localParticipant.setMicrophoneEnabled(true);
       setConnecting(true);
+      requestMicrophonePermission();
+
       const url = new URL(
         process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',
         window.location.origin
@@ -92,7 +100,6 @@ const TalkComponent = () => {
       }
 
       await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
-      await room.localParticipant.setMicrophoneEnabled(true);
 
       room.registerTextStreamHandler('has_enough_information', async (reader, participantInfo) => {
         const info = reader.info;
@@ -106,8 +113,15 @@ const TalkComponent = () => {
         for await (const chunk of reader) {
           console.log(`Has enough information: ${chunk}`);
           setIsConversationEnded(true);
+          room.disconnect();
+          console.log('room disconnected');
+
           if (chunk === 'false') {
             handleNotEnoughInformation();
+          } else {
+            // has enough information
+            setIsSummaryReceived(true);
+            setIsModalOpen(true);
           }
         }
       });
@@ -160,11 +174,6 @@ const TalkComponent = () => {
           finalMintData.current.summary += chunk;
           console.log(`Summary: ${chunk}`);
         }
-
-        room.disconnect();
-        console.log('room disconnected');
-        setIsSummaryReceived(true);
-        setIsModalOpen(true);
       });
 
       room.registerTextStreamHandler('agent_version', async (reader, participantInfo) => {
@@ -176,18 +185,19 @@ const TalkComponent = () => {
 
       setConnected(true);
       setConnecting(false);
+      await room.localParticipant.setMicrophoneEnabled(true);
     } catch (error) {
       console.error('Error connecting to room', error);
     }
   }
 
   const handleRetry = () => {
-    setIsSummaryReceived(false);
-    setIsConversationEnded(false);
-    setIsModalOpen(false);
-    finalMintData.current = initialData;
-    setConnected(false);
-    setConnecting(false);
+    // setIsSummaryReceived(false);
+    // setIsConversationEnded(false);
+    // setIsModalOpen(false);
+    // finalMintData.current = initialData;
+    // setConnected(false);
+    // setConnecting(false);
 
     router.push('/');
   };
@@ -249,7 +259,7 @@ const TalkComponent = () => {
       <main className="min-h-screen flex items-center justify-center bg-[#0C1110]">
         <div className="flex flex-col items-center justify-center">
           <div className="text-white text-2xl font-bold mb-4">
-            Connecting to {mood === AgentMoodEnum.EXCITED ? 'JesseXBT (Optimistic)' : 'SupaBald JesseXBT (Critical)'}...
+            Connecting to {mood === AgentMoodEnum.EXCITED ? 'JesseGPT (Optimistic)' : 'SupaBald JesseGPT (Critical)'}...
           </div>
           <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
         </div>

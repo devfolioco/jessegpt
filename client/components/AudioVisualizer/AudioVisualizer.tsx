@@ -34,6 +34,8 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ state: activeState = 
     };
   };
 
+  const barClasses = clsx('w-1 rounded-sm', variant === 'critical' ? 'bg-white' : 'bg-black');
+
   return (
     <div className="flex items-center justify-center w-16 h-16">
       {/* Speaking State */}
@@ -44,11 +46,11 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ state: activeState = 
           variant === 'critical' ? 'bg-critical' : 'bg-optimism'
         )}
       >
-        <motion.div className="w-1 rounded-sm bg-white" animate={activeState} variants={getVariant(0.8)} />
-        <motion.div className="w-1 rounded-sm bg-white" animate={activeState} variants={getVariant(0.9)} />
-        <motion.div className="w-1 rounded-sm bg-white" animate={activeState} variants={getVariant(0.7)} />
-        <motion.div className="w-1 rounded-sm bg-white" animate={activeState} variants={getVariant(0.85)} />
-        <motion.div className="w-1 rounded-sm bg-white" animate={activeState} variants={getVariant(0.75)} />
+        <motion.div className={barClasses} animate={activeState} variants={getVariant(0.8)} />
+        <motion.div className={barClasses} animate={activeState} variants={getVariant(0.9)} />
+        <motion.div className={barClasses} animate={activeState} variants={getVariant(0.7)} />
+        <motion.div className={barClasses} animate={activeState} variants={getVariant(0.85)} />
+        <motion.div className={barClasses} animate={activeState} variants={getVariant(0.75)} />
       </div>
     </div>
   );

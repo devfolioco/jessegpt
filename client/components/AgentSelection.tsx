@@ -26,11 +26,11 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
   return (
     <main className="min-h-screen w-full flex items-center justify-center" {...props}>
       <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-16 py-16">
-        {/* JesseXBT (Optimistic) */}
+        {/* JesseGPT (Optimistic) */}
         <div className="flex-1 flex flex-col items-center text-center bg-transparent" onClick={clickHandler}>
           <Image
             src="/mellow-jesse.gif"
-            alt="JesseXBT Avatar"
+            alt="JesseGPT Avatar"
             width={180}
             height={180}
             className="rounded-none mb-6"
@@ -55,11 +55,11 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
             Start talking
           </Button>
         </div>
-        {/* SupaBald JesseXBT (Critical) */}
+        {/* SupaBald JesseGPT (Critical) */}
         <div className="flex-1 flex flex-col items-center text-center bg-transparent" onClick={clickHandler}>
           <Image
             src="/critical-jesse.gif"
-            alt="SupaBald JesseXBT Avatar"
+            alt="SupaBald JesseGPT Avatar"
             width={180}
             height={180}
             className="rounded-none mb-6"

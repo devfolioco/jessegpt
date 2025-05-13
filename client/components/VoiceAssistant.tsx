@@ -35,7 +35,7 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
         <div className="flex flex-row">
           <Image
             src={mood === AgentMoodEnum.CRITICAL ? '/critical-jesse.gif' : '/mellow-jesse.gif'}
-            alt="JesseXBT Avatar"
+            alt="JesseGPT Avatar"
             width={254}
             height={254}
             className="rounded-none"
