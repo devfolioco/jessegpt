@@ -15,10 +15,14 @@ const EditIdea = ({
 }) => {
   const [localValue, setLocalValue] = useState(value);
 
+  const save = () => {
+    onChange(localValue);
+    onClose();
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      onChange(localValue);
-      onClose();
+      save();
     }
   };
 
@@ -53,12 +57,20 @@ const EditIdea = ({
             onChange={handleChange}
             onKeyDown={handleKeyDown}
           />
-          <div className="text-sm text-white/50 font-inter text-center">Press Enter to save</div>
         </div>
 
-        <button className="absolute top-4 right-4 hover:opacity-80 transition-opacity cursor-pointer" onClick={onClose}>
+        <div className="flex gap-2 font-inter mt-4">
+          <button className="bg-transparent text-white px-2 py-1 rounded-md min-w-24 !font-medium" onClick={onClose}>
+            Discard
+          </button>
+          <button className="bg-white text-black px-2 py-1 rounded-md min-w-24 !font-medium" onClick={save}>
+            Save
+          </button>
+        </div>
+
+        {/* <button className="absolute top-4 right-4 hover:opacity-80 transition-opacity cursor-pointer" onClick={onClose}>
           <CloseIcon color="white" className="w-6 h-6 opacity-90" />
-        </button>
+        </button> */}
       </motion.div>
     </AnimatePresence>
   );
