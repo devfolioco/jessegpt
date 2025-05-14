@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from './Button';
+import EditIdea from './EditIdea';
 import JesseFrame from './JesseFrame';
 import { Loader } from './Loader';
 import { CheckIcon } from './icons/CheckIcon';
@@ -44,11 +45,12 @@ const getZoraStateCopy = (status: ZoraCoinFlowStep) => {
   }
 };
 
-const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) => {
+const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
 
+  const [data, setData] = useState<AgentShareData>(initialData);
   const [error, setError] = useState<ShareModalError | null>(null);
   // todo: show error to user
 
@@ -127,6 +129,13 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
     return () => window.removeEventListener('keydown', handleEscape);
   }, [isOpen]);
 
+  const [editMode, setEditMode] = useState(false);
+
+  const handleOneLinerChange = (value: string) => {
+    console.log('value', value);
+    setData({ ...data, oneLiner: value });
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -142,18 +151,40 @@ const ShareModal = ({ data, onClose, mood, isOpen, roomId }: ShareModalProps) =>
             className="flex flex-col items-center gap-4 max-w-[682px] bg-secondary rounded-2xl p-4 relative"
             onClick={handleDefaultClick}
           >
-            <button
-              className="absolute top-10 right-10 hover:opacity-80 transition-opacity cursor-pointer"
-              onClick={onClose}
-            >
-              <CloseIcon color="#2D2D2D" className="w-6 h-6" />
-            </button>
-            <div className="flex flex-col items-start rounded-xl overflow-hidden">
-              <JesseFrame idea={data.oneLiner} mood={mood} onImageReady={onImageReady} onError={handleFrameError} />
+            {!editMode && (
+              <button
+                className="absolute top-10 right-10 hover:opacity-80 transition-opacity cursor-pointer z-10"
+                onClick={onClose}
+              >
+                <CloseIcon color="#2D2D2D" className="w-6 h-6" />
+              </button>
+            )}
 
+            <div className="flex flex-col items-start rounded-xl overflow-hidden">
+              <div className="relative">
+                <JesseFrame idea={data.oneLiner} mood={mood} onImageReady={onImageReady} onError={handleFrameError} />
+
+                {!editMode && (
+                  <button
+                    className="absolute right-5 bottom-4 px-4 py-1 rounded-full bg-black !font-inter text-white !font-medium"
+                    onClick={() => setEditMode(true)}
+                  >
+                    Edit
+                  </button>
+                )}
+                {editMode && (
+                  <EditIdea value={data.oneLiner} onChange={handleOneLinerChange} onClose={() => setEditMode(false)} />
+                )}
+              </div>
               <div className="flex justify-center items-center gap-2 self-stretch p-3 px-4 bg-[#1D1D1D] text-white text-[18px] leading-[28px] font-extralight font-inter">
                 {data.summary}
               </div>
+            </div>
+
+            <div className="flex gap-4 items-center w-full mt-2">
+              <Button appearance="colored" className="bg-white text-black" stretch>
+                Edit Idea
+              </Button>
             </div>
 
             <div className="flex gap-4 items-center w-full mt-2">
