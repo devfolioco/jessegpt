@@ -1,10 +1,12 @@
 from __future__ import annotations
 import os
+import random
 import requests
 
 from livekit.agents import Agent, function_tool, get_job_context, JobProcess, RunContext
 from livekit.plugins import silero
 
+from voice_agent.constants import mood_insufficient_info_end_messages
 from voice_agent.logger import get_logger
 
 logger = get_logger()
@@ -118,8 +120,6 @@ class Assistant(Agent):
             f"Ending conversation with has_enough_information: {has_enough_information}, is_inappropriate: {is_inappropriate}, end_message: {end_message}, super_short_summary: {super_short_summary}, summary: {summary}"
         )
 
-        # logger.debug(f"SESSION MOOD: {context.session.userdata.mood}")
-
         job_context = get_job_context()
         room = job_context.room
 
@@ -130,6 +130,14 @@ class Assistant(Agent):
         monitor_task = context.session.userdata.monitor_task
         if monitor_task is not None and not monitor_task.done():
             monitor_task.cancel()
+
+        if not has_enough_information:
+            await context.session.say(
+                random.choice(
+                    mood_insufficient_info_end_messages[context.session.userdata.mood]
+                ),
+                allow_interruptions=False,
+            )
 
         if has_enough_information and not is_inappropriate:
             await context.session.say(end_message, allow_interruptions=False)

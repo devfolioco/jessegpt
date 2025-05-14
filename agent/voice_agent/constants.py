@@ -5,6 +5,8 @@ from voice_agent.prompts.prompts import (
     critical_initial_prompt,
     excited_greetings,
     critical_greetings,
+    insufficient_info_excited_end_messages,
+    insufficient_info_critical_end_messages,
 )
 
 # Mapping from the room mood prefix to the correct prompts
@@ -19,6 +21,11 @@ mood_initial_prompts = {
 }
 
 mood_initial_greetings = {"excited": excited_greetings, "critical": critical_greetings}
+
+mood_insufficient_info_end_messages = {
+    "excited": insufficient_info_excited_end_messages,
+    "critical": insufficient_info_critical_end_messages,
+}
 
 # ---- Timing configuration ----
 TIMEOUT_SECONDS = 30

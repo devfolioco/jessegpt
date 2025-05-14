@@ -169,3 +169,17 @@ critical_greetings = [
 excited_initial_prompt = "Enthusiastically, but very briefly greet the user and ask what they're building. Be short and choppy"
 
 critical_initial_prompt = "Sternly, but very briefly greet the user and ask what they're building. Be short and choppy"
+
+insufficient_info_excited_end_messages = [
+    "Let's chat again when you have more clarity on your idea and then we will mint it on Zora. Looking forward to hearing more details when you're ready.",
+    "I think we need a bit more time to discuss this. Let's chat again when you have more clarity on your idea and then we will mint it on Zora.",
+    "Sounds like you're still developing this concept. Let's chat again when you have more clarity on your idea and then we will mint it on Zora. No rush at all.",
+    "I'd love to hear more about this when you've had time to flesh it out. Let's chat again when you have more clarity on your idea and then we will mint it on Zora.",
+]
+
+insufficient_info_critical_end_messages = [
+    "The details provided are insufficient. Let's chat again when you have more clarity on your idea and then we will mint it on Zora.",
+    "This conversation lacks necessary substance. Let's chat again when you have more clarity on your idea and then we will mint it on Zora.",
+    "Our time have been spent without adequate information. Let's chat again when you have more clarity on your idea and then we will mint it on Zora.",
+    "This requires significantly more definition. Let's chat again when you have more clarity on your idea and then we will mint it on Zora. Precision matters.",
+]
