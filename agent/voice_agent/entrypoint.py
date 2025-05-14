@@ -22,7 +22,7 @@ from voice_agent.assistant import Assistant, prewarm
 from voice_agent.constants import (
     CALL_DURATION_WARNING_TIME,
     MAX_CALL_DURATION,
-    PROMPT_WARNING_TIME,
+    TIMEOUT_WARNING_TIME,
     SPEAK_DELAY,
     TIMEOUT_SECONDS,
     mood_system_prompts,
@@ -156,7 +156,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         nonlocal still_there_prompt_sent
         idle_time = int(time.time() - (last_interaction_time or time.time()))
 
-        if idle_time >= PROMPT_WARNING_TIME:
+        if idle_time >= TIMEOUT_WARNING_TIME:
             logger.debug(
                 "Idle time: %d (Prompt sent: %s, Agent speaking: %s, User speaking: %s)",
                 idle_time,
@@ -174,7 +174,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
             return
 
         if (
-            time.time() - (last_interaction_time or time.time()) >= PROMPT_WARNING_TIME
+            time.time() - (last_interaction_time or time.time()) >= TIMEOUT_WARNING_TIME
             and not still_there_prompt_sent
         ):
             logger.info("Sending idle prompt to user")

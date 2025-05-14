@@ -22,7 +22,7 @@ mood_initial_greetings = {"excited": excited_greetings, "critical": critical_gre
 
 # ---- Timing configuration ----
 TIMEOUT_SECONDS = 30
-PROMPT_WARNING_TIME = 10
+TIMEOUT_WARNING_TIME = 10
 SPEAK_DELAY = 3
-MAX_CALL_DURATION = 360
-CALL_DURATION_WARNING_TIME = 300
+MAX_CALL_DURATION = 200
+CALL_DURATION_WARNING_TIME = 100
