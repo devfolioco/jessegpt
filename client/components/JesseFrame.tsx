@@ -56,12 +56,12 @@ const drawRoughEllipse = (
   });
   rc.ellipse(centerX + jitter, centerY, ellipseWidth, ellipseHeight - 20, {
     stroke: '#0061F2',
-    strokeWidth: 4,
+    strokeWidth: 2,
     roughness,
   });
   rc.ellipse(centerX - jitter, centerY + 4, ellipseWidth, ellipseHeight - 20, {
     stroke: '#0061F2',
-    strokeWidth: 4,
+    strokeWidth: 2,
     roughness,
   });
 };
