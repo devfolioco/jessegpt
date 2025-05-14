@@ -119,7 +119,7 @@ const useCoinOnZora = ({
     try {
       const balance = await getBalance(wagmiConfig, { address: address as Address });
 
-      if (balance.value === BigInt(0)) {
+      if (balance.value === BigInt(0) && balance.symbol === 'ETH') {
         setCurrentStep(ZoraCoinFlowStep.FAILURE);
         onFailure(new Error('Insufficient balance'));
         return;
