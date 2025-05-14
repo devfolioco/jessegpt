@@ -1,5 +1,6 @@
 # Top web3 most used words in conversations
 stt_words = [
+    "chain",
     "Account-Abstraction",
     "Airdrop",
     "Appchains",
