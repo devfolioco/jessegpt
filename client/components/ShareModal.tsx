@@ -255,7 +255,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
             </div>
 
             <div className="flex justify-center text-base text-white/90 font-inter">
-              Zora takes around $0.05 - $0.25 gas fee
+              Note: Coining on Zora requires a small amount of ETH for gas fees
             </div>
 
             {/* <Button
