@@ -2,7 +2,7 @@ from __future__ import annotations
 import os
 import requests
 
-from livekit.agents import Agent, RunContext, function_tool, get_job_context, JobProcess
+from livekit.agents import Agent, function_tool, get_job_context, JobProcess, RunContext
 from livekit.plugins import silero
 
 from voice_agent.logger import get_logger
@@ -118,6 +118,8 @@ class Assistant(Agent):
             f"Ending conversation with has_enough_information: {has_enough_information}, is_inappropriate: {is_inappropriate}, end_message: {end_message}, super_short_summary: {super_short_summary}, summary: {summary}"
         )
 
+        # logger.debug(f"SESSION MOOD: {context.session.userdata.mood}")
+
         job_context = get_job_context()
         room = job_context.room
 
@@ -125,7 +127,7 @@ class Assistant(Agent):
         context.session.input.set_audio_enabled(False)
         context.session.clear_user_turn()
 
-        monitor_task = job_context.proc.userdata.get("monitor_task")
+        monitor_task = context.session.userdata.monitor_task
         if monitor_task is not None and not monitor_task.done():
             monitor_task.cancel()
 
@@ -162,7 +164,7 @@ class Assistant(Agent):
         )
 
         save_conversation(
-            room.name.split("_")[2],
+            context.session.userdata.room_id,
             context.session.history.to_dict(),
             has_enough_information,
             is_inappropriate,

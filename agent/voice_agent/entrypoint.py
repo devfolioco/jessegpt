@@ -4,7 +4,9 @@ import asyncio
 import os
 import random
 import time
+from asyncio import Task
 from typing import Optional
+from dataclasses import dataclass
 
 from livekit.agents import (
     AgentSession,
@@ -35,12 +37,19 @@ logger = get_logger()
 _active_tasks = set()
 
 
+@dataclass
+class SessionInfo:
+    room_id: str | None = None
+    mood: str | None = None
+    monitor_task: Task[None] | None = None
+
+
 async def async_handle_user_end_conversation(
     reader, participant_identity, ctx: JobContext, session: AgentSession
 ):
     try:
         await session.interrupt()
-    except Exception as e:
+    except Exception:
         await session.current_speech.wait_for_playout()
 
     session.input.set_audio_enabled(False)
@@ -125,7 +134,11 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         ),
         vad=ctx.proc.userdata["vad"],
         turn_detection=EnglishModel(),
+        userdata=SessionInfo(),
     )
+
+    session.userdata.room_id = room_id
+    session.userdata.mood = mood
 
     # Agent that will power the conversation
     agent = Assistant(system_prompt)
@@ -326,7 +339,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
 
     monitor_task = asyncio.create_task(monitor_interaction())
     # Expose the task so other components (e.g., tools) can cancel it when needed
-    ctx.proc.userdata["monitor_task"] = monitor_task
+    session.userdata.monitor_task = monitor_task
 
     # Example starter message via data-channel
     await ctx.room.local_participant.send_text("Agent v1.12.0", topic="agent_version")
