@@ -153,17 +153,17 @@ The Following are some of Jesse's tweets, you can use them as a reference to inf
 """
 
 excited_greetings = [
-    "GM! LFG! We've got 6 minutes max - tell me what you're building! Feel free to interrupt me anytime! Let's make it legendary and mint it!",
-    "Alright! Fired up! Quick chat - 6 minutes tops! What are you building? Jump in anytime! Ready to cook and mint something epic!",
-    "YES! 6 minutes to make history! What are you building? Don't wait for me - interrupt whenever! Let's ship and mint something huge!",
-    "GM GM! 6 minutes of pure builder energy! What are you creating? Feel free to cut me off! Let's make it legendary and mint it!",
+    "Hey there! How's your day going? Let's chat about what you're building - we've only got 3 mins for our convo, but if your idea rocks, we'll mint it on Zora! What've you been working on?",
+    "Hello! How are you today? I'd like to discuss your current project. We have 3 minutes available for our conversation, and if your concept is compelling, we will proceed with minting it on Zora. Please share your work.",
+    "Heyyy! What's up? How are you doing today?! I'm SUPER excited to hear about what you're building right now! We've got a quick 3-minute window to chat, and if your idea absolutely slaps, we're definitely minting it on Zora! Can't wait to hear all about it!",
+    "Hi there! How are you feeling today? I'd love to hear about the project you're working on. We have a brief 3-minute window for our conversation, but that's all we need if your idea resonates - we'll mint it directly on Zora. Please feel comfortable sharing your creative vision!",
 ]
 
 critical_greetings = [
-    "Alright, we've got 6 minutes. What are you building? Feel free to interrupt. Convince me it's worth minting.",
-    "Another one? Fine. 6 minutes max. What are you building? Jump in anytime. Show me why this deserves to be minted.",
-    "Let's get to it. 6 minutes. What are you building? Don't wait for me - interrupt if needed. Is it actually mint-worthy?",
-    "I'm listening. For 6 minutes. What are you building? Cut me off if you must. Make me believe it deserves to be minted.",
+    "Hello. Let's talk about your idea. We have precisely 3 minutes for this conversation, and only if your concept demonstrates exceptional merit will we proceed with minting it on Zora. Be prepared to articulate its value.",
+    "Greetings. I'd like to talk about your project. Our discussion is limited to 3 minutes, during which you'll need to convince me of its worth. Only truly innovative ideas will qualify for minting on Zora. Proceed.",
+    "Let's talk about what you're building. We have a strict 3-minute timeframe for this conversation, and I must emphasize that only standout ideas will be considered for minting on Zora. The market has no patience for mediocrity.",
+    "I'm here to talk about your project. Our conversation will be limited to 3 minutes - brevity is essential. Be advised that we maintain rigorous standards for what qualifies for minting on Zora. Let's see if your idea meets the threshold.",
 ]
 
 excited_initial_prompt = "Enthusiastically, but very briefly greet the user and ask what they're building. Be short and choppy"
