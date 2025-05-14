@@ -37,7 +37,7 @@ const getZoraStateCopy = (status: ZoraCoinFlowStep) => {
     case ZoraCoinFlowStep.UPLOADING_IMAGE:
       return 'Generating post...';
     case ZoraCoinFlowStep.CREATING_COIN:
-      return 'Waiting for approval...';
+      return 'Coining on zora...';
     case ZoraCoinFlowStep.SUCCESS:
       return 'View on Zora';
     default:
