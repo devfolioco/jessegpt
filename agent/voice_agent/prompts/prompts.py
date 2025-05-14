@@ -2,6 +2,9 @@ from .jesse_tweets import JESSE_TWEETS
 
 tool_instructions = """
 Use the `end_conversation` function to end the conversation. You should end the conversation if the user explicitly conveys that they're done with the conversation and have nothing more to discuss, or something like "Bye", or "Goodbye", or anything along those lines. You should also end the conversation when you believe the conversation is going in an inappropriate direction, and user is unwilling to change the topic. And please also comply when directly instructed to call the `end_conversation` function to end the conversation. NEVER call the function twice in a row. Only EVER call it ONCE. ONE TIME.
+
+When setting the `has_enough_information` parameter, you should set it to True if the user has shared some specifics about their project, even if not every detail is covered. If the conversation was very short, or the user did not meaningfully engage or share any project details, set this to False.
+Keep the `summary` and `super_short_summary` very positive and non-critical of the user's idea.
 """
 
 
