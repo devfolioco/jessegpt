@@ -37,10 +37,10 @@ export default function HomePage() {
   return (
     <main
       className={
-        'min-h-screen flex items-center justify-center bg-[#638596] relative inset-0 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]'
+        'min-h-screen flex flex-col justify-between items-center bg-[#638596] relative inset-0 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]'
       }
     >
-      <div className="z-10 flex flex-col items-center text-center">
+      <div className="z-10 flex flex-col items-center text-center justify-center h-full">
         <Image
           src="/original.gif"
           alt="JesseGPT Avatar"
@@ -52,7 +52,11 @@ export default function HomePage() {
 
         <h1 className={clsx('text-5xl md:text-6xl text-white mt-6', nyghtMedium.className)}>Talk to JesseGPT</h1>
 
-        <p className={clsx('text-lg md:text-xl text-white/90 max-w-[515px] mx-auto font-light mt-2 font-inter')}>
+        <p
+          className={clsx(
+            'text-lg md:text-xl text-white/90 max-w-[515px] mx-auto font-light mt-2 font-inter px-4 md:px-0'
+          )}
+        >
           Talk to Jesse’s AI avatar about your project idea and coin it on Zora.
         </p>
 
@@ -66,18 +70,15 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div
-        className="fixed left-0 bottom-0 w-full flex justify-between text-white text-[22px] font-inter font-light"
-        style={{ padding: '40px 211px 48px 211px' }}
-      >
-        <div>
+      <div className="w-full flex md:flex-row flex-col justify-between text-white md:text-[22px] text-[16px] font-inter font-light pt-10 pb-12 md:px-[211px] px-[32px] gap-4 text-center md:text-left">
+        <div className="">
           Made with {'<3'} at{' '}
           <a href="https://devfolio.co" className="underline">
             Devfolio
           </a>
         </div>
 
-        <div className="flex gap-8">
+        <div className="flex md:flex-row flex-col md:gap-8 gap-4">
           <a className="underline" href="https://twitter.com/devfolio">
             Twitter / X
           </a>
