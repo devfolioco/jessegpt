@@ -37,10 +37,10 @@ export default function HomePage() {
   return (
     <main
       className={
-        'min-h-screen flex items-center justify-center bg-[#638596] relative inset-0 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]'
+        'min-h-screen flex flex-col justify-between items-center bg-[#638596] relative inset-0 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]'
       }
     >
-      <div className="z-10 flex flex-col items-center text-center">
+      <div className="z-10 flex flex-col items-center text-center justify-center h-full">
         <Image
           src="/original.gif"
           alt="JesseGPT Avatar"
@@ -67,7 +67,7 @@ export default function HomePage() {
       </div>
 
       <div
-        className="fixed left-0 bottom-0 w-full flex justify-between text-white text-[22px] font-inter font-light"
+        className="w-full flex justify-between text-white text-[22px] font-inter font-light"
         style={{ padding: '40px 211px 48px 211px' }}
       >
         <div>
