@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { CloseIcon } from './icons/CloseIcon';
 
+const MAX_LENGTH = 20;
+
 const EditIdea = ({
   onClose,
   value,
@@ -16,7 +18,7 @@ const EditIdea = ({
   const [localValue, setLocalValue] = useState(value);
 
   const save = () => {
-    onChange(localValue);
+    onChange(localValue.trim().slice(0, MAX_LENGTH));
     onClose();
   };
 
@@ -48,7 +50,7 @@ const EditIdea = ({
         <h1 className="text-5xl font-bold translate-y-[-9px] translate-x-[1px]">Base</h1>
         <h1 className="text-5xl font-bold translate-y-[-12px] translate-x-[1px]">is for</h1>
 
-        <div className="max-w-[80%] flex flex-col gap-2 -translate-x-[2px]">
+        <div className="max-w-[80%] flex flex-col gap-2 -translate-x-[2px] relative">
           <input
             type="text"
             className="w-full bg-transparent text-white !text-5xl border-b-2 border-white text-center focus:outline-none hover:outline-none -mt-1 mx-auto"
@@ -56,14 +58,15 @@ const EditIdea = ({
             value={localValue}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            maxLength={MAX_LENGTH}
           />
         </div>
 
         <div className="flex gap-2 font-inter mt-4">
-          <button className="bg-transparent text-white px-2 py-1 rounded-md min-w-24 !font-medium" onClick={onClose}>
+          <button className="bg-transparent text-white px-2 py-1 min-w-24 !font-medium" onClick={onClose}>
             Discard
           </button>
-          <button className="bg-white text-black px-2 py-1 rounded-md min-w-24 !font-medium" onClick={save}>
+          <button className="bg-white text-black px-2 py-1 rounded-lg min-w-24 !font-medium" onClick={save}>
             Save
           </button>
         </div>

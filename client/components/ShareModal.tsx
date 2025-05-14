@@ -117,19 +117,22 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
   };
 
   const [zoraSuccessToastVisible, setZoraToastVisible] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
-        onClose();
+        if (editMode) {
+          setEditMode(false);
+        } else {
+          onClose();
+        }
       }
     };
 
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
-  }, [isOpen]);
-
-  const [editMode, setEditMode] = useState(false);
+  }, [isOpen, editMode]);
 
   const handleOneLinerChange = (value: string) => {
     console.log('value', value);
@@ -166,7 +169,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
 
                 {!editMode && (
                   <button
-                    className="absolute right-5 bottom-4 px-4 py-1 rounded-full bg-black !font-inter text-white !font-medium"
+                    className="absolute right-5 bottom-4 px-4 py-1 rounded-full bg-secondary !font-inter text-white !font-medium"
                     onClick={() => setEditMode(true)}
                   >
                     Edit
@@ -179,12 +182,6 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
               <div className="flex justify-center items-center gap-2 self-stretch p-3 px-4 bg-[#1D1D1D] text-white text-[18px] leading-[28px] font-extralight font-inter">
                 {data.summary}
               </div>
-            </div>
-
-            <div className="flex gap-4 items-center w-full mt-2">
-              <Button appearance="colored" className="bg-white text-black" stretch>
-                Edit Idea
-              </Button>
             </div>
 
             <div className="flex gap-4 items-center w-full mt-2">
