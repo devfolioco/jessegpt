@@ -10,7 +10,7 @@ import { Button } from './Button';
 import EditIdea from './EditIdea';
 import JesseFrame from './JesseFrame';
 import { Loader } from './Loader';
-import { CheckIcon } from './icons/CheckIcon';
+import Snackbar from './Snackbar';
 import { CloseIcon } from './icons/CloseIcon';
 import { FarcasterIcon } from './icons/FarcasterIcon';
 import { MicIcon } from './icons/MicIcon';
@@ -28,6 +28,7 @@ interface ShareModalProps {
 enum ShareModalError {
   FRAME_RENDER_ERROR = 'frame-render-error',
   ZORA_COIN_CREATION_ERROR = 'zora-coin-creation-error',
+  INSUFFICIENT_WALLET_BALANCE = 'insufficient-wallet-balance',
 }
 
 const getZoraStateCopy = (status: ZoraCoinFlowStep) => {
@@ -45,6 +46,19 @@ const getZoraStateCopy = (status: ZoraCoinFlowStep) => {
   }
 };
 
+const getZoraStateCopyError = (error: ShareModalError) => {
+  switch (error) {
+    case ShareModalError.INSUFFICIENT_WALLET_BALANCE:
+      return 'Insufficient wallet balance. Add some ETH and try again.';
+    case ShareModalError.FRAME_RENDER_ERROR:
+      return 'Unable to render the idea frame. Try using a different browser.';
+    case ShareModalError.ZORA_COIN_CREATION_ERROR:
+      return 'Unable to create the Zora coin. Please try again.';
+    default:
+      return 'Unable to create the Zora coin. Please try again.';
+  }
+};
+
 const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareModalProps) => {
   const handleDefaultClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -52,12 +66,12 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
 
   const [data, setData] = useState<AgentShareData>(initialData);
   const [error, setError] = useState<ShareModalError | null>(null);
-  // todo: show error to user
+  console.log(error);
 
   const ideaImageRef = useRef<string | null>(null);
 
   const {
-    onClick: handleCoinOnZoraClick,
+    onClick: onZoraClick,
     isLoading,
     result: zoraResult,
     status: zoraStatus,
@@ -74,9 +88,19 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
     },
     onFailure: error => {
       console.error('Error creating Zora coin', error);
-      setError(ShareModalError.ZORA_COIN_CREATION_ERROR);
+
+      if (error.message === 'Insufficient balance') {
+        setError(ShareModalError.INSUFFICIENT_WALLET_BALANCE);
+      } else {
+        setError(ShareModalError.FRAME_RENDER_ERROR);
+      }
     },
   });
+
+  const handleCoinOnZoraClick = () => {
+    setError(null);
+    onZoraClick();
+  };
 
   const onImageReady = (base64Image: string) => {
     ideaImageRef.current = base64Image;
@@ -231,6 +255,10 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
               </Button>
             </div>
 
+            <div className="flex justify-center text-base text-white/90 font-inter">
+              Zora takes around $0.05 - $0.25 gas fee
+            </div>
+
             {/* <Button
               appearance="colored"
               className="bg-devfolio text-white"
@@ -244,23 +272,15 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
 
             <AnimatePresence initial={false}>
               {zoraSuccessToastVisible && (
-                <motion.div
-                  className="flex gap-4 p-4 justify-center items-center self-stretch rounded-2xl bg-secondary absolute w-full top-full mt-4 left-0 font-inter text-lg"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.4 }}
-                  viewport={{ once: true }}
-                >
-                  <CheckIcon />
-                  <p>
-                    Your idea has been successfully coined on Zora.{' '}
-                    <a href={zoraResult?.zoraLink ?? ''} target="_blank" className="underline">
-                      Check it out here.
-                    </a>
-                  </p>
-                </motion.div>
+                <Snackbar>
+                  Your idea has been successfully coined on Zora.{' '}
+                  <a href={zoraResult?.zoraLink ?? ''} target="_blank" className="underline">
+                    Check it out here.
+                  </a>
+                </Snackbar>
               )}
+
+              {error && <Snackbar error>{getZoraStateCopyError(error)}</Snackbar>}
 
               {/* 
               {error && (

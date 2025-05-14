@@ -3,7 +3,7 @@ import { config as wagmiConfig } from '@/config/wagmi';
 import { uploadToIPFS } from '@/helpers/ipfs';
 import { ZoraCoinFlowStep, ZoraCoinResult } from '@/types/agent';
 import { useAppKit, useAppKitAccount, useAppKitState, useDisconnect } from '@reown/appkit/react';
-import { getWalletClient } from '@wagmi/core';
+import { getBalance, getWalletClient } from '@wagmi/core';
 import { createCoin } from '@zoralabs/coins-sdk';
 import { useEffect, useRef, useState } from 'react';
 import { Address, createPublicClient, http } from 'viem';
@@ -117,6 +117,14 @@ const useCoinOnZora = ({
     }
 
     try {
+      const balance = await getBalance(wagmiConfig, { address: address as Address });
+
+      if (balance.value === BigInt(0)) {
+        setCurrentStep(ZoraCoinFlowStep.FAILURE);
+        onFailure(new Error('Insufficient balance'));
+        return;
+      }
+
       setCurrentStep(ZoraCoinFlowStep.UPLOADING_IMAGE);
       //   step 2: upload image to ipfs
       const cid = await uploadImageToIPFS();
