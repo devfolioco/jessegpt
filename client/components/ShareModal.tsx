@@ -66,7 +66,6 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
 
   const [data, setData] = useState<AgentShareData>(initialData);
   const [error, setError] = useState<ShareModalError | null>(null);
-  console.log(error);
 
   const ideaImageRef = useRef<string | null>(null);
 
