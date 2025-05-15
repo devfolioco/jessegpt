@@ -168,7 +168,7 @@ const JesseFrame = ({ idea, onImageReady, onError, mood }: JesseFrameProps) => {
       // Create a temporary link element
       const link = document.createElement('a');
       // Set the download name
-      link.download = 'base-is-for-mailsprint.png';
+      link.download = `base-is-for-${idea.toLowerCase().replace(' ', '-')}.png`;
       // Convert canvas to data URL
       link.href = canvasRef.current.toDataURL('image/png');
       // Append to document (required for Firefox)
