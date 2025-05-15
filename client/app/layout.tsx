@@ -17,14 +17,14 @@ export const metadata: Metadata = {
     title: 'JesseGPT – Onchain Feedback That Pays Off',
     description:
       'An AI trained on Jesse Pollak to give you real feedback on your onchain idea. Part of the Base Batches #001 Global Buildathon. Powered by Base.',
-    images: '/og-image.png',
+    images: '/og-image-1.0.png',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'JesseGPT – Onchain Feedback That Pays Off',
     description:
       'An AI trained on Jesse Pollak to give you real feedback on your onchain idea. Part of the Base Batches #001 Global Buildathon. Powered by Base.',
-    images: '/og-image.png',
+    images: '/og-image-1.0.png',
   },
   icons: {
     icon: [
