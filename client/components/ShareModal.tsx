@@ -114,7 +114,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
     const tweetCopy = getTweetCopy({
       title: data.oneLiner,
       summary: data.summary,
-      zoraUrl: zoraResult?.zoraLink ?? '',
+      zoraUrl: zoraResult?.zoraLink || null,
     });
 
     const twitterShareURL = getTwitterIntentURL({ text: tweetCopy });
@@ -126,7 +126,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
     const farcasterCopy = getFarcasterCopy({
       title: data.oneLiner,
       summary: data.summary,
-      zoraUrl: zoraResult?.zoraLink ?? '',
+      zoraUrl: zoraResult?.zoraLink || null,
     });
 
     const warpcastShareURL = getWarpcastIntentURL({ text: farcasterCopy });

@@ -30,14 +30,45 @@ const tweetAndCastCopies = [
   `Picked Critical Jesse on JesseGPT.\n\nGot cooked.\nLearned a lot.\nMight go cry a little.\n\nMade by @devfolio — jessegpt.com`,
 ];
 
-export const getTweetCopy = ({ title, summary, zoraUrl }: { title: string; summary: string; zoraUrl: string }) => {
+const tweetAndCastCopiesWithZora = [
+  `Ran my idea through JesseGPT.\nCame out stronger.\n\nMinted this for the record → {{zora_link}}\n\n@devfolio\n\njessegpt.xyz`,
+
+  `Talked to JesseGPT.\nKept the receipts.\n\nMinted → {{zora_link}}\n\n@devfolio\n\njessegpt.xyz`,
+
+  `JesseGPT didn’t love it.\nThat doesn’t mean I’m not shipping.\n\nLogged this moment → {{zora_link}}\n\n@devfolio\n\njessegpt.xyz`,
+];
+
+export const getTweetCopy = ({
+  title,
+  summary,
+  zoraUrl,
+}: {
+  title: string;
+  summary: string;
+  zoraUrl: string | null;
+}) => {
+  if (zoraUrl) {
+    return tweetAndCastCopiesWithZora[Math.floor(Math.random() * tweetAndCastCopiesWithZora.length)].replace(
+      '{{zora_link}}',
+      zoraUrl
+    );
+  }
+
   const randomCopy = tweetAndCastCopies[Math.floor(Math.random() * tweetAndCastCopies.length)];
   return `
     ${randomCopy}
   `;
 };
 
-export const getFarcasterCopy = ({ title, summary, zoraUrl }: { title: string; summary: string; zoraUrl: string }) => {
+export const getFarcasterCopy = ({
+  title,
+  summary,
+  zoraUrl,
+}: {
+  title: string;
+  summary: string;
+  zoraUrl: string | null;
+}) => {
   const randomCopy = tweetAndCastCopies[Math.floor(Math.random() * tweetAndCastCopies.length)];
 
   return `
