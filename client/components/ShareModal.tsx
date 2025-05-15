@@ -31,16 +31,16 @@ enum ShareModalError {
   INSUFFICIENT_WALLET_BALANCE = 'insufficient-wallet-balance',
 }
 
-const getZoraStateCopy = (status: ZoraCoinFlowStep) => {
+const getZoraStateCopy = (status: ZoraCoinFlowStep, isCoiningDelayed: boolean) => {
   switch (status) {
     case ZoraCoinFlowStep.CONNECTING_WALLET:
       return 'Connecting wallet...';
     case ZoraCoinFlowStep.UPLOADING_IMAGE:
       return 'Generating post...';
     case ZoraCoinFlowStep.CREATING_COIN:
-      return 'Coining on zora...';
-    case ZoraCoinFlowStep.SUCCESS:
-      return 'View on Zora';
+      return isCoiningDelayed
+        ? 'Please wait, this is taking longer than expected...'
+        : 'Creating your coin on Zora. This may take around 2 minutes...';
     default:
       return 'Coin on Zora';
   }
@@ -91,7 +91,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
       if (error.message === 'Insufficient balance') {
         setError(ShareModalError.INSUFFICIENT_WALLET_BALANCE);
       } else {
-        setError(ShareModalError.FRAME_RENDER_ERROR);
+        setError(ShareModalError.ZORA_COIN_CREATION_ERROR);
       }
     },
   });
@@ -161,6 +161,25 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
     console.log('value', value);
     setData({ ...data, oneLiner: value });
   };
+
+  // show "This is taking longer than expected" after 3 mins
+  const [isCoiningDelayed, setIsCoiningDelayed] = useState(false);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (zoraStatus === ZoraCoinFlowStep.CREATING_COIN) {
+      timeout = setTimeout(
+        () => {
+          setIsCoiningDelayed(true);
+        },
+        1000 * 60 * 3
+      ); // show warning after 3 mins
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [zoraStatus]);
 
   return (
     <AnimatePresence>
@@ -235,9 +254,10 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
                   className={clsx('bg-white ', isLoading ? 'text-grey-7' : 'text-black')}
                   onClick={handleCoinOnZoraClick}
                   stretch
+                  disabled={isLoading}
                 >
-                  {isLoading ? <Loader /> : <ZoraIcon />}
-                  {getZoraStateCopy(zoraStatus)}
+                  <ZoraIcon />
+                  Coin on Zora
                 </Button>
               )}
             </div>
@@ -270,8 +290,14 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
             </Button> */}
 
             <AnimatePresence initial={false}>
+              {(zoraStatus === ZoraCoinFlowStep.CONNECTING_WALLET ||
+                zoraStatus === ZoraCoinFlowStep.CREATING_COIN ||
+                zoraStatus === ZoraCoinFlowStep.UPLOADING_IMAGE) && (
+                <Snackbar appearance="loading">{getZoraStateCopy(zoraStatus, isCoiningDelayed)}</Snackbar>
+              )}
+
               {zoraSuccessToastVisible && (
-                <Snackbar>
+                <Snackbar appearance="success">
                   Your idea has been successfully coined on Zora.{' '}
                   <a href={zoraResult?.zoraLink ?? ''} target="_blank" className="underline">
                     Check it out here.
@@ -279,7 +305,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
                 </Snackbar>
               )}
 
-              {error && <Snackbar error>{getZoraStateCopyError(error)}</Snackbar>}
+              {error && <Snackbar appearance="error">{getZoraStateCopyError(error)}</Snackbar>}
 
               {/* 
               {error && (
