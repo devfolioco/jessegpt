@@ -15,7 +15,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ href, target, appearance = 'primary', className = '', children, stretch = false, ...props }, ref) => {
+  ({ href, target, appearance = 'primary', className = '', children, stretch = false, disabled, ...props }, ref) => {
     const basePrimarySecondaryStyles = clsx(
       'px-14 py-4 rounded-lg text-2xl font-semibold transition-all shadow-md',
       nyghtBold.className
@@ -24,8 +24,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       primary: 'text-[#6B8A96] bg-white hover:bg-gray-200',
       secondary: 'border-2 border-[#7D98A6] text-white bg-transparent hover:bg-white/10',
       colored: clsx(
-        'flex items-center justify-center gap-2 py-4 px-10 w-full rounded-lg !font-semibold !text-xl hover:opacity-80 transition-opacity font-inter',
-        stretch ? 'w-full' : 'max-w-fit'
+        'flex items-center justify-center gap-2 py-4 px-10 w-full rounded-lg !font-semibold !text-xl transition-opacity font-inter',
+        stretch ? 'w-full' : 'max-w-fit',
+        disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:opacity-80'
       ),
     };
 
@@ -44,7 +45,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <button ref={ref} className={combinedClassName} {...props}>
+      <button ref={ref} className={combinedClassName} disabled={disabled} {...props}>
         {children}
       </button>
     );
