@@ -1,5 +1,6 @@
 import AppKitContextProvider from '@/context/AppKitContext';
 import '@livekit/components-styles';
+import { Analytics } from '@vercel/analytics/next';
 import clsx from 'clsx';
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
@@ -51,6 +52,7 @@ export default function RootLayout({
     <html lang="en" className={'h-full'}>
       <body className={clsx('h-full', inter.variable)}>
         <AppKitContextProvider cookies={cookies}>{children}</AppKitContextProvider>
+        <Analytics />
       </body>
     </html>
   );
