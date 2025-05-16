@@ -207,7 +207,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
           transition={{ duration: 0.2 }}
         >
           <div
-            className="flex flex-col items-center gap-4 max-w-[682px] bg-secondary rounded-2xl p-4 relative"
+            className="flex flex-col items-center gap-4 md:max-w-[682px] bg-secondary rounded-2xl p-4 relative"
             onClick={handleDefaultClick}
           >
             {!editMode && (

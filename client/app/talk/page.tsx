@@ -7,6 +7,7 @@ import ShareModal from '@/components/ShareModal';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
 import { MicIcon } from '@/components/icons/MicIcon';
 import { ShareIcon } from '@/components/icons/ShareIcon';
+import useIsPhone from '@/hooks/useIsPhone';
 import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
 import { RoomContext } from '@livekit/components-react';
 import { track } from '@vercel/analytics';
@@ -66,6 +67,8 @@ const TalkComponent = () => {
   const finalMintData = useRef<AgentShareData>(initialData);
 
   const [roomId, setRoomId] = useState<string | null>(null);
+
+  const isPhone = useIsPhone();
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -286,9 +289,10 @@ const TalkComponent = () => {
       </RoomContext.Provider>
 
       {isConversationEnded && (
-        <div className="w-full flex items-center justify-center fixed bottom-0 left-0 px-4 py-8 z-10 gap-6">
+        <div className="w-full flex flex-col md:flex-row items-center justify-center fixed bottom-0 left-0 px-4 py-8 z-10 gap-4 md:gap-6">
           <Button
             appearance="colored"
+            stretch={isPhone}
             className={clsx(
               mood === AgentMoodEnum.EXCITED ? 'text-black bg-optimism' : 'text-white bg-critical shadow-lg'
             )}
@@ -304,7 +308,12 @@ const TalkComponent = () => {
           </Button> */}
 
           {isSummaryReceived && (
-            <Button appearance="colored" className="bg-white text-black shadow-lg" onClick={handleShareModal}>
+            <Button
+              stretch={isPhone}
+              appearance="colored"
+              className="bg-white text-black shadow-lg"
+              onClick={handleShareModal}
+            >
               <ShareIcon color="black" />
               Share on socials
             </Button>
