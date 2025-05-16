@@ -9,7 +9,7 @@ import { ButtonHTMLAttributes, forwardRef } from 'react';
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
   target?: string;
-  appearance?: 'primary' | 'secondary' | 'colored';
+  appearance?: 'primary' | 'secondary' | 'colored' | 'outlined';
   color?: Color;
   stretch?: boolean;
 }
@@ -24,7 +24,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       primary: 'text-[#6B8A96] bg-white hover:bg-gray-200',
       secondary: 'border-2 border-[#7D98A6] text-white bg-transparent hover:bg-white/10',
       colored: clsx(
-        'flex items-center justify-center gap-2 py-4 px-10 w-full rounded-lg !font-semibold !text-xl transition-opacity font-inter',
+        'flex items-center justify-center gap-2 py-4 px-10 w-full rounded-lg !font-semibold text-lg md:!text-xl transition-opacity font-inter',
+        stretch ? 'w-full' : 'max-w-fit',
+        disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:opacity-80'
+      ),
+      outlined: clsx(
+        'border-2 border-[#7D98A6] text-white bg-transparent hover:bg-white/10 px-14 py-3 rounded-lg text-lg md:text-xl font-semibold transition-all shadow-md',
         stretch ? 'w-full' : 'max-w-fit',
         disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:opacity-80'
       ),
