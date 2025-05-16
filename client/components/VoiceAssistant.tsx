@@ -4,7 +4,7 @@ import TranscriptionView from '@/components/TranscriptionView';
 import { CloseIcon } from '@/components/icons/CloseIcon';
 import useIsPhone from '@/hooks/useIsPhone';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
-import { BarVisualizer, RoomAudioRenderer, useChat, useVoiceAssistant } from '@livekit/components-react';
+import { RoomAudioRenderer, useChat, useVoiceAssistant } from '@livekit/components-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import AudioVisualizer from './AudioVisualizer/AudioVisualizer';
@@ -101,7 +101,7 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
             </div>
           </div>
 
-          <div className="text-base text-white font-inter text-center">
+          <div className="text-sm md:text-base text-white font-inter text-center">
             You can say ‘Bye’ or press the ‘End’ button to finish this conversation
           </div>
         </div>

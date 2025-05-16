@@ -8,22 +8,27 @@ interface JesseFrameProps {
   mood: AgentMoodI;
   onImageReady: (base64Image: string) => void;
   onError: (error: Error) => void;
+  className?: string;
 }
 
 const frameWidth = 650;
 const frameHeight = 340;
+
+const frameWidthMobile = 325;
+const frameHeightMobile = 170;
+
 const MAX_IDEA_WIDTH = 350;
 
 function resizeCanvas(canvas: HTMLCanvasElement) {
-  const { width, height } = canvas.getBoundingClientRect();
+  // const { width, height } = canvas.getBoundingClientRect();
 
   const { devicePixelRatio: ratio = 1 } = window;
   const context = canvas.getContext('2d');
 
   if (!context) return;
 
-  canvas.width = width * ratio;
-  canvas.height = height * ratio;
+  canvas.width = frameWidth * ratio;
+  canvas.height = frameHeight * ratio;
   context.scale(ratio, ratio);
 }
 
@@ -160,7 +165,7 @@ const drawFrame = async (
   drawRoughEllipse(canvasElement, frameWidth, frameHeight, { ideaTextWidth });
 };
 
-const JesseFrame = ({ idea, onImageReady, onError, mood }: JesseFrameProps) => {
+const JesseFrame = ({ idea, onImageReady, onError, mood, className }: JesseFrameProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleDownload = () => {
@@ -232,8 +237,7 @@ const JesseFrame = ({ idea, onImageReady, onError, mood }: JesseFrameProps) => {
       width={frameWidth}
       height={frameHeight}
       // this is important to load the font family, before canvas is drawn
-      className={`w-full h-full ${nyghtMedium.className}`}
-      style={{ width: `${frameWidth}px`, height: `${frameHeight}px` }}
+      className={`w-full h-full ${nyghtMedium.className} ${className}`}
     ></canvas>
   );
 };
