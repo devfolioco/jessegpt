@@ -36,9 +36,10 @@ export default function HomePage() {
 
   return (
     <main
-      className={
-        'min-h-screen flex flex-col justify-between items-center bg-[#638596] relative inset-0 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]'
-      }
+      className={clsx(
+        'min-h-screen flex flex-col justify-between items-center bg-[#638596] relative inset-0 h-full w-full bg-[radial-gradient(rgba(229,231,235,0.3)_1px,transparent_2px)] [background-size:36px_36px]',
+        showAgentSelection && 'overflow-hidden'
+      )}
     >
       <div className="z-10 flex flex-col items-center text-center justify-center h-full">
         <Image
@@ -63,7 +64,7 @@ export default function HomePage() {
           Talk to Jesse’s AI avatar about your project idea and coin it on Zora.
         </p>
 
-        <div className="flex flex-col-reverse md:flex-row gap-6 mt-14">
+        <div className="flex flex-col-reverse md:flex-row gap-6 mt-14 px-8">
           <Button href={BASE_BATCH_APPLY_URL} target="_blank" appearance="secondary">
             Learn more
           </Button>
@@ -98,7 +99,7 @@ export default function HomePage() {
       <AnimatePresence>
         {showAgentSelection && (
           <motion.div
-            className="flex items-center justify-center absolute inset-0 bg-black bg-opacity-80 w-screen min-h-screen backdrop-blur-lg z-20"
+            className="flex items-center justify-center absolute inset-0 bg-black bg-opacity-80 w-screen min-h-screen backdrop-blur-lg z-20 overflow-scroll"
             onClick={() => setShowAgentSelection(false)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

@@ -44,10 +44,15 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
             alt="JesseGPT Avatar"
             width={200}
             height={200}
-            className="rounded-none mb-6"
+            className="rounded-none mb-6 w-32 h-32 sm:w-48 sm:h-48 m-auto"
             priority
           />
-          <h2 className={clsx('text-4xl text-white mb-2 text-center leading-[52px]', nyghtMedium.className)}>
+          <h2
+            className={clsx(
+              'text-2xl sm:text-4xl text-white mb-2 text-center sm:leading-[52px]',
+              nyghtMedium.className
+            )}
+          >
             JesseGPT
           </h2>
         </div>
@@ -59,11 +64,16 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
               alt="SupaBald JesseGPT Avatar"
               width={200}
               height={200}
-              className="rounded-none mb-6"
+              className="rounded-none mb-6 w-32 h-32 sm:w-48 sm:h-48 m-auto"
               priority
             />
           </div>
-          <h2 className={clsx('text-4xl text-white mb-2 text-center leading-[52px]', nyghtMedium.className)}>
+          <h2
+            className={clsx(
+              'text-2xl sm:text-4xl text-white mb-2 text-center sm:leading-[52px]',
+              nyghtMedium.className
+            )}
+          >
             SupaBald <br />
             JesseGPT
           </h2>
@@ -120,7 +130,7 @@ const JesseCard = ({
         alt={mood === AgentMoodEnum.CRITICAL ? 'SupaBald JesseGPT Avatar' : 'JesseGPT Avatar'}
         width={200}
         height={200}
-        className="rounded-none mb-6"
+        className="rounded-none mb-6 w-32 h-32 sm:w-48 sm:h-48 m-auto mt-16 sm:mt-0"
         priority
       />
       <h2 className={clsx('text-4xl text-white mb-2', nyghtMedium.className)}>
