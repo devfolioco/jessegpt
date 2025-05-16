@@ -17,7 +17,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ href, target, appearance = 'primary', className = '', children, stretch = false, disabled, ...props }, ref) => {
     const basePrimarySecondaryStyles = clsx(
-      'px-14 py-4 rounded-lg text-2xl font-semibold transition-all shadow-md',
+      'px-12 md:px-14 py-4 rounded-lg text-xl md:text-2xl font-semibold transition-all shadow-md',
       nyghtBold.className
     );
     const variants = {
