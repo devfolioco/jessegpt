@@ -14,7 +14,7 @@ interface UseCoinOnZoraProps {
   title: string;
   description: string;
   base64Image: string | null;
-  onSuccess?: () => void;
+  onSuccess?: (result: ZoraCoinResult) => void;
   onFailure?: (error: Error) => void;
 }
 
@@ -62,7 +62,7 @@ const useCoinOnZora = ({
     // disconnect wallet
     disconnect();
 
-    successCallback?.();
+    successCallback?.(result);
   };
 
   const onFailure = (error: Error) => {
