@@ -54,10 +54,7 @@ export const getTweetCopy = ({
     );
   }
 
-  const randomCopy = tweetAndCastCopies[Math.floor(Math.random() * tweetAndCastCopies.length)];
-  return `
-    ${randomCopy}
-  `;
+  return tweetAndCastCopies[Math.floor(Math.random() * tweetAndCastCopies.length)];
 };
 
 export const getFarcasterCopy = ({
@@ -69,9 +66,12 @@ export const getFarcasterCopy = ({
   summary: string;
   zoraUrl: string | null;
 }) => {
-  const randomCopy = tweetAndCastCopies[Math.floor(Math.random() * tweetAndCastCopies.length)];
+  if (zoraUrl) {
+    return tweetAndCastCopiesWithZora[Math.floor(Math.random() * tweetAndCastCopiesWithZora.length)].replace(
+      '{{zora_link}}',
+      zoraUrl
+    );
+  }
 
-  return `
-    ${randomCopy}
-  `;
+  return tweetAndCastCopies[Math.floor(Math.random() * tweetAndCastCopies.length)];
 };
