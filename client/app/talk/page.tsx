@@ -289,7 +289,9 @@ const TalkComponent = () => {
         <div className="w-full flex items-center justify-center fixed bottom-0 left-0 px-4 py-8 z-10 gap-6">
           <Button
             appearance="colored"
-            className={clsx(mood === AgentMoodEnum.EXCITED ? 'text-black bg-optimism' : 'text-white bg-critical')}
+            className={clsx(
+              mood === AgentMoodEnum.EXCITED ? 'text-black bg-optimism' : 'text-white bg-critical shadow-lg'
+            )}
             onClick={handleRetry}
           >
             <MicIcon color={mood === AgentMoodEnum.EXCITED ? 'black' : 'white'} />
@@ -302,7 +304,7 @@ const TalkComponent = () => {
           </Button> */}
 
           {isSummaryReceived && (
-            <Button appearance="colored" className="bg-white text-black" onClick={handleShareModal}>
+            <Button appearance="colored" className="bg-white text-black shadow-lg" onClick={handleShareModal}>
               <ShareIcon color="black" />
               Share on socials
             </Button>
