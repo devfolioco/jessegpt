@@ -207,7 +207,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
           transition={{ duration: 0.2 }}
         >
           <div
-            className="flex flex-col items-center gap-4 md:max-w-[682px] md:bg-secondary rounded-2xl p-4 relative"
+            className="flex flex-col items-center gap-4 md:max-w-[682px] md:bg-secondary rounded-2xl p-4 relative overflow-scroll h-full md:h-auto md:overflow-auto"
             onClick={handleDefaultClick}
           >
             {!editMode && (
@@ -219,7 +219,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
               </button>
             )}
 
-            <div className="flex flex-col items-start md:rounded-xl overflow-hidden">
+            <div className="flex flex-col items-start md:rounded-xl md:overflow-hidden">
               <div className="relative">
                 <JesseFrame
                   idea={data.oneLiner}
@@ -231,7 +231,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
 
                 {!editMode && (
                   <button
-                    className="absolute right-5 md:bottom-4 bottom-8 px-4 py-1 rounded-full bg-secondary !font-inter text-white !font-medium"
+                    className="absolute right-5 bottom-4 px-4 py-1 rounded-full bg-secondary !font-inter text-white !font-medium"
                     onClick={() => setEditMode(true)}
                   >
                     Edit

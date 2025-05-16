@@ -13,6 +13,10 @@ const config: Config = {
       fontFamily: {
         inter: ['var(--font-inter)'],
       },
+      screens: {
+        xs: '300px',
+        sm: '400px',
+      },
     },
   },
   plugins: [],
