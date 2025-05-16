@@ -160,7 +160,7 @@ export default function TranscriptionView({ mood }: { mood: AgentMoodI }) {
 
   return (
     <div
-      className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden py-8 w-[700px] pb-40 px-4"
+      className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden py-8 md:w-[700px] w-full pb-44 md:pb-40 px-4"
       onWheel={preventAutoScrollOnHumanScroll}
       onTouchStart={preventAutoScrollOnHumanScroll}
     >
@@ -202,8 +202,8 @@ const ChatBubble = ({
       id={id}
       className={clsx(
         role === 'assistant'
-          ? `assistant-bubble rounded-2xl px-6 py-4 self-start max-w-[70%] shadow-md text-lg ${mood === AgentMoodEnum.EXCITED ? 'bg-[#FFF68E] text-gray-900' : 'bg-[#0157FA] text-white'} ${isLast ? 'rounded-tl-none' : ''}`
-          : `user-bubble bg-[#22302B] text-white rounded-2xl px-6 py-4 self-end max-w-[70%] shadow-md text-lg ${isLast ? 'rounded-br-none' : ''}`
+          ? `assistant-bubble rounded-2xl px-6 py-4 self-start md:max-w-[70%] max-w-[90%] shadow-md font-medium md:font-normal text-sm md:text-lg ${mood === AgentMoodEnum.EXCITED ? 'bg-[#FFF68E] text-gray-900' : 'bg-[#0157FA] text-white'} ${isLast ? 'rounded-tl-none' : ''}`
+          : `user-bubble bg-[#22302B] text-white rounded-2xl px-6 py-4 self-end md:max-w-[70%] font-medium md:font-normal max-w-[90%] shadow-md text-sm md:text-lg ${isLast ? 'rounded-br-none' : ''}`
       )}
       style={{ wordBreak: 'break-word', whiteSpace: 'pre-line' }}
     >

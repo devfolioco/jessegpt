@@ -199,7 +199,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="flex items-center justify-center absolute inset-0 bg-black bg-opacity-80 w-screen h-screen backdrop-blur-lg z-20"
+          className="flex items-center justify-center absolute inset-0 bg-black bg-opacity-80 w-screen min-h-screen backdrop-blur-lg z-20"
           onClick={onClose}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -207,25 +207,31 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
           transition={{ duration: 0.2 }}
         >
           <div
-            className="flex flex-col items-center gap-4 max-w-[682px] bg-secondary rounded-2xl p-4 relative"
+            className="flex flex-col items-center gap-4 md:max-w-[682px] md:bg-secondary rounded-2xl p-4 relative"
             onClick={handleDefaultClick}
           >
             {!editMode && (
               <button
-                className="absolute top-10 right-10 hover:opacity-80 transition-opacity cursor-pointer z-10"
+                className="absolute top-8 right-8 md:top-10 md:right-10 hover:opacity-80 transition-opacity cursor-pointer z-10"
                 onClick={onClose}
               >
-                <CloseIcon color="#2D2D2D" className="w-6 h-6" />
+                <CloseIcon color="#2D2D2D" className="w-5 h-5 md:w-6 md:h-6" />
               </button>
             )}
 
-            <div className="flex flex-col items-start rounded-xl overflow-hidden">
+            <div className="flex flex-col items-start md:rounded-xl overflow-hidden">
               <div className="relative">
-                <JesseFrame idea={data.oneLiner} mood={mood} onImageReady={onImageReady} onError={handleFrameError} />
+                <JesseFrame
+                  idea={data.oneLiner}
+                  mood={mood}
+                  onImageReady={onImageReady}
+                  onError={handleFrameError}
+                  className="rounded-xl md:rounded-none mb-4 md:mb-0"
+                />
 
                 {!editMode && (
                   <button
-                    className="absolute right-5 bottom-4 px-4 py-1 rounded-full bg-secondary !font-inter text-white !font-medium"
+                    className="absolute right-5 md:bottom-4 bottom-8 px-4 py-1 rounded-full bg-secondary !font-inter text-white !font-medium"
                     onClick={() => setEditMode(true)}
                   >
                     Edit
@@ -235,12 +241,12 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
                   <EditIdea value={data.oneLiner} onChange={handleOneLinerChange} onClose={() => setEditMode(false)} />
                 )}
               </div>
-              <div className="flex justify-center items-center gap-2 self-stretch p-3 px-4 bg-[#1D1D1D] text-white text-[18px] leading-[28px] font-extralight font-inter">
+              <div className="flex justify-center items-center gap-2 py-3 px-2 md:px-4 md:bg-[#1D1D1D] text-white md:text-lg leading-[26px] md:leading-[28px] md:font-extralight font-inter">
                 {data.summary}
               </div>
             </div>
 
-            <div className="flex gap-4 items-center w-full mt-2">
+            <div className="flex flex-col md:flex-row gap-4 items-center w-full mt-2">
               <Button
                 appearance="colored"
                 className={clsx(mood === AgentMoodEnum.CRITICAL ? 'bg-critical text-white' : 'bg-optimism text-black')}
@@ -276,7 +282,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
               )}
             </div>
 
-            <div className="flex gap-4 items-center w-full">
+            <div className="flex flex-col md:flex-row gap-4 items-center w-full">
               <Button appearance="colored" className="bg-farcaster  text-white" onClick={handleFarcaster} stretch>
                 <FarcasterIcon />
                 Cast
@@ -288,7 +294,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
               </Button>
             </div>
 
-            <div className="flex justify-center text-base text-white/90 font-inter">
+            <div className="flex justify-center text-sm md:text-base text-white/90 font-inter text-center">
               Note: Coining on Zora requires a small amount of ETH for gas fees
             </div>
 

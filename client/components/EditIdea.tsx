@@ -43,17 +43,20 @@ const EditIdea = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className={clsx(
-          'absolute top-0 left-0 w-full h-full bg-black text-white flex flex-col items-center justify-center gap-4',
+          'absolute top-0 left-0 w-full h-full bg-black text-white flex flex-col items-center justify-center gap-2 md:gap-4',
           nyghtMedium.className
         )}
       >
-        <h1 className="text-5xl font-bold translate-y-[-9px] translate-x-[1px]">Base</h1>
-        <h1 className="text-5xl font-bold translate-y-[-12px] translate-x-[1px]">is for</h1>
+        <h1 className="block md:hidden text-3xl md:text-5xl font-bold translate-y-[-9px] translate-x-[1px]">
+          Base is for
+        </h1>
+        <h1 className="hidden md:block text-3xl md:text-5xl font-bold translate-y-[-9px] translate-x-[1px]">Base</h1>
+        <h1 className="hidden md:block text-3xl md:text-5xl font-bold translate-y-[-12px] translate-x-[1px]">is for</h1>
 
         <div className="max-w-[80%] flex flex-col gap-2 -translate-x-[2px] relative">
           <input
             type="text"
-            className="w-full bg-transparent text-white !text-5xl border-b-2 border-white text-center focus:outline-none hover:outline-none -mt-1 mx-auto"
+            className="w-full bg-transparent text-white !text-3xl md:!text-5xl border-b-2 border-white text-center focus:outline-none hover:outline-none -mt-1 mx-auto"
             placeholder="Your Idea name"
             value={localValue}
             onChange={handleChange}

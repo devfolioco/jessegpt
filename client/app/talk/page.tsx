@@ -7,6 +7,7 @@ import ShareModal from '@/components/ShareModal';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
 import { MicIcon } from '@/components/icons/MicIcon';
 import { ShareIcon } from '@/components/icons/ShareIcon';
+import useIsPhone from '@/hooks/useIsPhone';
 import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
 import { RoomContext } from '@livekit/components-react';
 import { track } from '@vercel/analytics';
@@ -66,6 +67,8 @@ const TalkComponent = () => {
   const finalMintData = useRef<AgentShareData>(initialData);
 
   const [roomId, setRoomId] = useState<string | null>(null);
+
+  const isPhone = useIsPhone();
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -263,8 +266,8 @@ const TalkComponent = () => {
   if (connecting && !connected) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-[#0C1110]">
-        <div className="flex flex-col items-center justify-center">
-          <div className="text-white text-2xl font-bold mb-4">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <div className="text-white text-lg md:text-2xl font-bold mb-4 px-8 md:px-0 text-center">
             Connecting to {mood === AgentMoodEnum.EXCITED ? 'JesseGPT (Optimistic)' : 'SupaBald JesseGPT (Critical)'}...
           </div>
           <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
@@ -286,10 +289,13 @@ const TalkComponent = () => {
       </RoomContext.Provider>
 
       {isConversationEnded && (
-        <div className="w-full flex items-center justify-center fixed bottom-0 left-0 px-4 py-8 z-10 gap-6">
+        <div className="w-full flex flex-col md:flex-row items-center justify-center fixed bottom-0 left-0 px-4 py-8 z-10 gap-4 md:gap-6">
           <Button
             appearance="colored"
-            className={clsx(mood === AgentMoodEnum.EXCITED ? 'text-black bg-optimism' : 'text-white bg-critical')}
+            stretch={isPhone}
+            className={clsx(
+              mood === AgentMoodEnum.EXCITED ? 'text-black bg-optimism' : 'text-white bg-critical shadow-lg'
+            )}
             onClick={handleRetry}
           >
             <MicIcon color={mood === AgentMoodEnum.EXCITED ? 'black' : 'white'} />
@@ -302,7 +308,12 @@ const TalkComponent = () => {
           </Button> */}
 
           {isSummaryReceived && (
-            <Button appearance="colored" className="bg-white text-black" onClick={handleShareModal}>
+            <Button
+              stretch={isPhone}
+              appearance="colored"
+              className="bg-white text-black shadow-lg"
+              onClick={handleShareModal}
+            >
               <ShareIcon color="black" />
               Share on socials
             </Button>

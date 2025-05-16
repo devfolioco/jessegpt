@@ -37,12 +37,12 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ state: activeState = 
   const barClasses = clsx('w-1 rounded-sm', variant === 'critical' ? 'bg-white' : 'bg-black');
 
   return (
-    <div className="flex items-center justify-center w-16 h-16">
+    <div className="flex items-center justify-center md:w-16 md:h-16 w-10 h-10">
       {/* Speaking State */}
       <div
         id={activeState === 'speaking' ? 'state1' : 'state2'}
         className={clsx(
-          `relative flex items-center justify-center gap-1 w-16 h-16 rounded-full ${activeState === 'speaking' ? 'speaking' : 'not-speaking'}`,
+          `relative flex items-center justify-center gap-1 md:w-16 md:h-16 w-10 h-10 rounded-full ${activeState === 'speaking' ? 'speaking' : 'not-speaking'}`,
           variant === 'critical' ? 'bg-critical' : 'bg-optimism'
         )}
       >

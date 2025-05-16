@@ -2,8 +2,9 @@ import { CustomVoiceAssistantControlBar } from '@/components/CustomVoiceAssistan
 import { NoAgentNotification } from '@/components/NoAgentNotification';
 import TranscriptionView from '@/components/TranscriptionView';
 import { CloseIcon } from '@/components/icons/CloseIcon';
+import useIsPhone from '@/hooks/useIsPhone';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
-import { BarVisualizer, RoomAudioRenderer, useChat, useVoiceAssistant } from '@livekit/components-react';
+import { RoomAudioRenderer, useChat, useVoiceAssistant } from '@livekit/components-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import AudioVisualizer from './AudioVisualizer/AudioVisualizer';
@@ -15,6 +16,8 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
   const { send } = useChat();
 
   const [loading, setLoading] = useState(false);
+
+  const isPhone = useIsPhone();
 
   const handleEndConversation = () => {
     send('Goodbye for now. Please end the conversation', {
@@ -38,7 +41,7 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
             alt="JesseGPT Avatar"
             width={254}
             height={254}
-            className="rounded-none"
+            className="rounded-none md:w-[254px] md:h-[254px] w-[200px] h-[200px]"
             priority
           />
           <div
@@ -66,7 +69,7 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
         </div>
       </div>
 
-      <div className="w-full flex-1 flex flex-col items-center overflow-hidden z-10 mt-16">
+      <div className="w-full flex-1 flex flex-col items-center overflow-hidden z-10">
         <TranscriptionView mood={mood} />
       </div>
 
@@ -93,12 +96,12 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
                 }}
               >
                 {loading ? <Loader color="white" /> : <CloseIcon />}
-                End
+                {!isPhone && 'End'}
               </button>
             </div>
           </div>
 
-          <div className="text-base text-white font-inter">
+          <div className="text-sm md:text-base text-white font-inter text-center">
             You can say ‘Bye’ or press the ‘End’ button to finish this conversation
           </div>
         </div>
