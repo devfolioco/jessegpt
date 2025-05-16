@@ -46,21 +46,24 @@ export default function HomePage() {
           alt="JesseGPT Avatar"
           width={328}
           height={328}
-          className="rounded-none mx-auto -z-10"
+          className="rounded-none mx-auto -z-10 w-[202px] h-[202px] md:w-[328px] md:h-[328px]"
           priority
         />
 
-        <h1 className={clsx('text-5xl md:text-6xl text-white mt-6', nyghtMedium.className)}>Talk to JesseGPT</h1>
+        <h1 className={clsx('text-5xl md:text-6xl text-white mt-6 leading-[60px]', nyghtMedium.className)}>
+          Talk to
+          <div className="md:hidden"></div> JesseGPT
+        </h1>
 
         <p
           className={clsx(
-            'text-lg md:text-xl text-white/90 max-w-[515px] mx-auto font-light mt-2 font-inter px-4 md:px-0'
+            'text-lg md:text-xl text-white/90 md:max-w-[515px] max-w-[300px] mx-auto font-light mt-2 font-inter px-4 md:px-0'
           )}
         >
           Talk to Jesse’s AI avatar about your project idea and coin it on Zora.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-6 mt-14">
+        <div className="flex flex-col-reverse md:flex-row gap-6 mt-14">
           <Button href={BASE_BATCH_APPLY_URL} target="_blank" appearance="secondary">
             Learn more
           </Button>
@@ -70,7 +73,11 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="w-full flex md:flex-row flex-col justify-between text-white md:text-[22px] text-[16px] font-inter font-light pt-10 pb-12 md:px-[211px] px-[32px] gap-4 text-center md:text-left">
+      <div className="hidden w-full px-8  pb-2">
+        <div className="border-grey-3 border-b w-full"></div>
+      </div>
+
+      <div className="w-full flex md:flex-row flex-col justify-between text-white md:text-[22px] text-[16px] font-inter font-light pt-10 pb-12 md:px-[211px] px-8 gap-6 text-center md:text-left">
         <div className="">
           Made with {'<3'} at{' '}
           <a href="https://devfolio.co" className="underline">
@@ -78,7 +85,7 @@ export default function HomePage() {
           </a>
         </div>
 
-        <div className="flex md:flex-row flex-col md:gap-8 gap-4">
+        <div className="flex flex-row gap-8 justify-center">
           <a className="underline" href="https://twitter.com/devfolio">
             Twitter / X
           </a>
