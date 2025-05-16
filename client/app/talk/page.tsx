@@ -9,6 +9,7 @@ import { MicIcon } from '@/components/icons/MicIcon';
 import { ShareIcon } from '@/components/icons/ShareIcon';
 import { AgentMoodEnum, AgentMoodI, AgentShareData } from '@/types/agent';
 import { RoomContext } from '@livekit/components-react';
+import { track } from '@vercel/analytics';
 import clsx from 'clsx';
 import { Room, RoomEvent } from 'livekit-client';
 import { useSearchParams } from 'next/navigation';
@@ -122,6 +123,11 @@ const TalkComponent = () => {
             // has enough information
             setIsSummaryReceived(true);
             setIsModalOpen(true);
+            track('conversation_ended', {
+              title: finalMintData.current.oneLiner,
+              roomId: roomId,
+              mood,
+            });
           }
         }
       });

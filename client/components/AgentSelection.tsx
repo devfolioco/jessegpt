@@ -3,6 +3,7 @@
 import { nyghtMedium } from '@/app/fonts/fonts';
 import { MicIcon } from '@/components/icons/MicIcon';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
+import { track } from '@vercel/analytics';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -16,6 +17,9 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
   const router = useRouter();
 
   const updateMood = (mood: AgentMoodI) => {
+    track('conversation_started', {
+      mood,
+    });
     router.push(`/talk?mood=${mood}`);
   };
 

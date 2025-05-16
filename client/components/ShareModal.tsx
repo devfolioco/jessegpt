@@ -1,6 +1,7 @@
 import { getFarcasterCopy, getTweetCopy, getTwitterIntentURL, getWarpcastIntentURL } from '@/helpers/copy';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
 import { AgentMoodEnum, AgentMoodI, AgentShareData, ZoraCoinFlowStep } from '@/types/agent';
+import { track } from '@vercel/analytics';
 import confetti from 'canvas-confetti';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
@@ -79,10 +80,17 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
     title: data.oneLiner,
     description: data.summary,
     base64Image: ideaImageRef.current,
-    onSuccess: () => {
+    onSuccess: result => {
       setTimeout(() => {
         triggerConfetti();
         setZoraToastVisible(true);
+        // Send analytics event for successful Zora coin creation
+        track('zora_coined', {
+          title: data.oneLiner,
+          roomId: roomId,
+          zoraLink: result.zoraLink,
+          mood,
+        });
       }, 1000);
     },
     onFailure: error => {
@@ -99,6 +107,12 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
   const handleCoinOnZoraClick = () => {
     setError(null);
     onZoraClick();
+
+    track('zora_initiated', {
+      title: data.oneLiner,
+      roomId: roomId,
+      mood,
+    });
   };
 
   const onImageReady = (base64Image: string) => {
