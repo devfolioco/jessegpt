@@ -69,7 +69,7 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
         </div>
       </div>
 
-      <div className="w-full flex-1 flex flex-col items-center overflow-hidden z-10 mt-0 md:mt-16">
+      <div className="w-full flex-1 flex flex-col items-center overflow-hidden z-10">
         <TranscriptionView mood={mood} />
       </div>
 
