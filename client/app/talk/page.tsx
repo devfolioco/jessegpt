@@ -263,8 +263,8 @@ const TalkComponent = () => {
   if (connecting && !connected) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-[#0C1110]">
-        <div className="flex flex-col items-center justify-center">
-          <div className="text-white text-2xl font-bold mb-4">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <div className="text-white text-lg md:text-2xl font-bold mb-4 px-8 md:px-0 text-center">
             Connecting to {mood === AgentMoodEnum.EXCITED ? 'JesseGPT (Optimistic)' : 'SupaBald JesseGPT (Critical)'}...
           </div>
           <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
