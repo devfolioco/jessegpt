@@ -202,8 +202,8 @@ const ChatBubble = ({
       id={id}
       className={clsx(
         role === 'assistant'
-          ? `assistant-bubble rounded-2xl px-6 py-4 self-start md:max-w-[70%] max-w-[90%] shadow-md text-sm md:text-lg ${mood === AgentMoodEnum.EXCITED ? 'bg-[#FFF68E] text-gray-900' : 'bg-[#0157FA] text-white'} ${isLast ? 'rounded-tl-none' : ''}`
-          : `user-bubble bg-[#22302B] text-white rounded-2xl px-6 py-4 self-end md:max-w-[70%] max-w-[90%] shadow-md text-sm md:text-lg ${isLast ? 'rounded-br-none' : ''}`
+          ? `assistant-bubble rounded-2xl px-6 py-4 self-start md:max-w-[70%] max-w-[90%] shadow-md font-medium md:font-normal text-sm md:text-lg ${mood === AgentMoodEnum.EXCITED ? 'bg-[#FFF68E] text-gray-900' : 'bg-[#0157FA] text-white'} ${isLast ? 'rounded-tl-none' : ''}`
+          : `user-bubble bg-[#22302B] text-white rounded-2xl px-6 py-4 self-end md:max-w-[70%] font-medium md:font-normal max-w-[90%] shadow-md text-sm md:text-lg ${isLast ? 'rounded-br-none' : ''}`
       )}
       style={{ wordBreak: 'break-word', whiteSpace: 'pre-line' }}
     >
