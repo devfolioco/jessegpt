@@ -3,7 +3,6 @@
 import { AgentSelection } from '@/components/AgentSelection';
 import { Button } from '@/components/Button';
 import { BASE_BATCH_APPLY_URL } from '@/constants';
-import useButtonPointerAnimation from '@/hooks/useButtonPointerAnimation';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
@@ -27,12 +26,6 @@ export default function HomePage() {
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
   }, [showAgentSelection]);
-
-  const { canvasRef, targetRef, initializeAnimation } = useButtonPointerAnimation();
-
-  useEffect(() => {
-    initializeAnimation();
-  }, []);
 
   return (
     <main
@@ -68,9 +61,7 @@ export default function HomePage() {
           <Button href={BASE_BATCH_APPLY_URL} target="_blank" appearance="secondary">
             Learn more
           </Button>
-          <Button ref={targetRef} onClick={handleAgentSelection}>
-            Start talking to Jesse
-          </Button>
+          <Button onClick={handleAgentSelection}>Start talking to Jesse</Button>
         </div>
       </div>
 
@@ -110,8 +101,6 @@ export default function HomePage() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none w-screen h-screen z-10 hidden"></canvas>
 
       {/* Prefetch Jesse avatar images for faster loading */}
       <link rel="prefetch" href="/mellow-jesse.gif" as="image" type="image/gif" />

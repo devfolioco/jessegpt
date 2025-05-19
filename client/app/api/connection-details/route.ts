@@ -36,8 +36,6 @@ export async function GET(request: Request) {
     // Generate participant token
     const participantIdentity = `voice_assistant_user_${crypto.randomUUID().replace(/-/g, '')}`;
     const roomName = `${mood}_room_${crypto.randomUUID().replace(/-/g, '')}`;
-    console.log('roomName', roomName);
-    console.log('participantIdentity', participantIdentity);
     const participantToken = await createParticipantToken({ identity: participantIdentity }, roomName);
 
     // Return connection details
