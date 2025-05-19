@@ -25,6 +25,7 @@ const parseMoodQueryParam = (query: string | string[] | null): AgentMoodI | null
   return null;
 };
 
+// Used for testing
 const projectIdeas = [
   'Tax Weighted Voting',
   'Talent Protocol',
@@ -35,6 +36,7 @@ const projectIdeas = [
   'Airdrop Sentinel',
 ];
 
+// Used for testing
 const testData = {
   oneLiner: projectIdeas[2],
   summary: `
@@ -201,13 +203,6 @@ const TalkComponent = () => {
   }
 
   const handleRetry = () => {
-    // setIsSummaryReceived(false);
-    // setIsConversationEnded(false);
-    // setIsModalOpen(false);
-    // finalMintData.current = initialData;
-    // setConnected(false);
-    // setConnecting(false);
-
     router.push('/');
   };
 

@@ -9,6 +9,14 @@ interface Transcription {
   firstReceivedTime: number;
 }
 
+/**
+ * Custom hook for combining agent and user transcriptions.
+ *
+ * This hook manages the combination of transcriptions from the voice assistant and the user's microphone.
+ * It provides a combined list of transcriptions sorted by the time they were first received.
+ *
+ * @returns {Transcription[]} Combined list of transcriptions
+ */
 export default function useCombinedTranscriptions() {
   const { agentTranscriptions, state } = useVoiceAssistant();
 

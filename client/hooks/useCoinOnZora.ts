@@ -26,8 +26,28 @@ interface UseCoinOnZoraReturn {
   status: ZoraCoinFlowStep;
 }
 
-// todo: remove this (simulate success)
+// only for testing: Enable this to simulate successful coin creation
 const test = false;
+
+/**
+ * Custom hook for creating a coin on Zora.
+ *
+ * This hook manages the flow of creating a coin on Zora, including:
+ * - Connecting a wallet
+ * - Uploading image to IPFS
+ * - Creating the coin on Zora
+ * - Handling success and failure states
+ *
+ * @param {UseCoinOnZoraProps} props - Configuration for creating the coin
+ * @param {string} props.roomId - Unique identifier for the room
+ * @param {string} props.title - Idea Name
+ * @param {string} props.description - Idea Summary
+ * @param {string | null} props.base64Image - Base64 encoded image for the coin
+ * @param {Function} [props.onSuccess] - Callback function called on successful coin creation
+ * @param {Function} [props.onFailure] - Callback function called when coin creation fails
+ *
+ * @returns {UseCoinOnZoraReturn} Object containing coin creation state and controls
+ */
 
 const useCoinOnZora = ({
   roomId,
