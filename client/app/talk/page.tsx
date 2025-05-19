@@ -45,6 +45,9 @@ Save time, stay focused, and conquer your inbox with MailSprint.
     `,
 };
 
+// only for testing: Enabling this will simulate a successful jesse conversation
+const TEST = false;
+
 const initialData = {
   oneLiner: '',
   summary: '',
@@ -56,17 +59,17 @@ const TalkComponent = () => {
   const router = useRouter();
 
   const [room] = useState(new Room());
-  const [connecting, setConnecting] = useState(false);
-  const [connected, setConnected] = useState(false);
-  const isInitialRender = useRef(false);
+  const [connecting, setConnecting] = useState(TEST ? true : false);
+  const [connected, setConnected] = useState(TEST ? true : false);
+  const isInitialRender = useRef(TEST ? true : false);
 
-  const [isSummaryReceived, setIsSummaryReceived] = useState(false);
+  const [isSummaryReceived, setIsSummaryReceived] = useState(TEST ? true : false);
 
-  const [isConversationEnded, setIsConversationEnded] = useState(false);
+  const [isConversationEnded, setIsConversationEnded] = useState(TEST ? true : false);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(TEST ? true : false);
 
-  const finalMintData = useRef<AgentShareData>(initialData);
+  const finalMintData = useRef<AgentShareData>(TEST ? testData : initialData);
 
   const [roomId, setRoomId] = useState<string | null>(null);
 
