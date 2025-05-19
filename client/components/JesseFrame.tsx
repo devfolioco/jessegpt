@@ -14,14 +14,9 @@ interface JesseFrameProps {
 const frameWidth = 650;
 const frameHeight = 340;
 
-const frameWidthMobile = 325;
-const frameHeightMobile = 170;
-
 const MAX_IDEA_WIDTH = 350;
 
 function resizeCanvas(canvas: HTMLCanvasElement) {
-  // const { width, height } = canvas.getBoundingClientRect();
-
   const { devicePixelRatio: ratio = 1 } = window;
   const context = canvas.getContext('2d');
 

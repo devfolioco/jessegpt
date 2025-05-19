@@ -2,7 +2,6 @@ import { nyghtMedium } from '@/app/fonts/fonts';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { CloseIcon } from './icons/CloseIcon';
 
 const MAX_LENGTH = 20;
 
@@ -73,10 +72,6 @@ const EditIdea = ({
             Save
           </button>
         </div>
-
-        {/* <button className="absolute top-4 right-4 hover:opacity-80 transition-opacity cursor-pointer" onClick={onClose}>
-          <CloseIcon color="white" className="w-6 h-6 opacity-90" />
-        </button> */}
       </motion.div>
     </AnimatePresence>
   );

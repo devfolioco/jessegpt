@@ -39,7 +39,7 @@ const useCoinOnZora = ({
 }: UseCoinOnZoraProps): UseCoinOnZoraReturn => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
-  const { open: isOpen, loading } = useAppKitState();
+  const { open: isOpen } = useAppKitState();
 
   const [currentStep, setCurrentStep] = useState<ZoraCoinFlowStep>(ZoraCoinFlowStep.IDLE);
   const zoraResult = useRef<ZoraCoinResult | null>(null);

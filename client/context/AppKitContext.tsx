@@ -1,6 +1,6 @@
 'use client';
 
-import { base, mainnet } from '@reown/appkit/networks';
+import { base } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React, { type ReactNode } from 'react';

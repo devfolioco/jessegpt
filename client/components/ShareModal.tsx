@@ -10,7 +10,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from './Button';
 import EditIdea from './EditIdea';
 import JesseFrame from './JesseFrame';
-import { Loader } from './Loader';
 import Snackbar from './Snackbar';
 import { CloseIcon } from './icons/CloseIcon';
 import { FarcasterIcon } from './icons/FarcasterIcon';
@@ -298,17 +297,6 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
               Note: Coining on Zora requires a small amount of ETH for gas fees
             </div>
 
-            {/* <Button
-              appearance="colored"
-              className="bg-devfolio text-white"
-              href={BASE_BATCH_APPLY_URL}
-              target="_blank"
-              stretch
-            >
-              <DevfolioIcon />
-              Build your idea at Base Batches: 001
-            </Button> */}
-
             <AnimatePresence initial={false}>
               {(zoraStatus === ZoraCoinFlowStep.CONNECTING_WALLET ||
                 zoraStatus === ZoraCoinFlowStep.CREATING_COIN ||
@@ -326,26 +314,6 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
               )}
 
               {error && <Snackbar appearance="error">{getZoraStateCopyError(error)}</Snackbar>}
-
-              {/* 
-              {error && (
-                <motion.div
-                  className="flex gap-4 p-4 justify-center items-center self-stretch rounded-2xl bg-secondary absolute w-full top-full mt-4 left-0 font-inter text-lg"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.4 }}
-                  viewport={{ once: true }}
-                >
-                  <p>
-                    {error === ShareModalError.ZORA_COIN_CREATION_ERROR ? (
-                      <p>Something went wrong while creating your Zora coin. Please try again.</p>
-                    ) : (
-                      <p>Error: Something went wrong while generating your idea frame. Please try again.</p>
-                    )}
-                  </p>
-                </motion.div>
-              )} */}
             </AnimatePresence>
           </div>
         </motion.div>
