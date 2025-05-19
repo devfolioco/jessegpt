@@ -1,4 +1,4 @@
-# Jesse Voice Assistant Client
+# JesseGPT Client
 
 ## Getting started
 
@@ -15,4 +15,8 @@ pnpm install
 pnpm dev
 ```
 
-> Make sure an agent is running with the same LIVEKIT environment variables before starting the client.
+> Make sure an instance of the agent is running with the same LIVEKIT environment variables before starting the client.
+
+---
+
+> Bootstrapped from LiveKit's [Voice Assistant Frontend](https://github.com/livekit-examples/voice-assistant-frontend) template.

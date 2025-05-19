@@ -160,6 +160,8 @@ dist
 
 .vscode-test
 
+.vscode
+
 # yarn v2
 
 .yarn/cache
@@ -192,7 +194,6 @@ transcripts/
 
 build/
 *.egg-info/
-
 
 # ignore all ai generated files in the agent directory
 agent/*.png

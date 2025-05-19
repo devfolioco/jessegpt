@@ -11,7 +11,7 @@
 
 - Node.js and pnpm (for the client)
 - Python and [uv](https://github.com/astral-sh/uv#installation) (for the agent)
-- Access keys/credentials for any required services (e.g., LiveKit, TTS providers - check `.env.example` files)
+- Access keys/credentials for any required services (e.g., LiveKit, STT/TTS providers, OpenAI, etc. - check `.env.example` files)
 
 ### Setup
 

@@ -19,8 +19,7 @@ COPY . /app
 # Create virtualenv & install project + production deps
 RUN python -m venv /venv && \
   /venv/bin/pip install --upgrade pip wheel && \
-  /venv/bin/pip install --no-cache-dir . && \
-  /venv/bin/pip install --no-cache-dir ./livekit-plugins-smallest
+  /venv/bin/pip install --no-cache-dir .
 
 # ---------------------------------------------------------------------------
 # Runtime stage – lightweight image with just Python 3.13 + the built venv -------
