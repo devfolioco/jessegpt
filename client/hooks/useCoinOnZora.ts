@@ -212,8 +212,6 @@ const useCoinOnZora = ({
 
   const isLoading = ![ZoraCoinFlowStep.IDLE, ZoraCoinFlowStep.SUCCESS, ZoraCoinFlowStep.FAILURE].includes(currentStep);
 
-  console.log('currentStep: ', currentStep);
-
   return {
     onClick: onClickHandler,
     isDisabled,

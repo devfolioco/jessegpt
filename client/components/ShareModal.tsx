@@ -171,7 +171,6 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
   }, [isOpen, editMode]);
 
   const handleOneLinerChange = (value: string) => {
-    console.log('value', value);
     setData({ ...data, oneLiner: value });
   };
 
