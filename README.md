@@ -102,9 +102,24 @@ Feel free to open [issues](https://github.com/devfolioco/jessegpt/issues/new/cho
 
 ## Contributors
 
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://swarnimwalavalkar.com/"><img src="https://avatars.githubusercontent.com/u/38808472?v=4?s=100" width="100px;" alt="Swarnim Walavalkar"/><br /><sub><b>Swarnim Walavalkar</b></sub></a><br /><a href="https://github.com/devfolioco/jessegpt/commits?author=SwarnimWalavalkar" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://prathamvaidya.in"><img src="https://avatars.githubusercontent.com/u/61202986?v=4?s=100" width="100px;" alt="Pratham Vaidya"/><br /><sub><b>Pratham Vaidya</b></sub></a><br /><a href="https://github.com/devfolioco/jessegpt/commits?author=prathamVaidya" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://preetjdp.dev/"><img src="https://avatars.githubusercontent.com/u/27439197?v=4?s=100" width="100px;" alt="Preet Parekh"/><br /><sub><b>Preet Parekh</b></sub></a><br /><a href="https://github.com/devfolioco/jessegpt/commits?author=preetjdp" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://faradayfury.webflow.io"><img src="https://avatars.githubusercontent.com/u/126873863?v=4?s=100" width="100px;" alt="Anish Dhiman"/><br /><sub><b>Anish Dhiman</b></sub></a><br /><a href="#design-faradayfury" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://bio.link/ashwinexe"><img src="https://avatars.githubusercontent.com/u/53075480?v=4?s=100" width="100px;" alt="Ashwin Kumar Uppala"/><br /><sub><b>Ashwin Kumar Uppala</b></sub></a><br /><a href="https://github.com/devfolioco/jessegpt/commits?author=ashwinexe" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
@@ -112,7 +127,6 @@ Feel free to open [issues](https://github.com/devfolioco/jessegpt/issues/new/cho
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
-
 
 
 ## License
