@@ -1,4 +1,30 @@
-# JesseGPT
+# JesseGPT 
+
+    
+### Choose your Jesse
+
+
+-  **JesseGPT**:  The relentlessly optimistic Jesse Pollak.
+    
+    Sees massive potential everywhere, bursting with Onchain Summer energy, & ready to hype your vision to the moon. 
+    <img src ="/assets/mellow-jesse.gif" width=150px>
+<br>
+    
+- **Supabald JesseGPT:** The brutally honest Jesse Pollak.
+    
+    Cuts through the hype, challenges every premise, & believes great ideas must survive intense scrutiny to succeed.
+    <img src ="/assets/critical-jesse.gif" width=150px>
+
+
+Last year, we gave you [Supabald Jesse](https://letsgetjessebald.com/), a pixelated, cool-aura oracle who left the chain and entered your wallets.
+
+This year, Jesse’s back. Not as a meme. 
+
+But as **an AI**.
+
+Say gm to [JesseGPT](https://jessegpt.xyz/) - your onchain feedback buddy, Base-pilled mentor, and hype generator all rolled into one. Built for the latest cohort of [Base Batches 2025](https://basebatches.xyz/), JesseGPT is trained to channel the spirit (and tweets) of Jesse Pollak, CEO of Base, and deliver hot takes on your project submission.
+
+---
 
 ## Overview
 
@@ -59,3 +85,28 @@
     ```
 
 Open your browser to the address provided by the Next.js development server (usually `http://localhost:3000`).
+
+---
+# Contributing
+
+
+Feel free to open [issues](https://github.com/devfolioco/jessegpt/issues/new/choose) and [pull requests](https://github.com/devfolioco/jessegpt/pulls)!
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+
+
+## License
+
+[![License](https://img.shields.io/github/license/devfolioco/jessegpt#reload)](https://github.com/devfolioco/jessegpt/blob/improve-readme/LICENSE)
