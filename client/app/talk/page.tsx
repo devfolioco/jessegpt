@@ -171,6 +171,11 @@ const TalkComponent = () => {
           console.log(`One Liner: ${chunk}`);
           finalMintData.current.oneLiner += chunk;
         }
+
+        if (finalMintData.current.oneLiner) {
+          // only use the first 3 words
+          finalMintData.current.oneLiner = finalMintData.current.oneLiner.split(' ').slice(0, 3).join(' ');
+        }
       });
 
       // Register handler for the one liner text stream
