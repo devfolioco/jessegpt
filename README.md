@@ -100,8 +100,6 @@ Open your browser to the address provided by the Next.js development server (usu
 
 Feel free to open [issues](https://github.com/devfolioco/jessegpt/issues/new/choose) and [pull requests](https://github.com/devfolioco/jessegpt/pulls)!
 
-## Contributors
-
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
