@@ -18,6 +18,11 @@ export const wagmiAdapter = new WagmiAdapter({
     storage: cookieStorage,
   }),
   connectors: [
+    /**
+      we are intentionally using coinbase sdk v3 here 
+      because v4 forces a reload on disconnect, 
+      which resets our react app state
+    */
     coinbaseWallet({
       reloadOnDisconnect: false,
       version: '3',
