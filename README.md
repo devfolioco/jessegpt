@@ -1,5 +1,10 @@
 # JesseGPT 
 
+
+
+https://github.com/user-attachments/assets/f229628b-1405-40a3-9796-60b59983970e
+
+
     
 ### Choose your Jesse
 
@@ -7,13 +12,16 @@
 -  **JesseGPT**:  The relentlessly optimistic Jesse Pollak.
     
     Sees massive potential everywhere, bursting with Onchain Summer energy, & ready to hype your vision to the moon. 
-    <img src ="/assets/mellow-jesse.gif" width=150px>
+
+   <img src ="/assets/mellow-jesse.gif" width=150px>
+   
 <br>
     
 - **Supabald JesseGPT:** The brutally honest Jesse Pollak.
     
     Cuts through the hype, challenges every premise, & believes great ideas must survive intense scrutiny to succeed.
-    <img src ="/assets/critical-jesse.gif" width=150px>
+
+  <img src ="/assets/critical-jesse.gif" width=150px>
 
 
 Last year, we gave you [Supabald Jesse](https://letsgetjessebald.com/), a pixelated, cool-aura oracle who left the chain and entered your wallets.
