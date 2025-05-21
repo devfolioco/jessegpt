@@ -33,3 +33,7 @@ TIMEOUT_WARNING_TIME = 10
 SPEAK_DELAY = 3
 MAX_CALL_DURATION = 200
 CALL_DURATION_WARNING_TIME = 100
+
+# ---- ElevenLabs Default Voice ID ----
+# Mark - Natural Conversations -> https://elevenlabs.io/app/voice-library?voiceId=UgBBYS2sOqTuMpoF3BR0
+ELEVENLABS_DEFAULT_VOICE_ID = "UgBBYS2sOqTuMpoF3BR0"

@@ -25,15 +25,24 @@ def save_conversation(
     # with open("transcript.json", "w") as f:
     #     json.dump(session.history.to_dict(), f, indent=2)
 
+    datalayer_base_url = os.environ.get("DATALAYER_BASE_URL")
+    datalayer_api_key = os.environ.get("DATALAYER_API_KEY")
+
+    if not datalayer_base_url or not datalayer_api_key:
+        logger.info(
+            "Skipping Devfolio Datalayer API call - required environment variables not defined"
+        )
+        return
+
     try:
         response = requests.post(
-            f"{os.environ.get('DATALAYER_BASE_URL')}miscellaneous/jessegpt/conversations/{room_id}",
+            f"{datalayer_base_url}miscellaneous/jessegpt/conversations/{room_id}",
             json={
                 "messages": transcript,
                 "has_enough_information": has_enough_information,
                 "is_inappropriate": is_inappropriate,
             },
-            headers={"x_api_key": os.environ.get("DATALAYER_API_KEY")},
+            headers={"x_api_key": datalayer_api_key},
         )
         response.raise_for_status()
         logger.info("Successfully saved conversation to database")

@@ -23,6 +23,7 @@ from voice_agent.stt_words import stt_words
 from voice_agent.assistant import Assistant, prewarm
 from voice_agent.constants import (
     CALL_DURATION_WARNING_TIME,
+    ELEVENLABS_DEFAULT_VOICE_ID,
     MAX_CALL_DURATION,
     TIMEOUT_WARNING_TIME,
     SPEAK_DELAY,
@@ -97,15 +98,23 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     try:
         room_id = ctx.room.name.split("_")[2]
 
-        response = requests.post(
-            f"{os.environ.get('DATALAYER_BASE_URL')}miscellaneous/jessegpt/conversations",
-            json={
-                "roomId": room_id,
-            },
-            headers={"x_api_key": os.environ.get("DATALAYER_API_KEY")},
-        )
-        response.raise_for_status()
-        logger.info("Successfully saved conversation to database")
+        datalayer_base_url = os.environ.get("DATALAYER_BASE_URL")
+        datalayer_api_key = os.environ.get("DATALAYER_API_KEY")
+
+        if datalayer_base_url and datalayer_api_key:
+            response = requests.post(
+                f"{datalayer_base_url}miscellaneous/jessegpt/conversations",
+                json={
+                    "roomId": room_id,
+                },
+                headers={"x_api_key": datalayer_api_key},
+            )
+            response.raise_for_status()
+            logger.info("Successfully saved conversation to database")
+        else:
+            logger.info(
+                "Skipping Devfolio Datalayer API call - required environment variables not defined"
+            )
     except IndexError:
         logger.error("Room name does not contain a room ID")
         raise ValueError("Room name does not contain a room ID")
@@ -123,7 +132,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         llm=openai.LLM(model="gpt-4.1"),
         tts=elevenlabs.TTS(
             model="eleven_multilingual_v2",
-            voice_id="goljFZPfRhM9ZkyHrOmQ",
+            voice_id=os.environ.get("ELEVEN_VOICE_ID", ELEVENLABS_DEFAULT_VOICE_ID),
             voice_settings=VoiceSettings(
                 speed=0.86,
                 stability=0.3,
