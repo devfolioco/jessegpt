@@ -6,17 +6,21 @@ https://github.com/user-attachments/assets/f229628b-1405-40a3-9796-60b59983970e
 
 <table>
   <tr>
-    <td width="50%">
+    <td width="50%" align="center">
       <h4>JesseGPT</h4>
       <p>The relentlessly optimistic Jesse Pollak.</p>
       <p>Sees massive potential everywhere, bursting with Onchain Summer energy, & ready to hype your vision to the moon.</p>
-      <img src="/assets/mellow-jesse.gif" width=150px>
+      <div style="text-align: center;">
+        <img src="/assets/mellow-jesse.gif" width=150px>
+      </div>
     </td>
-    <td width="50%">
+    <td width="50%" align="center">
       <h4>Supabald JesseGPT</h4>
       <p>The brutally honest Jesse Pollak.</p>
       <p>Cuts through the hype, challenges every premise, & believes great ideas must survive intense scrutiny to succeed.</p>
-      <img src="/assets/critical-jesse.gif" width=150px>
+      <div style="text-align: center;">
+        <img src="/assets/critical-jesse.gif" width=150px>
+      </div>
     </td>
   </tr>
 </table>
