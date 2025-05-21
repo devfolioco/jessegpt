@@ -1,28 +1,25 @@
-# JesseGPT 
-
-
+# JesseGPT
 
 https://github.com/user-attachments/assets/f229628b-1405-40a3-9796-60b59983970e
 
-
-    
 ### Choose your Jesse
 
-
--  **JesseGPT**:  The relentlessly optimistic Jesse Pollak.
-    
-    Sees massive potential everywhere, bursting with Onchain Summer energy, & ready to hype your vision to the moon. 
-
-   <img src ="/assets/mellow-jesse.gif" width=150px>
-   
-<br>
-    
-- **Supabald JesseGPT:** The brutally honest Jesse Pollak.
-    
-    Cuts through the hype, challenges every premise, & believes great ideas must survive intense scrutiny to succeed.
-
-  <img src ="/assets/critical-jesse.gif" width=150px>
-
+<table>
+  <tr>
+    <td width="50%">
+      <h4>JesseGPT</h4>
+      <p>The relentlessly optimistic Jesse Pollak.</p>
+      <p>Sees massive potential everywhere, bursting with Onchain Summer energy, & ready to hype your vision to the moon.</p>
+      <img src="/assets/mellow-jesse.gif" width=150px>
+    </td>
+    <td width="50%">
+      <h4>Supabald JesseGPT</h4>
+      <p>The brutally honest Jesse Pollak.</p>
+      <p>Cuts through the hype, challenges every premise, & believes great ideas must survive intense scrutiny to succeed.</p>
+      <img src="/assets/critical-jesse.gif" width=150px>
+    </td>
+  </tr>
+</table>
 
 Last year, we gave you [Supabald Jesse](https://letsgetjessebald.com/), a pixelated, cool-aura oracle who left the chain and entered your wallets.
 
@@ -95,8 +92,8 @@ Say gm to [JesseGPT](https://jessegpt.xyz/) - your onchain feedback buddy, Base-
 Open your browser to the address provided by the Next.js development server (usually `http://localhost:3000`).
 
 ---
-# Contributing
 
+# Contributing
 
 Feel free to open [issues](https://github.com/devfolioco/jessegpt/issues/new/choose) and [pull requests](https://github.com/devfolioco/jessegpt/pulls)!
 
@@ -125,7 +122,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
-
 
 ## License
 
