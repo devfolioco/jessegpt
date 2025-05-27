@@ -97,6 +97,13 @@ Open your browser to the address provided by the Next.js development server (usu
 
 ---
 
+# Voice Cloning with ElevenLabs
+
+To create your own voice clone using ElevenLabs, follow their comprehensive guide:
+https://elevenlabs.io/blog/how-to-clone-voice
+
+---
+
 # Contributing
 
 Feel free to open [issues](https://github.com/devfolioco/jessegpt/issues/new/choose) and [pull requests](https://github.com/devfolioco/jessegpt/pulls)!
