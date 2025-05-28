@@ -2,7 +2,7 @@
 
 import { AgentSelection } from '@/components/AgentSelection';
 import { Button } from '@/components/Button';
-import { BASE_BATCH_APPLY_URL } from '@/constants';
+import { JESSEGPT_BLOG_URL } from '@/constants';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
@@ -58,7 +58,7 @@ export default function HomePage() {
         </p>
 
         <div className="flex flex-col-reverse md:flex-row gap-6 mt-14 px-8">
-          <Button href={BASE_BATCH_APPLY_URL} target="_blank" appearance="secondary">
+          <Button href={JESSEGPT_BLOG_URL} target="_blank" appearance="secondary">
             Learn more
           </Button>
           <Button onClick={handleAgentSelection}>Start talking to Jesse</Button>
