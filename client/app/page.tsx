@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { nyghtMedium } from './fonts/fonts';
+import GitHubButton from 'react-github-btn'
 
 export default function HomePage() {
   const [showAgentSelection, setShowAgentSelection] = useState(false);
@@ -34,6 +35,9 @@ export default function HomePage() {
         showAgentSelection && 'overflow-hidden'
       )}
     >
+      <div className="fixed top-4 right-4 z-20">
+<GitHubButton href="https://github.com/devfolioco/jessegpt" data-color-scheme="no-preference: light; light: dark; dark: dark;" data-size="large" data-show-count="true" aria-label="Star devfolioco/jessegpt on GitHub">Star</GitHubButton>
+      </div>
       <div className="z-10 flex flex-col items-center text-center justify-center h-full">
         <Image
           src="/original.gif"
@@ -78,12 +82,17 @@ export default function HomePage() {
         </div>
 
         <div className="flex flex-row gap-8 justify-center">
+          
           <a className="underline" href="https://twitter.com/devfolio">
             Twitter / X
           </a>
           <a className="underline" href="https://warpcast.com/devfolio">
             Farcaster
           </a>
+          <a className='underline' href="https://devfolio.co/projects/jessegpt-2acd">
+            View Project
+          </a>
+          
         </div>
       </div>
 
