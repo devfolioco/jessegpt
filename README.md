@@ -1,7 +1,5 @@
 # JesseGPT
 
-https://github.com/user-attachments/assets/f229628b-1405-40a3-9796-60b59983970e
-
 ### Choose your Jesse GPT
 
 <table>
