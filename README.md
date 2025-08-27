@@ -29,7 +29,7 @@ Last year, we gave you [Supabald Jesse](https://letsgetjessebald.com/), a pixela
 
 This year, Jesse’s back. Not as a meme. 
 
-But as **an AI**.
+But as ** AI**.
 
 Say gm to [JesseGPT](https://jessegpt.xyz/) - your onchain feedback buddy, Base-pilled mentor, and hype generator all rolled into one. Built for the latest cohort of [Base Batches 2025](https://basebatches.xyz/), JesseGPT is trained to channel the spirit (and tweets) of Jesse Pollak, CEO of Base, and deliver hot takes on your project submission.
 
