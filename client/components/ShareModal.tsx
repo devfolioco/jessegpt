@@ -1,3 +1,4 @@
+import { isZoraMintingEnabled } from '@/config/persona.config';
 import { getFarcasterCopy, getTweetCopy, getTwitterIntentURL, getWarpcastIntentURL } from '@/helpers/copy';
 import { useCoinOnZora } from '@/hooks/useCoinOnZora';
 import { AgentMoodEnum, AgentMoodI, AgentShareData, ZoraCoinFlowStep } from '@/types/agent';
@@ -255,29 +256,30 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
                 Chat again
               </Button>
 
-              {zoraResult ? (
-                <Button
-                  appearance="colored"
-                  className="bg-white text-black"
-                  href={zoraResult.zoraLink}
-                  target="_blank"
-                  stretch
-                >
-                  <ZoraIcon />
-                  View on Zora
-                </Button>
-              ) : (
-                <Button
-                  appearance="colored"
-                  className={clsx('bg-white ', isLoading ? 'text-grey-7' : 'text-black')}
-                  onClick={handleCoinOnZoraClick}
-                  stretch
-                  disabled={isLoading}
-                >
-                  <ZoraIcon />
-                  Coin on Zora
-                </Button>
-              )}
+              {isZoraMintingEnabled &&
+                (zoraResult ? (
+                  <Button
+                    appearance="colored"
+                    className="bg-white text-black"
+                    href={zoraResult.zoraLink}
+                    target="_blank"
+                    stretch
+                  >
+                    <ZoraIcon />
+                    View on Zora
+                  </Button>
+                ) : (
+                  <Button
+                    appearance="colored"
+                    className={clsx('bg-white ', isLoading ? 'text-grey-7' : 'text-black')}
+                    onClick={handleCoinOnZoraClick}
+                    stretch
+                    disabled={isLoading}
+                  >
+                    <ZoraIcon />
+                    Coin on Zora
+                  </Button>
+                ))}
             </div>
 
             <div className="flex flex-col md:flex-row gap-4 items-center w-full">
@@ -292,18 +294,21 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
               </Button>
             </div>
 
-            <div className="flex justify-center text-sm md:text-base text-white/90 font-inter text-center">
-              Note: Coining on Zora requires a small amount of ETH for gas fees
-            </div>
+            {isZoraMintingEnabled && (
+              <div className="flex justify-center text-sm md:text-base text-white/90 font-inter text-center">
+                Note: Coining on Zora requires a small amount of ETH for gas fees
+              </div>
+            )}
 
             <AnimatePresence initial={false}>
-              {(zoraStatus === ZoraCoinFlowStep.CONNECTING_WALLET ||
-                zoraStatus === ZoraCoinFlowStep.CREATING_COIN ||
-                zoraStatus === ZoraCoinFlowStep.UPLOADING_IMAGE) && (
-                <Snackbar appearance="loading">{getZoraStateCopy(zoraStatus, isCoiningDelayed)}</Snackbar>
-              )}
+              {isZoraMintingEnabled &&
+                (zoraStatus === ZoraCoinFlowStep.CONNECTING_WALLET ||
+                  zoraStatus === ZoraCoinFlowStep.CREATING_COIN ||
+                  zoraStatus === ZoraCoinFlowStep.UPLOADING_IMAGE) && (
+                  <Snackbar appearance="loading">{getZoraStateCopy(zoraStatus, isCoiningDelayed)}</Snackbar>
+                )}
 
-              {zoraSuccessToastVisible && (
+              {isZoraMintingEnabled && zoraSuccessToastVisible && (
                 <Snackbar appearance="success">
                   Your idea has been successfully coined on Zora.{' '}
                   <a href={zoraResult?.zoraLink ?? ''} target="_blank" className="underline">

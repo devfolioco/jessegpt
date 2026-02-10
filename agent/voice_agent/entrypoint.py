@@ -19,6 +19,13 @@ from livekit.plugins import deepgram, elevenlabs, openai
 from livekit.plugins.elevenlabs import VoiceSettings
 from livekit.plugins.turn_detector.english import EnglishModel
 import requests
+from voice_agent.persona_config import (
+    VOICE_SPEED,
+    VOICE_STABILITY,
+    VOICE_SIMILARITY_BOOST,
+    VOICE_STYLE,
+    VOICE_USE_SPEAKER_BOOST,
+)
 from voice_agent.stt_words import stt_words
 from voice_agent.assistant import Assistant, prewarm
 from voice_agent.constants import (
@@ -95,15 +102,28 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
         mood = "excited"  # sensible default
     logger.debug("Conversation mood resolved to '%s'", mood)
 
-    try:
-        room_id = ctx.room.name.split("_")[2]
+    # Parse room ID from room name (format: <mood>_room_<roomId>)
+    parts = ctx.room.name.split("_")
+    if len(parts) >= 3:
+        room_id = parts[2]
+    else:
+        import uuid
+        room_id = str(uuid.uuid4())
+        logger.warning(
+            "Room name '%s' does not contain a room ID – generated fallback: %s",
+            ctx.room.name,
+            room_id,
+        )
 
-        datalayer_base_url = os.environ.get("DATALAYER_BASE_URL")
-        datalayer_api_key = os.environ.get("DATALAYER_API_KEY")
+    # Optional: save initial conversation to analytics backend (Devfolio-specific; forks can ignore)
+    datalayer_base_url = os.environ.get("DATALAYER_BASE_URL")
+    datalayer_api_key = os.environ.get("DATALAYER_API_KEY")
+    datalayer_path = os.environ.get("DATALAYER_PATH", "miscellaneous/jessegpt/conversations")
 
-        if datalayer_base_url and datalayer_api_key:
+    if datalayer_base_url and datalayer_api_key:
+        try:
             response = requests.post(
-                f"{datalayer_base_url}miscellaneous/jessegpt/conversations",
+                f"{datalayer_base_url}{datalayer_path}",
                 json={
                     "roomId": room_id,
                 },
@@ -111,15 +131,12 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
             )
             response.raise_for_status()
             logger.info("Successfully saved conversation to database")
-        else:
-            logger.info(
-                "Skipping Devfolio Datalayer API call - required environment variables not defined"
-            )
-    except IndexError:
-        logger.error("Room name does not contain a room ID")
-        raise ValueError("Room name does not contain a room ID")
-    except Exception as e:
-        logger.error(f"Failed to save initial conversation: {e}")
+        except Exception as e:
+            logger.error(f"Failed to save initial conversation: {e}")
+    else:
+        logger.info(
+            "Skipping Devfolio Datalayer API call - required environment variables not defined"
+        )
 
     system_prompt = mood_system_prompts[mood]
     greetings = mood_initial_greetings[mood]
@@ -134,11 +151,11 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
             model="eleven_multilingual_v2",
             voice_id=os.environ.get("ELEVEN_VOICE_ID", ELEVENLABS_DEFAULT_VOICE_ID),
             voice_settings=VoiceSettings(
-                speed=0.86,
-                stability=0.3,
-                similarity_boost=0.7,
-                style=0.10,
-                use_speaker_boost=True,
+                speed=VOICE_SPEED,
+                stability=VOICE_STABILITY,
+                similarity_boost=VOICE_SIMILARITY_BOOST,
+                style=VOICE_STYLE,
+                use_speaker_boost=VOICE_USE_SPEAKER_BOOST,
             ),
         ),
         vad=ctx.proc.userdata["vad"],

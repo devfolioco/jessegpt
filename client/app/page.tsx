@@ -2,6 +2,7 @@
 
 import { AgentSelection } from '@/components/AgentSelection';
 import { Button } from '@/components/Button';
+import { personaConfig } from '@/config/persona.config';
 import { JESSEGPT_BLOG_URL } from '@/constants';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -36,12 +37,12 @@ export default function HomePage() {
       )}
     >
       <div className="fixed top-4 right-4 z-20">
-<GitHubButton href="https://github.com/devfolioco/jessegpt" data-color-scheme="no-preference: light; light: dark; dark: dark;" data-size="large" data-show-count="true" aria-label="Star devfolioco/jessegpt on GitHub">Star</GitHubButton>
+<GitHubButton href={personaConfig.footer.githubRepo} data-color-scheme="no-preference: light; light: dark; dark: dark;" data-size="large" data-show-count="true" aria-label="Star devfolioco/jessegpt on GitHub">Star</GitHubButton>
       </div>
       <div className="z-10 flex flex-col items-center text-center justify-center h-full">
         <Image
-          src="/original.gif"
-          alt="JesseGPT Avatar"
+          src={personaConfig.heroAvatarImage}
+          alt={personaConfig.heroAvatarAlt}
           width={328}
           height={328}
           className="rounded-none mx-auto -z-10 w-[202px] h-[202px] md:w-[328px] md:h-[328px]"
@@ -49,8 +50,7 @@ export default function HomePage() {
         />
 
         <h1 className={clsx('text-5xl md:text-6xl text-white mt-6 leading-[60px]', nyghtMedium.className)}>
-          Talk to
-          <div className="md:hidden"></div> JesseGPT
+          {personaConfig.heroTitle}
         </h1>
 
         <p
@@ -58,14 +58,14 @@ export default function HomePage() {
             'text-lg md:text-xl text-white/90 md:max-w-[515px] max-w-[300px] mx-auto font-light mt-2 font-inter px-4 md:px-0'
           )}
         >
-          Talk to Jesse’s AI avatar about your project idea and coin it on Zora.
+          {personaConfig.heroDescription}
         </p>
 
         <div className="flex flex-col-reverse md:flex-row gap-6 mt-14 px-8">
           <Button href={JESSEGPT_BLOG_URL} target="_blank" appearance="secondary">
             Learn more
           </Button>
-          <Button onClick={handleAgentSelection}>Start talking to Jesse</Button>
+          <Button onClick={handleAgentSelection}>{personaConfig.startChatButtonLabel}</Button>
         </div>
       </div>
 
@@ -76,23 +76,17 @@ export default function HomePage() {
       <div className="w-full flex md:flex-row flex-col justify-between text-white md:text-[22px] text-[16px] font-inter font-light pt-10 pb-12 md:px-[211px] px-8 gap-6 text-center md:text-left">
         <div className="">
           Made with {'<3'} at{' '}
-          <a href="https://devfolio.co" className="underline">
-            Devfolio
+          <a href={personaConfig.footer.creditUrl} className="underline">
+            {personaConfig.footer.credit}
           </a>
         </div>
 
         <div className="flex flex-row gap-8 justify-center">
-          
-          <a className="underline" href="https://twitter.com/devfolio">
-            Twitter / X
-          </a>
-          <a className="underline" href="https://warpcast.com/devfolio">
-            Farcaster
-          </a>
-          <a className='underline' href="https://devfolio.co/projects/jessegpt-2acd">
-            View Project
-          </a>
-          
+          {personaConfig.footer.socialLinks.map((link) => (
+            <a key={link.label} className="underline" href={link.url}>
+              {link.label}
+            </a>
+          ))}
         </div>
       </div>
 
@@ -112,9 +106,9 @@ export default function HomePage() {
       </AnimatePresence>
 
       {/* Prefetch Jesse avatar images for faster loading */}
-      <link rel="prefetch" href="/mellow-jesse.gif" as="image" type="image/gif" />
-      <link rel="prefetch" href="/critical-jesse.gif" as="image" type="image/gif" />
-      <link rel="prefetch" href="/original.gif" as="image" type="image/gif" />
+      <link rel="prefetch" href={personaConfig.moods.excited.avatarImage} as="image" type="image/gif" />
+      <link rel="prefetch" href={personaConfig.moods.critical.avatarImage} as="image" type="image/gif" />
+      <link rel="prefetch" href={personaConfig.heroAvatarImage} as="image" type="image/gif" />
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import { nyghtMedium } from '@/app/fonts/fonts';
 import { MicIcon } from '@/components/icons/MicIcon';
+import { personaConfig } from '@/config/persona.config';
 import useIsPhone from '@/hooks/useIsPhone';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { track } from '@vercel/analytics';
@@ -10,6 +11,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Button } from './Button';
+
+const getMoodKey = (mood: AgentMoodI) => (mood === AgentMoodEnum.CRITICAL ? 'critical' : 'excited');
 
 interface AgentSelectionProps extends React.HTMLAttributes<HTMLDivElement> {
   // add new props here
@@ -40,8 +43,8 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
       <div className="flex flex-col justify-center items-center gap-16" onClick={clickHandler}>
         <div onClick={() => handleMoodSelection(AgentMoodEnum.EXCITED)}>
           <Image
-            src="/mellow-jesse.gif"
-            alt="JesseGPT Avatar"
+            src={personaConfig.moods.excited.avatarImage}
+            alt={`${personaConfig.moods.excited.label} Avatar`}
             width={200}
             height={200}
             className="rounded-none mb-6 w-32 h-32 sm:w-48 sm:h-48 m-auto"
@@ -53,15 +56,15 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
               nyghtMedium.className
             )}
           >
-            JesseGPT
+            {personaConfig.moods.excited.label}
           </h2>
         </div>
 
         <div onClick={() => handleMoodSelection(AgentMoodEnum.CRITICAL)}>
           <div>
             <Image
-              src="/critical-jesse.gif"
-              alt="SupaBald JesseGPT Avatar"
+              src={personaConfig.moods.critical.avatarImage}
+              alt={`${personaConfig.moods.critical.label} Avatar`}
               width={200}
               height={200}
               className="rounded-none mb-6 w-32 h-32 sm:w-48 sm:h-48 m-auto"
@@ -74,8 +77,14 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
               nyghtMedium.className
             )}
           >
-            SupaBald <br />
-            JesseGPT
+            {personaConfig.moods.critical.label.split(' ').length > 1 ? (
+              <>
+                {personaConfig.moods.critical.label.split(' ').slice(0, -1).join(' ')} <br />
+                {personaConfig.moods.critical.label.split(' ').slice(-1)}
+              </>
+            ) : (
+              personaConfig.moods.critical.label
+            )}
           </h2>
         </div>
       </div>
@@ -123,38 +132,32 @@ const JesseCard = ({
   onBack: () => void;
   isPhone: boolean;
 } & React.HTMLAttributes<HTMLDivElement>) => {
+  const moodKey = getMoodKey(mood);
+  const moodConfig = personaConfig.moods[moodKey];
+
   return (
     <div className="flex-1 flex flex-col items-center text-center bg-transparent w-full px-8 md:px-0 " {...props}>
       <Image
-        src={mood === AgentMoodEnum.CRITICAL ? '/critical-jesse.gif' : '/mellow-jesse.gif'}
-        alt={mood === AgentMoodEnum.CRITICAL ? 'SupaBald JesseGPT Avatar' : 'JesseGPT Avatar'}
+        src={moodConfig.avatarImage}
+        alt={`${moodConfig.label} Avatar`}
         width={200}
         height={200}
         className="rounded-none mb-6 w-32 h-32 sm:w-48 sm:h-48 m-auto mt-16 sm:mt-0"
         priority
       />
-      <h2 className={clsx('text-4xl text-white mb-2', nyghtMedium.className)}>
-        {mood === AgentMoodEnum.CRITICAL ? 'SupaBald JesseGPT' : 'JesseGPT'}
-      </h2>
+      <h2 className={clsx('text-4xl text-white mb-2', nyghtMedium.className)}>{moodConfig.label}</h2>
       <p className="text-lg md:text-[22px] text-white/80 mb-2 font-inter font-light max-w-[300px] md:max-w-[427px]">
-        {mood === AgentMoodEnum.CRITICAL
-          ? 'The brutally honest Jesse Pollak.'
-          : 'The relentlessly optimistic Jesse Pollak.'}
+        {moodConfig.subtitle}
       </p>
       <p className="text-lg md:text-[22px] text-white/80 mb-8 max-w-[300px] md:max-w-[427px] font-inter font-light">
-        {mood === AgentMoodEnum.CRITICAL
-          ? 'Cuts through the hype, challenges every premise, & believes great ideas must survive intense scrutiny to succeed.'
-          : 'Sees massive potential everywhere, bursting with Onchain Summer energy, & ready to hype your vision to the moon.'}
+        {moodConfig.description}
       </p>
 
       <Button
         appearance="colored"
         onClick={() => onMoodSelection(mood)}
         stretch={isPhone}
-        className={clsx(
-          mood === AgentMoodEnum.CRITICAL ? 'bg-critical text-white' : 'bg-optimism text-black',
-          'mt-8 md:mt-0'
-        )}
+        className={clsx(moodConfig.accentClass, 'mt-8 md:mt-0')}
       >
         <span role="img" aria-label="microphone">
           <MicIcon color={mood === AgentMoodEnum.CRITICAL ? undefined : 'black'} />

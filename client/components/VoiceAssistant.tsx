@@ -2,6 +2,7 @@ import { CustomVoiceAssistantControlBar } from '@/components/CustomVoiceAssistan
 import { NoAgentNotification } from '@/components/NoAgentNotification';
 import TranscriptionView from '@/components/TranscriptionView';
 import { CloseIcon } from '@/components/icons/CloseIcon';
+import { personaConfig } from '@/config/persona.config';
 import useIsPhone from '@/hooks/useIsPhone';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { RoomAudioRenderer, useChat, useVoiceAssistant } from '@livekit/components-react';
@@ -27,6 +28,9 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
     setLoading(true);
   };
 
+  const moodKey = mood === AgentMoodEnum.CRITICAL ? 'critical' : 'excited';
+  const moodConfig = personaConfig.moods[moodKey];
+
   return (
     <div className="fixed inset-0 flex flex-col items-center bg-[#638596] pt-8">
       <div
@@ -37,33 +41,20 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
       <div className="flex flex-col items-center mb-6 relative">
         <div className="flex flex-row">
           <Image
-            src={mood === AgentMoodEnum.CRITICAL ? '/critical-jesse.gif' : '/mellow-jesse.gif'}
-            alt="JesseGPT Avatar"
+            src={moodConfig.avatarImage}
+            alt={`${moodConfig.label} Avatar`}
             width={254}
             height={254}
             className="rounded-none md:w-[254px] md:h-[254px] w-[200px] h-[200px]"
             priority
           />
           <div
-            className={`mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden ${mood === AgentMoodEnum.EXCITED ? 'bg-[#FFF68D]' : 'bg-[#0157FA]'}`}
+            className="mt-[64px] w-[64px] h-[64px] rounded-full flex justify-center items-center relative overflow-hidden"
+            style={{ backgroundColor: moodConfig.visualizerBgColor }}
           >
-            {/* <BarVisualizer
-              state={agentState}
-              trackRef={agentAudioTrack}
-              barCount={5}
-              className="agent-visualizer"
-              options={{ minHeight: 8, maxHeight: 20 }}
-              style={{
-                // @ts-expect-error variable update
-                '--lk-fg': mood === AgentMoodEnum.EXCITED ? '#20282D' : 'white',
-
-                '--lk-va-bg': mood === AgentMoodEnum.EXCITED ? '#20282D' : 'white',
-              }}
-            /> */}
-
             <AudioVisualizer
               state={agentState === 'speaking' ? 'speaking' : 'idle'}
-              variant={mood === AgentMoodEnum.EXCITED ? 'optimism' : 'critical'}
+              variant={moodConfig.visualizerVariant}
             />
           </div>
         </div>
@@ -102,7 +93,7 @@ export function VoiceAssistant({ mood, hideControls }: { mood: AgentMoodI; hideC
           </div>
 
           <div className="text-sm md:text-base text-white font-inter text-center">
-            You can say ‘Bye’ or press the ‘End’ button to finish this conversation
+            You can say 'Bye' or press the 'End' button to finish this conversation
           </div>
         </div>
       )}
