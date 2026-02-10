@@ -8,6 +8,14 @@ from voice_agent.prompts.prompts import (
     insufficient_info_excited_end_messages,
     insufficient_info_critical_end_messages,
 )
+from voice_agent.persona_config import (
+    TIMEOUT_SECONDS,
+    TIMEOUT_WARNING_TIME,
+    SPEAK_DELAY,
+    MAX_CALL_DURATION,
+    CALL_DURATION_WARNING_TIME,
+    DEFAULT_VOICE_ID as ELEVENLABS_DEFAULT_VOICE_ID,
+)
 
 # Mapping from the room mood prefix to the correct prompts
 mood_system_prompts = {
@@ -26,14 +34,3 @@ mood_insufficient_info_end_messages = {
     "excited": insufficient_info_excited_end_messages,
     "critical": insufficient_info_critical_end_messages,
 }
-
-# ---- Timing configuration ----
-TIMEOUT_SECONDS = 30
-TIMEOUT_WARNING_TIME = 10
-SPEAK_DELAY = 3
-MAX_CALL_DURATION = 200
-CALL_DURATION_WARNING_TIME = 100
-
-# ---- ElevenLabs Default Voice ID ----
-# Mark - Natural Conversations -> https://elevenlabs.io/app/voice-library?voiceId=UgBBYS2sOqTuMpoF3BR0
-ELEVENLABS_DEFAULT_VOICE_ID = "UgBBYS2sOqTuMpoF3BR0"

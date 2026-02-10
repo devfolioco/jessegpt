@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/Button';
 import { PrefetchJesseFrameAssets } from '@/components/JesseFrame';
+import { personaConfig } from '@/config/persona.config';
 import LoadingPage from '@/components/LoadingPage';
 import ShareModal from '@/components/ShareModal';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
@@ -271,7 +272,7 @@ const TalkComponent = () => {
       <main className="min-h-screen flex items-center justify-center bg-[#0C1110]">
         <div className="flex flex-col items-center justify-center gap-4">
           <div className="text-white text-lg md:text-2xl font-bold mb-4 px-8 md:px-0 text-center">
-            Connecting to {mood === AgentMoodEnum.EXCITED ? 'JesseGPT (Optimistic)' : 'SupaBald JesseGPT (Critical)'}...
+            Connecting to {personaConfig.moods[mood === AgentMoodEnum.EXCITED ? 'excited' : 'critical'].connectingLabel}...
           </div>
           <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
         </div>

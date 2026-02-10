@@ -182,9 +182,6 @@ dist
 # API extractor
 temp
 
-# typedoc
-docs
-
 # direnv
 .direnv
 

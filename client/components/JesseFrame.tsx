@@ -1,4 +1,5 @@
 import { nyghtMedium } from '@/app/fonts/fonts';
+import { personaConfig } from '@/config/persona.config';
 import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { useEffect, useRef } from 'react';
 import rough from 'roughjs';
@@ -79,9 +80,9 @@ const loadJesseAsset = async (mood: AgentMoodI): Promise<HTMLImageElement> => {
     };
 
     if (mood === AgentMoodEnum.EXCITED) {
-      jesseImage.src = '/frame/jesse-t-excited.png';
+      jesseImage.src = personaConfig.shareFrame.excitedAvatarImage;
     } else {
-      jesseImage.src = '/frame/jesse-t-critical.png';
+      jesseImage.src = personaConfig.shareFrame.criticalAvatarImage;
     }
   });
 };
@@ -125,13 +126,13 @@ const drawFrame = async (
   ctx.textAlign = 'center';
   ctx.fillStyle = '#FFFFFF'; // Set text color to white
 
-  // Draw "Base"
+  // Draw frame title
   ctx.font = `bold 50px ${nyghtMedium.style.fontFamily}`;
-  ctx.fillText('Base', width / 2, height / 3 - 20);
+  ctx.fillText(personaConfig.shareFrame.title, width / 2, height / 3 - 20);
 
-  // Draw "is for"
+  // Draw frame subtitle
   // Font is inherited from previous fillText, no need to reset unless different
-  ctx.fillText('is for', width / 2, height / 3 + 40);
+  ctx.fillText(personaConfig.shareFrame.subtitle, width / 2, height / 3 + 40);
 
   //   default font size
   ctx.font = `bold 50px ${nyghtMedium.style.fontFamily}`;
