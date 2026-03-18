@@ -3,7 +3,7 @@
 import { AgentSelection } from '@/components/AgentSelection';
 import { Button } from '@/components/Button';
 import { personaConfig } from '@/config/persona.config';
-import { BLOG_URL } from '@/constants';
+import { JESSEGPT_BLOG_URL } from '@/constants';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
@@ -37,7 +37,7 @@ export default function HomePage() {
       )}
     >
       <div className="fixed top-4 right-4 z-20">
-<GitHubButton href={personaConfig.footer.githubRepo} data-color-scheme="no-preference: light; light: dark; dark: dark;" data-size="large" data-show-count="true" aria-label="Star devfolioco/austingpt on GitHub">Star</GitHubButton>
+<GitHubButton href={personaConfig.footer.githubRepo} data-color-scheme="no-preference: light; light: dark; dark: dark;" data-size="large" data-show-count="true" aria-label="Star devfolioco/jessegpt on GitHub">Star</GitHubButton>
       </div>
       <div className="z-10 flex flex-col items-center text-center justify-center h-full">
         <Image
@@ -62,7 +62,7 @@ export default function HomePage() {
         </p>
 
         <div className="flex flex-col-reverse md:flex-row gap-6 mt-14 px-8">
-          <Button href={BLOG_URL} target="_blank" appearance="secondary">
+          <Button href={JESSEGPT_BLOG_URL} target="_blank" appearance="secondary">
             Learn more
           </Button>
           <Button onClick={handleAgentSelection}>{personaConfig.startChatButtonLabel}</Button>
@@ -105,7 +105,7 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      {/* Prefetch persona avatar images for faster loading */}
+      {/* Prefetch Jesse avatar images for faster loading */}
       <link rel="prefetch" href={personaConfig.moods.excited.avatarImage} as="image" type="image/gif" />
       <link rel="prefetch" href={personaConfig.moods.critical.avatarImage} as="image" type="image/gif" />
       <link rel="prefetch" href={personaConfig.heroAvatarImage} as="image" type="image/gif" />

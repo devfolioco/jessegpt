@@ -6,7 +6,7 @@ export const storeZoraCoin = async (
   { wallet, zoraResult }: { wallet: string; zoraResult: ZoraCoinResult }
 ) => {
   try {
-    await fetch(`https://api.devfolio.co/api/miscellaneous/austingpt/conversations/${roomId}`, {
+    await fetch(`https://api.devfolio.co/api/miscellaneous/jessegpt/conversations/${roomId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

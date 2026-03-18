@@ -94,9 +94,9 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
   return (
     <main className="min-h-screen w-full flex items-center justify-center" {...props}>
       <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-16 py-16">
-        {/* AustinGPT (Enthusiastic) */}
+        {/* JesseGPT (Optimistic) */}
         {((isPhone && selectedMood === AgentMoodEnum.EXCITED) || !isPhone) && (
-          <PersonaCard
+          <JesseCard
             mood={AgentMoodEnum.EXCITED}
             onMoodSelection={updateMood}
             onClick={clickHandler}
@@ -105,9 +105,9 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
           />
         )}
 
-        {/* Tough Love AustinGPT (Critical) */}
+        {/* SupaBald JesseGPT (Critical) */}
         {((isPhone && selectedMood === AgentMoodEnum.CRITICAL) || !isPhone) && (
-          <PersonaCard
+          <JesseCard
             mood={AgentMoodEnum.CRITICAL}
             onMoodSelection={updateMood}
             onClick={clickHandler}
@@ -120,7 +120,7 @@ export const AgentSelection = ({ ...props }: AgentSelectionProps) => {
   );
 };
 
-const PersonaCard = ({
+const JesseCard = ({
   mood,
   onMoodSelection,
   onBack,

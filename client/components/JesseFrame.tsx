@@ -4,7 +4,7 @@ import { AgentMoodEnum, AgentMoodI } from '@/types/agent';
 import { useEffect, useRef } from 'react';
 import rough from 'roughjs';
 
-interface PersonaFrameProps {
+interface JesseFrameProps {
   idea: string;
   mood: AgentMoodI;
   onImageReady: (base64Image: string) => void;
@@ -67,22 +67,22 @@ const drawRoughEllipse = (
   });
 };
 
-const loadPersonaAsset = async (mood: AgentMoodI): Promise<HTMLImageElement> => {
+const loadJesseAsset = async (mood: AgentMoodI): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
-    const personaImage = new Image();
+    const jesseImage = new Image();
 
-    personaImage.onload = () => {
-      resolve(personaImage);
+    jesseImage.onload = () => {
+      resolve(jesseImage);
     };
 
-    personaImage.onerror = () => {
-      reject(new Error('Failed to load persona image'));
+    jesseImage.onerror = () => {
+      reject(new Error('Failed to load jesse image'));
     };
 
     if (mood === AgentMoodEnum.EXCITED) {
-      personaImage.src = personaConfig.shareFrame.excitedAvatarImage;
+      jesseImage.src = personaConfig.shareFrame.excitedAvatarImage;
     } else {
-      personaImage.src = personaConfig.shareFrame.criticalAvatarImage;
+      jesseImage.src = personaConfig.shareFrame.criticalAvatarImage;
     }
   });
 };
@@ -152,16 +152,16 @@ const drawFrame = async (
 
   ctx.fillText(idea, width / 2, height / 3 + (120 - (1 - scaleDownRatio) * 14));
 
-  // Load and draw the persona image in the bottom left corner
-  const personaImage = await loadPersonaAsset(mood);
+  // Load and draw the jesse image in the bottom left corner
+  const jesseImage = await loadJesseAsset(mood);
   const imageSize = 114;
-  ctx.drawImage(personaImage, 32, frameHeight - imageSize, imageSize, imageSize);
+  ctx.drawImage(jesseImage, 32, frameHeight - imageSize, imageSize, imageSize);
 
   // Draw the rough ellipse
   drawRoughEllipse(canvasElement, frameWidth, frameHeight, { ideaTextWidth });
 };
 
-const PersonaFrame = ({ idea, onImageReady, onError, mood, className }: PersonaFrameProps) => {
+const JesseFrame = ({ idea, onImageReady, onError, mood, className }: JesseFrameProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleDownload = () => {
@@ -169,7 +169,7 @@ const PersonaFrame = ({ idea, onImageReady, onError, mood, className }: PersonaF
       // Create a temporary link element
       const link = document.createElement('a');
       // Set the download name
-      link.download = `ethereum-is-for-${idea.toLowerCase().replace(' ', '-')}.png`;
+      link.download = `base-is-for-${idea.toLowerCase().replace(' ', '-')}.png`;
       // Convert canvas to data URL
       link.href = canvasRef.current.toDataURL('image/png');
       // Append to document (required for Firefox)
@@ -238,13 +238,13 @@ const PersonaFrame = ({ idea, onImageReady, onError, mood, className }: PersonaF
   );
 };
 
-export const PrefetchPersonaFrameAssets = () => {
+export const PrefetchJesseFrameAssets = () => {
   return (
     <>
       <link rel="prefetch" href="/frame/dot-grid.svg" as="image" type="image/svg+xml" />
-      <link rel="prefetch" href={personaConfig.shareFrame.excitedAvatarImage} as="image" type="image/png" />
+      <link rel="prefetch" href="/frame/jesse-t.png" as="image" type="image/png" />
     </>
   );
 };
 
-export default PersonaFrame;
+export default JesseFrame;

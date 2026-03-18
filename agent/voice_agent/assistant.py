@@ -36,7 +36,7 @@ def save_conversation(
 
     try:
         response = requests.post(
-            f"{datalayer_base_url}miscellaneous/austingpt/conversations/{room_id}",
+            f"{datalayer_base_url}miscellaneous/jessegpt/conversations/{room_id}",
             json={
                 "messages": transcript,
                 "has_enough_information": has_enough_information,
@@ -109,13 +109,13 @@ class Assistant(Agent):
             This is only applicable and used if `has_enough_information` is True and `is_inappropriate` is False.
             If `has_enough_information` is False or `is_inappropriate` is True, this parameter may be an empty string.
         super_short_summary:
-            Craft a highly concise (1-3 words MAX) and impactful phrase that encapsulates the user's project idea. This phrase will complete the sentence "Ethereum is for __" on a shareable image.
+            Craft a highly concise (1-3 words MAX) and impactful phrase that encapsulates the user's project idea. This phrase will complete the sentence "Base is for __" on a shareable image.
             Think creatively:
             *   Aim for a noun or a very short noun phrase.
             *   Make it catchy, memorable, and inspiring if possible.
             *   It should feel like a bold declaration or a core identity for the project.
             *   Examples of good fits: "Global Unity", "Indie Creators", "Transparent Finance", "Healing the Planet", "Decentralized Art".
-            *   Ensure it makes perfect sense when read as "Ethereum is for [Your Phrase]".
+            *   Ensure it makes perfect sense when read as "Base is for [Your Phrase]".
             *   STRICTLY ADHERE to the 1-3 word limit.
             This is only applicable and used if `has_enough_information` is True and `is_inappropriate` is False.
             If `has_enough_information` is False or `is_inappropriate` is True, this parameter may be an empty string.

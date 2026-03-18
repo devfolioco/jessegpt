@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: austingpt
+    container_name: jessegpt
     env_file: .env
     volumes:
       - .:/app

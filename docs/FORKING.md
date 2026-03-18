@@ -1,6 +1,6 @@
-# Forking & Customising AustinGPT
+# Forking & Customising JesseGPT
 
-This guide walks you through forking AustinGPT and re-skinning it as your own AI voice-feedback assistant with a different persona.
+This guide walks you through forking JesseGPT and re-skinning it as your own AI voice-feedback assistant with a different persona.
 
 ---
 
@@ -23,8 +23,8 @@ You will need accounts and API keys for the following services:
 
 ```bash
 # Fork on GitHub, then:
-git clone https://github.com/<your-username>/austingpt.git
-cd austingpt
+git clone https://github.com/<your-username>/jessegpt.git
+cd jessegpt
 ```
 
 ---
@@ -88,7 +88,7 @@ This is the single file that controls the agent's personality:
 
 - **`PERSONA_NAME`** – The name your AI embodies (e.g. `"Vitalik Buterin"`)
 - **`APP_NAME`** – Displayed app name
-- **`REFERENCE_MATERIAL`** – Tweets, blog posts, or any text corpus that informs the AI's tone. Edit `agent/voice_agent/prompts/austin_tweets.py` (or create your own file) and update the import.
+- **`REFERENCE_MATERIAL`** – Tweets, blog posts, or any text corpus that informs the AI's tone. Edit `agent/voice_agent/prompts/jesse_tweets.py` (or create your own file) and update the import.
 - **`DEFAULT_VOICE_ID`** – Your ElevenLabs voice ID. Create a voice clone following [ElevenLabs' guide](https://elevenlabs.io/blog/how-to-clone-voice).
 - **`VOICE_*`** settings – Adjust speed, stability, and style to taste.
 - **Greetings & end messages** – Customize per mood.
@@ -105,7 +105,7 @@ This is the single file that controls the UI copy and branding:
 - **`moods`** – Labels, descriptions, and avatar images for each mood
 - **`shareCopies`** / **`shareCopiesWithZora`** – Social share templates
 - **`walletMetadata`** – Reown AppKit wallet modal metadata
-- **`shareFrame`** – The "Ethereum is for \_\_\_" frame title/subtitle
+- **`shareFrame`** – The "Base is for \_\_\_" frame title/subtitle
 - **`footer`** – Credit, social links, GitHub repo URL
 
 ### Replace assets
@@ -115,11 +115,11 @@ Swap out these files in `client/public/` (and update the paths in `client/config
 | File                         | Purpose                        |
 | ---------------------------- | ------------------------------ |
 | `original.gif`               | Landing page hero avatar       |
-| `mellow-austin.gif`          | Excited/enthusiastic mood avatar |
-| `critical-austin.gif`        | Critical mood avatar           |
+| `mellow-jesse.gif`           | Excited/optimistic mood avatar |
+| `critical-jesse.gif`         | Critical mood avatar           |
 | `og-image-1.1.png`           | Open Graph preview image       |
-| `frame/austin-t-excited.png` | Share frame avatar (excited)   |
-| `frame/austin-t-critical.png`| Share frame avatar (critical)  |
+| `frame/jesse-t-excited.png`  | Share frame avatar (excited)   |
+| `frame/jesse-t-critical.png` | Share frame avatar (critical)  |
 | `favicon_io/*`               | Favicon files                  |
 | `favicon_io/site.webmanifest`| PWA name & icon paths          |
 
@@ -127,13 +127,13 @@ Swap out these files in `client/public/` (and update the paths in `client/config
 
 You'll need avatar images for both moods plus a few supporting assets. Here's what works well:
 
-**Avatar images** (`original.gif`, `mellow-austin.gif`, `critical-austin.gif`)
+**Avatar images** (`original.gif`, `mellow-jesse.gif`, `critical-jesse.gif`)
 - Square aspect ratio, at least 512×512px. GIF or PNG both work (update the file extension in `persona.config.ts` if you switch formats).
 - The "excited" avatar should feel approachable and energetic; the "critical" avatar should feel intense or serious.
 - `original.gif` is the landing page hero — a neutral or signature pose works best.
 - Transparent backgrounds are ideal; the UI places them on dark backgrounds.
 
-**Share frame avatars** (`frame/austin-t-excited.png`, `frame/austin-t-critical.png`)
+**Share frame avatars** (`frame/jesse-t-excited.png`, `frame/jesse-t-critical.png`)
 - These are composited onto a canvas at render time. Keep them as portrait cutouts (head + shoulders) with transparent backgrounds, roughly 400×500px.
 
 **OG image** (`og-image-1.1.png`)
@@ -229,7 +229,7 @@ Other options:
 - [ ] Set up agent environment variables (`agent/.env`)
 - [ ] Set up client environment variables (`client/.env.local`)
 - [ ] Edit `agent/voice_agent/persona_config.py` with your persona
-- [ ] Replace reference material in `agent/voice_agent/prompts/austin_tweets.py`
+- [ ] Replace reference material in `agent/voice_agent/prompts/jesse_tweets.py`
 - [ ] Create an ElevenLabs voice clone and update `DEFAULT_VOICE_ID`
 - [ ] Edit `client/config/persona.config.ts` with your branding
 - [ ] Replace avatar and OG images in `client/public/`

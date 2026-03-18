@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/Button';
-import { PrefetchPersonaFrameAssets } from '@/components/PersonaFrame';
+import { PrefetchJesseFrameAssets } from '@/components/JesseFrame';
 import { personaConfig } from '@/config/persona.config';
 import LoadingPage from '@/components/LoadingPage';
 import ShareModal from '@/components/ShareModal';
@@ -46,7 +46,7 @@ Save time, stay focused, and conquer your inbox with MailSprint.
     `,
 };
 
-// only for testing: Enabling this will simulate a successful conversation
+// only for testing: Enabling this will simulate a successful jesse conversation
 const TEST = false;
 
 const initialData = {
@@ -283,8 +283,8 @@ const TalkComponent = () => {
   // Voice assistant UI
   return (
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
-      {/* Prefetch assets for the PersonaFrame */}
-      <PrefetchPersonaFrameAssets />
+      {/* Prefetch assets for the JesseFrame */}
+      <PrefetchJesseFrameAssets />
 
       <RoomContext.Provider value={room}>
         <div className="lk-room-container max-h-[90vh]">
