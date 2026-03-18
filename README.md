@@ -1,37 +1,31 @@
-# JesseGPT
+# AustinGPT
 
 https://github.com/user-attachments/assets/f229628b-1405-40a3-9796-60b59983970e
 
-### Choose your Jesse
+### Choose your Austin
 
 <table>
   <tr>
     <td width="50%" align="center">
-      <h4>JesseGPT</h4>
-      <p>The relentlessly optimistic Jesse Pollak.</p>
-      <p>Sees massive potential everywhere, bursting with Onchain Summer energy, & ready to hype your vision to the moon.</p>
+      <h4>AustinGPT</h4>
+      <p>The enthusiastic builder mentor.</p>
+      <p>Sees a buidler in everyone, bursting with hackathon energy, & ready to help you ship your first prototype.</p>
       <div style="text-align: center;">
-        <img src="/assets/mellow-jesse.gif" width=150px>
+        <img src="/assets/mellow-austin.gif" width=150px>
       </div>
     </td>
     <td width="50%" align="center">
-      <h4>Supabald JesseGPT</h4>
-      <p>The brutally honest Jesse Pollak.</p>
-      <p>Cuts through the hype, challenges every premise, & believes great ideas must survive intense scrutiny to succeed.</p>
+      <h4>Tough Love AustinGPT</h4>
+      <p>The tough-love builder mentor.</p>
+      <p>Demands you understand the fundamentals, challenges every abstraction, & believes great builders explain things simply.</p>
       <div style="text-align: center;">
-        <img src="/assets/critical-jesse.gif" width=150px>
+        <img src="/assets/critical-austin.gif" width=150px>
       </div>
     </td>
   </tr>
 </table>
 
-Last year, we gave you [Supabald Jesse](https://letsgetjessebald.com/), a pixelated, cool-aura oracle who left the chain and entered your wallets.
-
-This year, Jesse’s back. Not as a meme. 
-
-But as **an AI**.
-
-Say gm to [JesseGPT](https://jessegpt.xyz/) - your onchain feedback buddy, Base-pilled mentor, and hype generator all rolled into one. Built for the latest cohort of [Base Batches 2025](https://basebatches.xyz/), JesseGPT is trained to channel the spirit (and tweets) of Jesse Pollak, CEO of Base, and deliver hot takes on your project submission.
+Say gm to [AustinGPT](https://austingpt.xyz/) - your builder feedback buddy, Ethereum educator, and hackathon mentor all rolled into one. AustinGPT is trained to channel the spirit (and tweets) of Austin Griffith, creator of Scaffold-ETH and leader of BuidlGuidl, and deliver real builder feedback on your project.
 
 ---
 
@@ -108,7 +102,7 @@ https://elevenlabs.io/blog/how-to-clone-voice
 
 Feel free to open [issues](https://github.com/devfolioco/jessegpt/issues/new/choose) and [pull requests](https://github.com/devfolioco/jessegpt/pulls)!
 
-## Contributors ✨
+## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 

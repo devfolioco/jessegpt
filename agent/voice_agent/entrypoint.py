@@ -118,7 +118,7 @@ async def entrypoint(ctx: JobContext):  # noqa: C901 – keep high complexity fo
     # Optional: save initial conversation to analytics backend (Devfolio-specific; forks can ignore)
     datalayer_base_url = os.environ.get("DATALAYER_BASE_URL")
     datalayer_api_key = os.environ.get("DATALAYER_API_KEY")
-    datalayer_path = os.environ.get("DATALAYER_PATH", "miscellaneous/jessegpt/conversations")
+    datalayer_path = os.environ.get("DATALAYER_PATH", "miscellaneous/austingpt/conversations")
 
     if datalayer_base_url and datalayer_api_key:
         try:

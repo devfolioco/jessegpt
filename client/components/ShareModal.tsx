@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from './Button';
 import EditIdea from './EditIdea';
-import JesseFrame from './JesseFrame';
+import PersonaFrame from './PersonaFrame';
 import Snackbar from './Snackbar';
 import { CloseIcon } from './icons/CloseIcon';
 import { FarcasterIcon } from './icons/FarcasterIcon';
@@ -220,7 +220,7 @@ const ShareModal = ({ data: initialData, onClose, mood, isOpen, roomId }: ShareM
 
             <div className="flex flex-col items-start md:rounded-xl md:overflow-hidden">
               <div className="relative">
-                <JesseFrame
+                <PersonaFrame
                   idea={data.oneLiner}
                   mood={mood}
                   onImageReady={onImageReady}

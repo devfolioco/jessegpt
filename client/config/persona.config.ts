@@ -1,11 +1,11 @@
 export const personaConfig = {
   // App identity
-  appName: 'JesseGPT',
-  tagline: 'Onchain Feedback That Pays Off',
+  appName: 'AustinGPT',
+  tagline: 'Buidl Something. Ship It. Learn.',
   description:
-    'An AI trained on Jesse Pollak to give you real feedback on your onchain idea. Part of the Base Batches #001 Global Buildathon. Powered by Base.',
-  siteUrl: 'https://jessegpt.xyz',
-  blogUrl: 'https://devfolio.co/blog/jessegpt/',
+    'An AI trained on Austin Griffith to give you real builder feedback on your project idea. Powered by Ethereum.',
+  siteUrl: 'https://austingpt.xyz',
+  blogUrl: 'https://austingriffith.com',
 
   // OG / SEO
   ogImagePath: '/og-image-1.1.png',
@@ -16,11 +16,11 @@ export const personaConfig = {
   },
 
   // Landing page
-  heroTitle: 'Talk to JesseGPT',
-  heroDescription: 'Talk to Jesse\'s AI avatar about your project idea and coin it on Zora.',
+  heroTitle: 'Talk to AustinGPT',
+  heroDescription: 'Talk to Austin\'s AI avatar about your project idea and coin it on Zora.',
   heroAvatarImage: '/original.gif',
-  heroAvatarAlt: 'JesseGPT Avatar',
-  startChatButtonLabel: 'Start talking to Jesse',
+  heroAvatarAlt: 'AustinGPT Avatar',
+  startChatButtonLabel: 'Start talking to Austin',
 
   // Footer
   footer: {
@@ -37,58 +37,58 @@ export const personaConfig = {
   // Moods / personas
   moods: {
     excited: {
-      label: 'JesseGPT',
-      subtitle: 'The relentlessly optimistic Jesse Pollak.',
+      label: 'AustinGPT',
+      subtitle: 'The enthusiastic builder mentor.',
       description:
-        'Sees massive potential everywhere, bursting with Onchain Summer energy, & ready to hype your vision to the moon.',
-      avatarImage: '/mellow-jesse.gif',
+        'Sees a buidler in everyone, bursting with hackathon energy, & ready to help you ship your first prototype.',
+      avatarImage: '/mellow-austin.gif',
       accentClass: 'bg-optimism text-black',
       visualizerVariant: 'optimism' as const,
       visualizerBgColor: '#FFF68D',
-      connectingLabel: 'JesseGPT (Optimistic)',
+      connectingLabel: 'AustinGPT (Enthusiastic)',
     },
     critical: {
-      label: 'SupaBald JesseGPT',
-      subtitle: 'The brutally honest Jesse Pollak.',
+      label: 'Tough Love AustinGPT',
+      subtitle: 'The tough-love builder mentor.',
       description:
-        'Cuts through the hype, challenges every premise, & believes great ideas must survive intense scrutiny to succeed.',
-      avatarImage: '/critical-jesse.gif',
+        'Demands you understand the fundamentals, challenges every abstraction, & believes great builders explain things simply.',
+      avatarImage: '/critical-austin.gif',
       accentClass: 'bg-critical text-white',
       visualizerVariant: 'critical' as const,
       visualizerBgColor: '#0157FA',
-      connectingLabel: 'SupaBald JesseGPT (Critical)',
+      connectingLabel: 'Tough Love AustinGPT (Critical)',
     },
   },
 
   // Social share copy templates
   shareCopies: [
-    `Pitched my project to JesseGPT.\n\nFeedback was half compliment, half therapy session.\n\nTry it here → jessegpt.com\n@devfolio`,
-    `JesseGPT: "This sounds like an MVP you haven't validated."\n\nMe: "fair."\n\nGood feedback engine by @devfolio.\nTry it here: jessegpt.com`,
-    `Encouraging JesseGPT is like your cofounder on a good day.\n\nGentle roast. Useful advice.\n\nIf you're building something, go vibe → jessegpt.com\n@devfolio`,
-    `JesseGPT didn't roast me.\n\nHe actually liked my idea 😳\n\nIf you're looking for a confidence boost with real feedback, try the green Jesse → jessegpt.com\n@devfolio`,
-    `Picked Critical Jesse on JesseGPT.\n\nGot cooked.\nLearned a lot.\nMight go cry a little.\n\nMade by @devfolio — jessegpt.com`,
+    `Pitched my project to AustinGPT.\n\n"Have you tried building it yet?"\n\nFair point.\n\nTry it here \u2192 austingpt.xyz\n@devfolio`,
+    `AustinGPT: "What does the simplest version look like?"\n\nMe: "...good question."\n\nGreat builder feedback.\nTry it: austingpt.xyz`,
+    `Encouraging AustinGPT is like having a hackathon mentor on demand.\n\nPractical advice. Builder energy.\n\nGo vibe \u2192 austingpt.xyz\n@devfolio`,
+    `AustinGPT loved my idea.\n\nNow I have to actually build it.\n\nIf you need builder feedback, try it \u2192 austingpt.xyz\n@devfolio`,
+    `Picked Tough Love Austin on AustinGPT.\n\nGot asked "but why does this need a blockchain?"\n\nOuch. But fair.\n\naustingpt.xyz`,
   ],
 
   shareCopiesWithZora: [
-    `Ran my idea through JesseGPT.\nCame out stronger.\n\nMinted this for the record → {{zora_link}}\n\n@devfolio\n\njessegpt.xyz`,
-    `Talked to JesseGPT.\nKept the receipts.\n\nMinted → {{zora_link}}\n\n@devfolio\n\njessegpt.xyz`,
-    `JesseGPT didn't love it.\nThat doesn't mean I'm not shipping.\n\nLogged this moment → {{zora_link}}\n\n@devfolio\n\njessegpt.xyz`,
+    `Ran my idea through AustinGPT.\nCame out with a plan to build.\n\nMinted this for the record \u2192 {{zora_link}}\n\n@devfolio\n\naustingpt.xyz`,
+    `Talked to AustinGPT.\nKept the receipts.\n\nMinted \u2192 {{zora_link}}\n\n@devfolio\n\naustingpt.xyz`,
+    `AustinGPT said "just build it."\nSo I'm minting the proof.\n\n\u2192 {{zora_link}}\n\n@devfolio\n\naustingpt.xyz`,
   ],
 
   // Wallet metadata (for Reown AppKit)
   walletMetadata: {
-    name: 'jessegpt',
-    description: 'Talk to Jesse Pollak',
-    url: 'https://jessegpt.xyz',
-    icons: ['https://avatars.githubusercontent.com/u/179229932'],
+    name: 'austingpt',
+    description: 'Talk to Austin Griffith',
+    url: 'https://austingpt.xyz',
+    icons: ['https://avatars.githubusercontent.com/u/2653167'],
   },
 
   // Share frame
   shareFrame: {
-    title: 'Base',
+    title: 'Ethereum',
     subtitle: 'is for',
-    excitedAvatarImage: '/frame/jesse-t-excited.png',
-    criticalAvatarImage: '/frame/jesse-t-critical.png',
+    excitedAvatarImage: '/frame/austin-t-excited.png',
+    criticalAvatarImage: '/frame/austin-t-critical.png',
   },
 };
 
