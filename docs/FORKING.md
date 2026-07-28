@@ -15,7 +15,7 @@ You will need accounts and API keys for the following services:
 | [ElevenLabs](https://elevenlabs.io/)              | Text-to-Speech (TTS)               | Yes      |
 | [OpenAI](https://platform.openai.com/)            | LLM (GPT-4.1)                      | Yes      |
 | [Reown (WalletConnect)](https://cloud.reown.com/) | Wallet connection for Zora minting | Optional |
-| [Infura](https://www.infura.io/)                  | IPFS upload for Zora coin metadata | Optional |
+| [Filebase](https://filebase.com/)                 | IPFS upload for Zora coin metadata | Optional |
 
 ---
 
@@ -71,8 +71,7 @@ LIVEKIT_URL=wss://<your-project>.livekit.cloud
 
 # Optional – required only if Zora minting is enabled
 NEXT_PUBLIC_PROJECT_ID=    # Reown project ID
-INFURA_API_KEY=
-INFURA_API_SECRET=
+FILEBASE_IPFS_RPC_TOKEN=
 
 # Optional – set to "false" to disable Zora minting flow
 NEXT_PUBLIC_ENABLE_ZORA_MINTING=true
@@ -166,7 +165,7 @@ This will:
 - Skip IPFS upload
 - Remove the gas fee notice
 
-You can also remove the `NEXT_PUBLIC_PROJECT_ID`, `INFURA_API_KEY`, and `INFURA_API_SECRET` env vars when minting is disabled.
+You can also remove the `NEXT_PUBLIC_PROJECT_ID` and `FILEBASE_IPFS_RPC_TOKEN` env vars when minting is disabled.
 
 ---
 

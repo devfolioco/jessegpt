@@ -53,8 +53,7 @@ vercel env add LIVEKIT_URL
 
 # Required only if Zora minting is enabled
 vercel env add NEXT_PUBLIC_PROJECT_ID
-vercel env add INFURA_API_KEY
-vercel env add INFURA_API_SECRET
+vercel env add FILEBASE_IPFS_RPC_TOKEN
 
 # Set to "false" to disable Zora minting
 vercel env add NEXT_PUBLIC_ENABLE_ZORA_MINTING

@@ -22,20 +22,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<{ cid: st
 
   const imageBuffer = Buffer.from(image.split(',')[1], 'base64');
 
-  const infuraAuth =
-    'Basic ' + Buffer.from(process.env.INFURA_API_KEY + ':' + process.env.INFURA_API_SECRET).toString('base64');
-
   const ipfsClient = create({
-    host: 'ipfs.infura.io',
-    port: 5001,
+    host: 'rpc.filebase.io',
+    port: 443,
     protocol: 'https',
     headers: {
-      authorization: infuraAuth,
+      authorization: `Bearer ${process.env.FILEBASE_IPFS_RPC_TOKEN}`,
     },
   });
 
   const { cid: imageCid } = await ipfsClient.add(imageBuffer);
-  await ipfsClient.pin.add(imageCid);
 
   const metadata: CoinMetadata = {
     name,
@@ -50,7 +46,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<{ cid: st
   };
 
   const { cid } = await ipfsClient.add(JSON.stringify(metadata));
-  await ipfsClient.pin.add(cid);
 
   return NextResponse.json({
     cid: cid.toString(),
