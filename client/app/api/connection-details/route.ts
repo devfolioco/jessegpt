@@ -1,3 +1,4 @@
+import { isProjectPaused } from '@/config/availability';
 import crypto from 'crypto';
 import { AccessToken, AccessTokenOptions, VideoGrant } from 'livekit-server-sdk';
 import { NextResponse } from 'next/server';
@@ -18,6 +19,13 @@ export type ConnectionDetails = {
 };
 
 export async function GET(request: Request) {
+  if (isProjectPaused()) {
+    return NextResponse.json(
+      { error: 'JesseGPT is taking a break. Chats are temporarily unavailable.' },
+      { status: 503, headers: { 'Cache-Control': 'no-store' } }
+    );
+  }
+
   try {
     const { searchParams } = new URL(request.url);
 

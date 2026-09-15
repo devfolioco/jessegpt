@@ -1,3 +1,4 @@
+import { isProjectPaused } from '@/config/availability';
 import { create } from 'kubo-rpc-client';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -13,7 +14,14 @@ type CoinMetadata = {
   };
 };
 
-export async function POST(request: NextRequest): Promise<NextResponse<{ cid: string }>> {
+export async function POST(request: NextRequest): Promise<NextResponse<{ cid: string } | { error: string }>> {
+  if (isProjectPaused()) {
+    return NextResponse.json(
+      { error: 'JesseGPT is taking a break. Minting is temporarily unavailable.' },
+      { status: 503, headers: { 'Cache-Control': 'no-store' } }
+    );
+  }
+
   const { name, description, image } = (await request.json()) as {
     name: string;
     description: string;

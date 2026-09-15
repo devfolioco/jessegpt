@@ -1,3 +1,5 @@
+import { PausedPage } from '@/components/PausedPage';
+import { isProjectPaused } from '@/config/availability';
 import { personaConfig } from '@/config/persona.config';
 import AppKitContextProvider from '@/context/AppKitContext';
 import '@livekit/components-styles';
@@ -51,7 +53,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={'h-full'}>
       <body className={clsx('h-full', inter.variable)}>
-        <AppKitContextProvider cookies={cookies}>{children}</AppKitContextProvider>
+        {isProjectPaused() ? (
+          <PausedPage />
+        ) : (
+          <AppKitContextProvider cookies={cookies}>{children}</AppKitContextProvider>
+        )}
         <Analytics />
       </body>
     </html>
